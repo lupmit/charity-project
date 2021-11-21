@@ -1,6 +1,6 @@
 pragma solidity >=0.7.0 <0.9.0;
 
-contract CharityProject {
+contract Project {
     struct Donator {
         address donatorAddress;
         string name;
@@ -13,6 +13,12 @@ contract CharityProject {
         address payable beneficiaryAddress;
         string name;
         string description;
+    }
+
+    struct TransactionBeneficiary {
+        Beneficiary beneficiary;
+        uint256 amount;
+        uint256 timestamp;
     }
 
     enum charity_state {
@@ -29,6 +35,7 @@ contract CharityProject {
     mapping(address => Donator[]) public myDonation;
     Donator[] public donators;
     Beneficiary[] public beneficiaries;
+    TransactionBeneficiary[] public transactionBeneficiaries;
     charity_state public state;
 
     constructor(
@@ -37,7 +44,10 @@ contract CharityProject {
         uint256 _target,
         address _ownerAddess
     ) {
-        require(_target > 0);
+        require(
+            _target > 0,
+            "M%E1%BB%A5c%20ti%C3%AAu%20c%E1%BB%A7a%20d%E1%BB%B1%20%C3%A1n%20ph%E1%BA%A3i%20l%E1%BB%9Bn%20h%C6%A1n%200"
+        );
         name = _name;
         description = _description;
         owner = _ownerAddess;
@@ -53,39 +63,57 @@ contract CharityProject {
         uint256 value
     );
 
-    //manager method
+    //manager methods
     function startCharity() public returns (bool) {
-        require(msg.sender == owner);
-        require(state == charity_state.SETUP);
+        require(
+            msg.sender == owner,
+            "Kh%C3%B4ng%20c%C3%B3%20quy%E1%BB%81n%20th%E1%BB%B1c%20thi"
+        );
+        require(
+            state == charity_state.SETUP,
+            "D%E1%BB%B1%20%C3%A1n%20n%C3%A0y%20%C4%91%C3%A3%20ho%E1%BA%A1t%20%C4%91%E1%BB%99ng"
+        );
         require(beneficiaries.length > 0);
+
         state = charity_state.START;
         return true;
     }
 
-    function addBeneficiary(
-        address payable _beneficiaryAddress,
-        string memory _name,
-        string memory _description
-    ) public returns (bool) {
-        require(msg.sender == owner);
-        require(state == charity_state.SETUP);
-        Beneficiary memory beneficiary = Beneficiary(
-            _beneficiaryAddress,
-            _name,
-            _description
+    function addBeneficiary(Beneficiary[] memory _beneficiaries)
+        public
+        returns (bool)
+    {
+        require(
+            msg.sender == owner,
+            "Kh%C3%B4ng%20c%C3%B3%20quy%E1%BB%81n%20th%E1%BB%B1c%20thi"
         );
-        beneficiaries.push(beneficiary);
+        require(
+            state == charity_state.SETUP,
+            "D%E1%BB%B1%20%C3%A1n%20n%C3%A0y%20%C4%91%C3%A3%20ho%E1%BA%A1t%20%C4%91%E1%BB%99ng"
+        );
+
+        beneficiaries = _beneficiaries;
         return true;
     }
 
+    //public methods
     function donate(string memory _name, string memory _message)
         public
         payable
         returns (bool)
     {
-        require(state == charity_state.START);
-        require(msg.value > 0);
-        require(msg.sender.balance > msg.value);
+        require(
+            state == charity_state.START,
+            "D%E1%BB%B1%20%C3%A1n%20n%C3%A0y%20ch%C6%B0a%20b%E1%BA%AFt%20%C4%91%E1%BA%A7u%20ho%E1%BA%B7c%20%C4%91%C3%A3%20k%E1%BA%BFt%20th%C3%BAc"
+        );
+        require(
+            msg.value > 0,
+            "S%E1%BB%91%20ti%E1%BB%81n%20quy%C3%AAn%20g%C3%B3p%20ph%E1%BA%A3i%20l%E1%BB%9Bn%20h%C6%A1n%200"
+        );
+        require(
+            msg.sender.balance > msg.value,
+            "S%E1%BB%91%20d%C6%B0%20kh%C3%B4ng%20%C4%91%E1%BB%A7"
+        );
 
         Donator memory donator = Donator(
             msg.sender,
@@ -122,6 +150,26 @@ contract CharityProject {
         return address(this);
     }
 
+    function getAllDonator() public view returns (Donator[] memory) {
+        Donator[] memory d = donators;
+        return d;
+    }
+
+    function getAllBeneficiary() public view returns (Beneficiary[] memory) {
+        Beneficiary[] memory b = beneficiaries;
+        return b;
+    }
+
+    function getAllTransactionBeneficiary()
+        public
+        view
+        returns (TransactionBeneficiary[] memory)
+    {
+        TransactionBeneficiary[] memory t = transactionBeneficiaries;
+        return t;
+    }
+
+    //private methods
     function tranferToBeneficiary() private {
         //the system retains 5% as a transaction fee
         uint256 amount = (address(this).balance * 95) / 100;
@@ -129,6 +177,15 @@ contract CharityProject {
         uint256 amountPerPerson = amount / totalBeneficiary;
         for (uint256 i = 0; i < totalBeneficiary; i++) {
             beneficiaries[i].beneficiaryAddress.transfer(amountPerPerson);
+
+            //save transaction
+            TransactionBeneficiary memory transaction = TransactionBeneficiary(
+                beneficiaries[i],
+                amountPerPerson,
+                block.timestamp
+            );
+            transactionBeneficiaries.push(transaction);
+
             emit tranferToBeneficiaryEvent(
                 address(this),
                 beneficiaries[i].beneficiaryAddress,

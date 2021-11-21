@@ -1,0 +1,21 @@
+{
+  "name": "charity-project",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lupmit/charity-project.git"
+  },
+  "author": "Phuc Le <lexuanphuc.mit@gmail.com>",
+  "license": "MIT",
+  "description": "Đồ án tốt nghiệp: Xây dựng hệ thống hỗ trợ từ thiện một cách minh bạch dựa trên nền tảng Blockchain",
+  "bugs": {
+    "url": "https://github.com/lupmit/charity-project/issues"
+  },
+  "homepage": "https://github.com/lupmit/charity-project#readme",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
