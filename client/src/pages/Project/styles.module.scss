@@ -1,0 +1,19 @@
+.filterGroup {
+	.filter {
+		height: 44px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding-right: 16px;
+		background: #f5f5f5;
+		border-radius: 4px;
+		cursor: pointer;
+		width: 132px;
+		& > span {
+			margin: 0 22px 0 8px;
+			font-size: 16px;
+			line-height: 24px;
+			color: #0b0e11;
+		}
+	}
+}

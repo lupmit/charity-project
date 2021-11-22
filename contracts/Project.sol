@@ -92,7 +92,9 @@ contract Project {
             "D%E1%BB%B1%20%C3%A1n%20n%C3%A0y%20%C4%91%C3%A3%20ho%E1%BA%A1t%20%C4%91%E1%BB%99ng"
         );
 
-        beneficiaries = _beneficiaries;
+        for (uint256 i = 0; i < _beneficiaries.length; i++) {
+            beneficiaries.push(_beneficiaries[i]);
+        }
         return true;
     }
 
@@ -169,7 +171,7 @@ contract Project {
         return t;
     }
 
-    //private methods
+    // private methods
     function tranferToBeneficiary() private {
         //the system retains 5% as a transaction fee
         uint256 amount = (address(this).balance * 95) / 100;
