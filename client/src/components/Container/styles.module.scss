@@ -3,5 +3,11 @@
 	max-width: 1040px;
 	height: 100%;
 	margin: 0 auto;
-	padding: 0;
+	padding: 0 16px;
+}
+
+@media (max-width: 768px) {
+	.wrapper {
+		padding: 0px 10px;
+	}
 }

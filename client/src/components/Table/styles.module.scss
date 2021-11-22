@@ -1,0 +1,16 @@
+.tableComponent {
+	font-size: 13px;
+	:global {
+		.rdt_TableHeadRow {
+			background: rgb(247, 247, 247);
+			border-radius: 3px;
+			box-shadow: none;
+		}
+		.rdt_TableCol {
+			font-size: 14px;
+			padding: 16px;
+			text-align: left;
+			color: rgb(132, 142, 156);
+		}
+	}
+}

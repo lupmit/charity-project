@@ -1,10 +1,16 @@
 .filterGroup {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	padding: 40px 10px 30px;
+	margin: 0 auto;
 	.filter {
 		height: 44px;
+		width: 132px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding-right: 16px;
+		margin: 0 16px 0 0;
 		background: #f5f5f5;
 		border-radius: 4px;
 		cursor: pointer;
@@ -14,6 +20,33 @@
 			font-size: 16px;
 			line-height: 24px;
 			color: #0b0e11;
+		}
+	}
+	.search {
+		flex: 1;
+	}
+}
+.listProject {
+	display: grid;
+	grid-template-columns: auto auto;
+	margin: 0 auto;
+}
+
+@media screen and (max-width: 1070px) {
+	.listProject {
+		grid-template-columns: auto;
+		max-width: 600px;
+	}
+	.filterGroup {
+		max-width: 600px;
+	}
+}
+
+@media (max-width: 768px) {
+	.filterGroup {
+		flex-direction: column;
+		.filter {
+			margin-bottom: 10px;
 		}
 	}
 }

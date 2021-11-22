@@ -1,7 +1,14 @@
-.wrapper {
-	width: 100%;
-	max-width: 1040px;
-	height: 100%;
-	margin: 0 auto;
-	padding: 0;
+.headerFixed {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	background: #f5f5f5;
+	z-index: 9999;
+	:global {
+		.navbar-toggler {
+			border: none !important;
+			box-shadow: none !important;
+		}
+	}
 }
