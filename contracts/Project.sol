@@ -21,6 +21,16 @@ contract Project {
         uint256 timestamp;
     }
 
+    struct ProjectInfo {
+        address projectAddress;
+        string name;
+        string description;
+        uint256 target;
+        uint256 balance;
+        uint256 numberOfDonator;
+        uint256 numberOfBeneficy;
+    }
+
     enum charity_state {
         SETUP,
         START,
@@ -152,6 +162,10 @@ contract Project {
         return address(this);
     }
 
+    function getAmountRaised() public view returns (uint256) {
+        return amountRaised;
+    }
+
     function getAllDonator() public view returns (Donator[] memory) {
         Donator[] memory d = donators;
         return d;
@@ -171,12 +185,23 @@ contract Project {
         return t;
     }
 
+    function getProjectInfo() public view returns (ProjectInfo memory) {
+        ProjectInfo memory pi = ProjectInfo(
+            getAddress(),
+            name,
+            description,
+            target,
+            getAmountRaised(),
+            donators.length,
+            beneficiaries.length
+        );
+        return pi;
+    }
+
     // private methods
     function tranferToBeneficiary() private {
-        //the system retains 5% as a transaction fee
-        uint256 amount = (address(this).balance * 95) / 100;
         uint256 totalBeneficiary = beneficiaries.length;
-        uint256 amountPerPerson = amount / totalBeneficiary;
+        uint256 amountPerPerson = address(this).balance / totalBeneficiary;
         for (uint256 i = 0; i < totalBeneficiary; i++) {
             beneficiaries[i].beneficiaryAddress.transfer(amountPerPerson);
 

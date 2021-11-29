@@ -11,7 +11,7 @@ contract Charity {
 
     mapping(address => address[]) public myCharity;
     Manager[] public listManager;
-    Project[] public listProject;
+    address[] public listProject;
     address public owner;
 
     constructor() {
@@ -91,20 +91,54 @@ contract Charity {
         );
 
         Project charity = new Project(_name, _description, _target, msg.sender);
-        myCharity[msg.sender].push(charity.getAddress());
-        listProject.push(charity);
+        myCharity[msg.sender].push(address(charity));
+        listProject.push(address(charity));
         emit addCharityProjectEvent(msg.sender, _name, _target);
         return true;
     }
 
-    function getAllProject() public view returns (Project[] memory) {
-        Project[] memory p = listProject;
-        return p;
+    function getAllProject() public view returns (address[] memory) {
+        return listProject;
+    }
+
+    function getProjectInfo(address _address)
+        public
+        view
+        returns (Project.ProjectInfo memory)
+    {
+        require(
+            indexOfArray(_address, listProject) >= 0,
+            "Kh%C3%B4ng%20t%E1%BB%93n%20t%E1%BA%A1i"
+        );
+        return Project(_address).getProjectInfo();
+    }
+
+    function getMyProject(address _address)
+        public
+        view
+        returns (address[] memory)
+    {
+        return myCharity[_address];
+    }
+
+    function getAllManager() public view returns (Manager[] memory) {
+        return listManager;
     }
 
     function indexOfManager(address item) internal view returns (int256) {
         for (int256 i = 0; i < int256(listManager.length); i++) {
             if (item == listManager[uint256(i)].managerAddress) return i;
+        }
+        return -1;
+    }
+
+    function indexOfArray(address item, address[] memory array)
+        internal
+        pure
+        returns (int256)
+    {
+        for (int256 i = 0; i < int256(array.length); i++) {
+            if (item == array[uint256(i)]) return i;
         }
         return -1;
     }

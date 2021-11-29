@@ -16,9 +16,11 @@
     "test": "test"
   },
   "scripts": {
-    "dev": "truffle migrate --network development & cd client && yarn start",
+    "dev": "truffle migrate --network development --reset & cd client && yarn start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {},
+  "dependencies": {
+    "truffle-hdwallet-provider": "^1.0.17"
+  },
   "devDependencies": {}
 }

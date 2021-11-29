@@ -1,4 +1,5 @@
 .tabWrapper {
+	margin-top: 50px;
 	:global {
 		width: 100%;
 		border-bottom: 1px solid rgb(132, 142, 156);
@@ -8,9 +9,9 @@
 			padding: 0 30px;
 			color: rgb(72, 81, 93);
 			&.active {
-				border-color: #fff;
-				color: rgb(240, 185, 11);
-				border-bottom: 3px solid rgb(240, 185, 11);
+				border-color: #fff !important;
+				color: rgb(240, 185, 11) !important;
+				border-bottom: 3px solid rgb(240, 185, 11) !important;
 				padding-bottom: 7px;
 				margin-bottom: -2px;
 			}

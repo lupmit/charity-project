@@ -1,68 +1,121 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Tab as TabComponent, Tabs } from "react-bootstrap";
 import Table from "../Table";
+import { useWeb3React } from "@web3-react/core";
+import { getContract } from "../../helpers/Contract";
+import {
+	getAllDonator,
+	getAllTransactionBeneficiary,
+} from "../../api/ProjectApi";
+import * as moment from "moment";
 import styles from "./styles.module.scss";
 
-const columns = [
+const columnsDonator = [
 	{
-		name: "Title",
-		selector: (row) => row.title,
+		name: "Name",
+		selector: (row) => row.name,
 	},
 	{
-		name: "Director",
-		selector: (row) => row.director,
+		name: "Method",
+		selector: (row) => row.method,
 	},
 	{
-		name: "Year",
-		selector: (row) => row.year,
-	},
-];
-
-const data = [
-	{
-		title: <button>Donate</button>,
-		director: "sdfsdfsdfsdf",
-		year: "sdfsdfsdfsdf",
+		name: "Currency",
+		selector: (row) => row.currency,
 	},
 	{
-		title: "hahahaha",
-		director: "sdfsdfsdfsdf",
-		year: "sdfsdfsdfsdf",
+		name: "Amount",
+		selector: (row) => row.amount,
 	},
 	{
-		title: "hahahaha",
-		director: "sdfsdfsdfsdf",
-		year: "sdfsdfsdfsdf",
+		name: "Message",
+		selector: (row) => row.message,
 	},
 	{
-		title: "hahahaha",
-		director: "sdfsdfsdfsdf",
-		year: "sdfsdfsdfsdf",
+		name: "Date",
+		selector: (row) => row.time,
 	},
 ];
 
-const Tab = () => {
+const columnsBeneficy = [
+	{
+		name: "Receiver Name",
+		selector: (row) => row.address,
+	},
+	{
+		name: "Currency",
+		selector: (row) => row.currency,
+	},
+	{
+		name: "Amount",
+		selector: (row) => row.amount,
+	},
+	{
+		name: "Date",
+		selector: (row) => row.time,
+	},
+];
+
+const Tab = (props) => {
+	const [donatorRecord, setDonatorRecord] = useState([]);
+	const [beneficyRecord, setBeneficyRecord] = useState([]);
+	const { address } = props;
+	const { library } = useWeb3React();
+
+	useEffect(() => {
+		const getData = async () => {
+			const contract = await getContract(library, address, "Project");
+			getAllDonator(contract).then((res) => {
+				setDonatorRecord(res);
+			});
+			getAllTransactionBeneficiary(contract).then((res) => {
+				setBeneficyRecord(res);
+			});
+		};
+		getData();
+	}, []);
+
+	const getDataDonator = (rawData) => {
+		return rawData?.map((item) => {
+			return {
+				name: item.name,
+				method: "Currency",
+				currency: "ETH",
+				amount: library.utils.fromWei(item.amount),
+				message: item.message,
+				time: moment.unix(item.timestamp).format("YYYY-MM-DD hh:mm:ss"),
+			};
+		});
+	};
+
+	const getDatabeneficy = (rawData) => {
+		return rawData?.map((item) => {
+			return {
+				address: item.beneficiary.name,
+				currency: "ETH",
+				amount: library.utils.fromWei(item.amount),
+				time: moment.unix(item.timestamp).format("YYYY-MM-DD hh:mm:ss"),
+			};
+		});
+	};
+
 	return (
 		<Tabs
-			defaultActiveKey="home"
+			defaultActiveKey="desc"
 			id="uncontrolled-tab-example"
 			className={styles.tabWrapper}
 		>
-			<TabComponent eventKey="home" title="Home">
-				<Table data={data} columns={columns} />
+			<TabComponent eventKey="desc" title="Project Description">
+				<div>Test</div>
 			</TabComponent>
-			<TabComponent eventKey="profile" title="Profile">
-				<div>
-					[UPDATE: June 16, 2021] Crypto4Good organise une collecte de dons en
-					partenariat avec Binance Charity. L'ensemble des fonds récoltés sera
-					utilisé pour acheter un maximum de nourriture et de produits de
-					première nécessité. Tous ces produits seront donnés aux associations
-					sociales dans 5 villes de France. Pour participer il vous suffit de
-					donner à cette cagnotte entre le 17 juin et le 22 juin Rejoignez nous
-					en live sur Twitch pour le premier marathon de trading live caritatif
-					en partenariat avec Binance. https://www.twitch.tv/cryptoforgood
-					Retrouvez les informations sur l’ONG Crypto4Good en bas de page.{" "}
-				</div>
+			<TabComponent eventKey="donator" title="Donator Records">
+				<Table data={getDataDonator(donatorRecord)} columns={columnsDonator} />
+			</TabComponent>
+			<TabComponent eventKey="beneficy" title="Beneficy Records">
+				<Table
+					data={getDatabeneficy(beneficyRecord)}
+					columns={columnsBeneficy}
+				/>
 			</TabComponent>
 		</Tabs>
 	);
