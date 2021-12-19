@@ -29,6 +29,7 @@ contract Project {
         uint256 balance;
         uint256 numberOfDonator;
         uint256 numberOfBeneficy;
+        charity_state state;
     }
 
     enum charity_state {
@@ -42,6 +43,8 @@ contract Project {
     address public owner;
     uint256 public target;
     uint256 public amountRaised;
+    uint256 public startTime;
+    uint256 public endTime;
     mapping(address => Donator[]) public myDonation;
     Donator[] public donators;
     Beneficiary[] public beneficiaries;
@@ -86,6 +89,7 @@ contract Project {
         require(beneficiaries.length > 0);
 
         state = charity_state.START;
+        startTime = block.timestamp;
         return true;
     }
 
@@ -143,6 +147,7 @@ contract Project {
 
         if (checkTarget() == true) {
             state = charity_state.FINISH;
+            endTime = block.timestamp;
             tranferToBeneficiary();
         }
 
@@ -186,16 +191,17 @@ contract Project {
     }
 
     function getProjectInfo() public view returns (ProjectInfo memory) {
-        ProjectInfo memory pi = ProjectInfo(
-            getAddress(),
-            name,
-            description,
-            target,
-            getAmountRaised(),
-            donators.length,
-            beneficiaries.length
-        );
-        return pi;
+        return
+            ProjectInfo(
+                getAddress(),
+                name,
+                description,
+                target,
+                getAmountRaised(),
+                donators.length,
+                beneficiaries.length,
+                state
+            );
     }
 
     // private methods

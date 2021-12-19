@@ -10,6 +10,7 @@ import {
 import { useWeb3React } from "@web3-react/core";
 
 import Project from "./pages/Project";
+import Donate from "./pages/Donate";
 import ProjectDetail from "./pages/ProjectDetail";
 import Admin from "./pages/Admin";
 import Login from "./pages/Login";
@@ -46,13 +47,14 @@ function App() {
 	return (
 		<div className="App">
 			<Container>
-				<Header />
 				<Router>
+					<Header />
 					<Routes>
 						<Route path="/login" element={<Login />} />
 						<Route element={<RequireAuth auth={active} />}>
 							<Route path="/project" element={<Project />} />
 							<Route path="/project/:address" element={<ProjectDetail />} />
+							<Route path="/project/:address/donate" element={<Donate />} />
 							<Route path="/admin" element={<Admin />} />
 							<Route path="/manager" element={<Manager />} />
 						</Route>

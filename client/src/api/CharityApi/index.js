@@ -34,8 +34,8 @@ const getAllManager = (contract) => {
 	return contract.methods.getAllManager().call();
 };
 
-const getMyProject = (contract) => {
-	return contract.methods.getMyProject().call();
+const getMyProject = (contract, address) => {
+	return contract.methods.getMyProject(address).call();
 };
 
 export {

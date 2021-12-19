@@ -8,26 +8,16 @@ import { CHARITY_CONTRACT_ADDRESS } from "../../config";
 import styles from "./styles.module.scss";
 
 const ProjectCard = (props) => {
-	const [info, setInfo] = useState();
 	const { data } = props;
 	const { library } = useWeb3React();
-	useEffect(() => {
-		const getInfo = async () => {
-			const contract = await getContract(library, CHARITY_CONTRACT_ADDRESS);
-			getProjectInfo(contract, data).then((res) => {
-				setInfo(res);
-			}, []);
-		};
-		getInfo();
-	}, []);
 
 	const navigate = useNavigate();
 	const handleClickCard = () => {
-		navigate("/project/" + info.projectAddress);
+		navigate("/project/" + data.projectAddress);
 	};
 	return (
 		<div>
-			{info && (
+			{data && (
 				<Card className={styles.projectCard}>
 					<div className={styles.imageGroup} onClick={handleClickCard}>
 						<Card.Img
@@ -36,34 +26,34 @@ const ProjectCard = (props) => {
 							className={styles.imageBg}
 						/>
 						<div className={styles.imageText}>
-							<h3>{info.name}</h3>
-							<span>{info.description}</span>
+							<h3>{data.name}</h3>
+							<span>{data.description}</span>
 						</div>
 					</div>
 					<Card.Body style={{ padding: "10px" }}>
 						<div className={styles.progressGroup}>
 							<div className={styles.content}>
 								<span className={styles.amount}>
-									{library.utils.fromWei(info.balance)} ETH
+									{library.utils.fromWei(data.balance)} ETH
 								</span>
 								<span className={styles.target}>
-									Của mục tiêu {library.utils.fromWei(info.target)} ETH
+									/ {library.utils.fromWei(data.target)} ETH
 								</span>
 							</div>
 							<div className={styles.progress}>
 								<ProgressBar
 									animated
-									now={(info.balance / info.target) * 100}
+									now={(data.balance / data.target) * 100}
 								/>
 							</div>
 						</div>
 						<div className={styles.information}>
 							<div className={styles.itemInfo}>
-								<div className={styles.value}>{info.numberOfDonator}</div>
+								<div className={styles.value}>{data.numberOfDonator}</div>
 								<div className={styles.label}>Donations</div>
 							</div>
 							<div className={styles.itemInfo}>
-								<div className={styles.value}>{info.numberOfBeneficy}</div>
+								<div className={styles.value}>{data.numberOfBeneficy}</div>
 								<div className={styles.label}>End-Beneficiaries</div>
 							</div>
 							<button onClick={handleClickCard} className={styles.btnDonate}>

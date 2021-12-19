@@ -3,12 +3,33 @@
 	top: 0;
 	left: 0;
 	right: 0;
-	background: #f5f5f5;
+	background: #181a20;
 	z-index: 9999;
 	:global {
 		.navbar-toggler {
 			border: none !important;
 			box-shadow: none !important;
+		}
+		.bg-dark {
+			background: #181a20 !important;
+		}
+		.navbar-dark .navbar-brand,
+		.navbar-dark .navbar-nav .nav-link,
+		.navbar-dark .navbar-nav .show > .nav-link {
+			color: rgba(255, 255, 255, 0.5);
+		}
+		.navbar-dark .navbar-nav .nav-link:hover {
+			color: #f0b90b;
+		}
+		.navbar-nav .dropdown-menu.show {
+			background: #181a20;
+		}
+		.dropdown-item {
+			color: rgba(255, 255, 255, 0.5);
+		}
+		.dropdown-item:hover {
+			background: #181a20;
+			color: #f0b90b;
 		}
 	}
 }

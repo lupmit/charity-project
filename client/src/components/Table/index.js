@@ -14,6 +14,7 @@ const Table = ({ columns, data }) => {
 				data={data}
 				pagination
 				paginationComponentOptions={paginationComponentOptions}
+				persistTableHead={true}
 			/>
 		</div>
 	);

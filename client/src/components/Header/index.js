@@ -1,37 +1,32 @@
 import React from "react";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import Container from "../Container";
+import { Link } from "react-router-dom";
 import styles from "./styles.module.scss";
 
 const Header = (props) => {
 	return (
 		<div className={styles.headerFixed}>
 			<Container>
-				<Navbar collapseOnSelect expand="lg">
-					<Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+				<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+					<Navbar.Brand as={Link} to="/">
+						Charity Project
+					</Navbar.Brand>
 					<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 					<Navbar.Collapse id="responsive-navbar-nav">
 						<Nav className="me-auto">
-							<Nav.Link href="#features">Features</Nav.Link>
-							<Nav.Link href="#pricing">Pricing</Nav.Link>
-							<NavDropdown title="Dropdown" id="collasible-nav-dropdown">
-								<NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-								<NavDropdown.Item href="#action/3.2">
-									Another action
-								</NavDropdown.Item>
-								<NavDropdown.Item href="#action/3.3">
-									Something
-								</NavDropdown.Item>
-								<NavDropdown.Item href="#action/3.4">
-									Separated link
-								</NavDropdown.Item>
-							</NavDropdown>
+							<Nav.Link as={Link} to="/project">
+								All Project
+							</Nav.Link>
+							<Nav.Link as={Link} to="/manager">
+								Manager
+							</Nav.Link>
+							<Nav.Link as={Link} to="/admin">
+								Admin
+							</Nav.Link>
 						</Nav>
 						<Nav>
-							<Nav.Link href="#deets">More deets</Nav.Link>
-							<Nav.Link eventKey={2} href="#memes">
-								Dank memes
-							</Nav.Link>
+							<Nav.Link href="#deets">MyWallet</Nav.Link>
 						</Nav>
 					</Navbar.Collapse>
 				</Navbar>

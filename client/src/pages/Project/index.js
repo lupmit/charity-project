@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import * as _ from "lodash";
 import Search from "../../components/Search";
 import ProjectCard from "../../components/ProjectCard";
-import { getAllProject } from "../../api/CharityApi";
+import { getAllProject, getProjectInfo } from "../../api/CharityApi";
 import { connect, useSelector, useDispatch } from "react-redux";
 import { GrFilter } from "react-icons/gr";
 import { AiFillCaretDown } from "react-icons/ai";
@@ -20,28 +20,27 @@ const Project = () => {
 	const [filter, setFilter] = useState({});
 	const { active, library } = useWeb3React();
 
-	const projectReducer = useSelector((state) => state.projectReducer);
-	const dispatch = useDispatch();
+	// const projectReducer = useSelector((state) => state.projectReducer);
+	// const dispatch = useDispatch();
+	// useEffect(() => {
+	// 	dispatch({ type: types.DATA_FETCH_STARTED });
 
-	useEffect(() => {
-		dispatch({ type: types.DATA_FETCH_STARTED });
+	// 	const success = (data) => {
+	// 		dispatch({ type: types.DATA_FETCH_SUCCESS, data });
+	// 	};
 
-		const success = (data) => {
-			dispatch({ type: types.DATA_FETCH_SUCCESS, data });
-		};
+	// 	const error = (error) => {
+	// 		dispatch({ type: types.DATA_FETCH_FAILED, error });
+	// 	};
 
-		const error = (error) => {
-			dispatch({ type: types.DATA_FETCH_FAILED, error });
-		};
+	// 	const getData = async () => {
+	// 		const contract = await getContract(library, CHARITY_CONTRACT_ADDRESS);
 
-		const getData = async () => {
-			const contract = await getContract(library, CHARITY_CONTRACT_ADDRESS);
+	// 		getAllProject(contract).then(success).catch(error);
+	// 	};
 
-			getAllProject(contract).then(success).catch(error);
-		};
-
-		getData();
-	}, [dispatch, library]);
+	// 	getData();
+	// }, [dispatch, library]);
 
 	const handleFilterClick = () => {
 		setOpenModal(true);
@@ -51,6 +50,32 @@ const Project = () => {
 	const handleClearFilter = () => {
 		setFilter({});
 	};
+
+	////
+	const [infoProject, setInfoProject] = useState();
+
+	const getInfoProject = (contract, address) => {
+		return getProjectInfo(contract, address);
+	};
+
+	useEffect(() => {
+		const getData = async () => {
+			const promise = [];
+			const contract = await getContract(library, CHARITY_CONTRACT_ADDRESS);
+			const allProject = await getAllProject(contract);
+			if (allProject.length < 1) return;
+			allProject.forEach((element) => {
+				promise.push(getInfoProject(contract, element));
+			});
+			const data = await Promise.all(promise);
+			setInfoProject(data);
+		};
+		getData();
+	}, []);
+
+	const projectShow = infoProject?.filter((item) => {
+		return item.state > 0;
+	});
 
 	return (
 		<div>
@@ -76,7 +101,7 @@ const Project = () => {
 				</div>
 			</div>
 			<div className={styles.listProject}>
-				{projectReducer.items?.map((item, key) => {
+				{projectShow?.map((item, key) => {
 					return <ProjectCard data={item} key={key} />;
 				})}
 			</div>

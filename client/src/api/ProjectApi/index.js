@@ -26,11 +26,16 @@ const getAllTransactionBeneficiary = (contract) => {
 	return contract.methods.getAllTransactionBeneficiary().call();
 };
 
+const getProjectInfo = (contract) => {
+	return contract.methods.getProjectInfo().call();
+};
+
 export {
 	startCharity,
 	addBeneficiary,
 	donate,
 	getAllDonator,
 	getAllBeneficiary,
+	getProjectInfo,
 	getAllTransactionBeneficiary,
 };

@@ -106,10 +106,6 @@ contract Charity {
         view
         returns (Project.ProjectInfo memory)
     {
-        require(
-            indexOfArray(_address, listProject) >= 0,
-            "Kh%C3%B4ng%20t%E1%BB%93n%20t%E1%BA%A1i"
-        );
         return Project(_address).getProjectInfo();
     }
 
@@ -128,17 +124,6 @@ contract Charity {
     function indexOfManager(address item) internal view returns (int256) {
         for (int256 i = 0; i < int256(listManager.length); i++) {
             if (item == listManager[uint256(i)].managerAddress) return i;
-        }
-        return -1;
-    }
-
-    function indexOfArray(address item, address[] memory array)
-        internal
-        pure
-        returns (int256)
-    {
-        for (int256 i = 0; i < int256(array.length); i++) {
-            if (item == array[uint256(i)]) return i;
         }
         return -1;
     }
