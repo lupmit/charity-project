@@ -1,0 +1,16 @@
+.buttonDefault {
+	background: rgb(252, 213, 53);
+	border-radius: 4px;
+	outline: none;
+	border: none;
+	cursor: pointer;
+}
+
+.buttonOutline {
+	background: none;
+	border: 1px solid rgb(252, 213, 53);
+	color: rgb(252, 213, 53);
+	border-radius: 4px;
+	outline: none;
+	cursor: pointer;
+}

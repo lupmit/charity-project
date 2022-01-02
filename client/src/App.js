@@ -14,7 +14,9 @@ import Donate from "./pages/Donate";
 import ProjectDetail from "./pages/ProjectDetail";
 import Admin from "./pages/Admin";
 import Login from "./pages/Login";
+import Home from "./pages/Home";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Manager from "./pages/Manager";
 import { useEagerConnect, useInactiveListener } from "./helpers/Hook";
 
@@ -46,21 +48,21 @@ function App() {
 
 	return (
 		<div className="App">
-			<Container>
-				<Router>
-					<Header />
-					<Routes>
-						<Route path="/login" element={<Login />} />
-						<Route element={<RequireAuth auth={active} />}>
-							<Route path="/project" element={<Project />} />
-							<Route path="/project/:address" element={<ProjectDetail />} />
-							<Route path="/project/:address/donate" element={<Donate />} />
-							<Route path="/admin" element={<Admin />} />
-							<Route path="/manager" element={<Manager />} />
-						</Route>
-					</Routes>
-				</Router>
-			</Container>
+			<Router>
+				<Header />
+				<Routes>
+					<Route path="/login" element={<Login />} />
+					<Route element={<RequireAuth auth={active} />}>
+						<Route path="/" element={<Home />} />
+						<Route path="/project" element={<Project />} />
+						<Route path="/project/:address" element={<ProjectDetail />} />
+						<Route path="/project/:address/donate" element={<Donate />} />
+						<Route path="/admin" element={<Admin />} />
+						<Route path="/manager" element={<Manager />} />
+					</Route>
+				</Routes>
+				<Footer />
+			</Router>
 		</div>
 	);
 }

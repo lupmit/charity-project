@@ -7,23 +7,13 @@ const data = {
 			name: "Gases",
 			data: [
 				{
-					name: "Argon",
-					y: 0.9,
-					color: "#3498db",
-				},
-				{
-					name: "Nitrogen",
-					y: 78.1,
-					color: "#9b59b6",
-				},
-				{
 					name: "Oxygen",
 					y: 20.9,
 					color: "#2ecc71",
 				},
 				{
 					name: "Trace Gases",
-					y: 0.1,
+					y: 10.9,
 					color: "#f1c40f",
 				},
 			],
@@ -31,7 +21,8 @@ const data = {
 	],
 };
 
-const Chart = () => {
+const Chart = (props) => {
+	const { width, height } = props;
 	const renderChart = () => {
 		Highcharts.chart({
 			chart: {
@@ -44,7 +35,7 @@ const Chart = () => {
 			plotOptions: {
 				pie: {
 					dataLabels: false,
-					innerSize: "70%",
+					innerSize: "60%",
 				},
 			},
 			credits: {
@@ -59,7 +50,7 @@ const Chart = () => {
 	return (
 		<div
 			id="pie-chart"
-			style={{ width: "300px", height: "300px", margin: "0 auto" }}
+			style={{ width: width, height: height, margin: "0 auto" }}
 		></div>
 	);
 };

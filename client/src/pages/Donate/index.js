@@ -4,6 +4,7 @@ import { getContract } from "../../helpers/Contract";
 import { donate } from "../../api/ProjectApi";
 import { useWeb3React } from "@web3-react/core";
 import { useNavigate } from "react-router-dom";
+import Container from "../../components/Container";
 import styles from "./styles.module.scss";
 
 const Donate = () => {
@@ -11,7 +12,8 @@ const Donate = () => {
 	const params = useParams();
 	const address = params.address;
 
-	const { account, library } = useWeb3React();
+	const { account, library, error } = useWeb3React();
+	console.log(account);
 
 	const getcontract = async () => {
 		return await getContract(library, address, "Project");
@@ -36,44 +38,46 @@ const Donate = () => {
 
 	return (
 		<div className={styles.donateWrapper}>
-			<div className={styles.donateContent}>
-				<div className={styles.left}>
-					<div className={styles.leftContent}>
-						<div className={styles.top}>
-							<img
-								src="https://resource.binance.charity/images/2cb9816b62254787a32e3fd34d59dea9_pinktoken.jpg"
-								alt="Pink Care Token Project for Period Poverty"
-							/>
+			<Container>
+				<div className={styles.donateContent}>
+					<div className={styles.left}>
+						<div className={styles.leftContent}>
+							<div className={styles.top}>
+								<img
+									src="https://resource.binance.charity/images/2cb9816b62254787a32e3fd34d59dea9_pinktoken.jpg"
+									alt="Pink Care Token Project for Period Poverty"
+								/>
+							</div>
+							<div className={styles.bottom}>
+								<div className={styles.content}>
+									<h3>Test</h3>
+									<p>test</p>
+								</div>
+							</div>
 						</div>
-						<div className={styles.bottom}>
-							<div className={styles.content}>
-								<h3>Test</h3>
-								<p>test</p>
+					</div>
+					<div className={styles.right}>
+						<div className={styles.rightContent}>
+							<div className={styles.header}>
+								<h3>Donate to help</h3>
+							</div>
+							<div className={styles.form}>
+								<form onSubmit={handleSumit}>
+									<span>Name</span>
+									<input name="name"></input>
+									<span>Description</span>
+									<input name="desc"></input>
+									<span>Amount</span>
+									<input name="amount"></input>
+									<div className={styles.buttonDonate}>
+										<button type="submit">Proceed to donation</button>
+									</div>
+								</form>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div className={styles.right}>
-					<div className={styles.rightContent}>
-						<div className={styles.header}>
-							<h3>Donate to help</h3>
-						</div>
-						<div className={styles.form}>
-							<form onSubmit={handleSumit}>
-								<span>Name</span>
-								<input name="name"></input>
-								<span>Description</span>
-								<input name="desc"></input>
-								<span>Amount</span>
-								<input name="amount"></input>
-								<div className={styles.buttonDonate}>
-									<button type="submit">Proceed to donation</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
+			</Container>
 		</div>
 	);
 };

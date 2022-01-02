@@ -12,6 +12,7 @@ import reducers from "./reducers";
 
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-multi-carousel/lib/styles.css";
 
 const getLibrary = (provider) => {
 	return new Web3(provider);

@@ -5,7 +5,7 @@ import { injected } from "../../components/Wallet";
 import { useLocation } from "react-router-dom";
 
 const Login = () => {
-	const { active, activate, deactivate } = useWeb3React();
+	const { active, activate, deactivate, library } = useWeb3React();
 	let location = useLocation();
 
 	const from = location.state?.from?.pathname || "/";
@@ -25,6 +25,8 @@ const Login = () => {
 			console.log(ex);
 		}
 	}
+
+	console.log(library);
 
 	return active ? (
 		<Navigate to={from} />
