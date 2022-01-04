@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useWeb3React } from "@web3-react/core";
 
 import { injected } from "../../components/Wallet";
+import Web3 from "web3";
 
 export function useEagerConnect() {
 	const { activate, active } = useWeb3React();
@@ -69,4 +70,13 @@ export function useInactiveListener(suppress = false) {
 			};
 		}
 	}, [active, error, suppress, activate]);
+}
+
+export function useLibrary() {
+	const { active, library } = useWeb3React();
+	if (active) {
+		return library;
+	}
+	const provider = "http://127.0.0.1:7545";
+	return new Web3(provider);
 }

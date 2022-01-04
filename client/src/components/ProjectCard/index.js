@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { getContract } from "../../helpers/Contract";
 import { useWeb3React } from "@web3-react/core";
 import { getProjectInfo } from "../../api/CharityApi";
-import { CHARITY_CONTRACT_ADDRESS } from "../../config";
 import styles from "./styles.module.scss";
+import { useLibrary } from "../../helpers/Hook";
 
 const ProjectCard = (props) => {
 	const { data } = props;
-	const { library } = useWeb3React();
+	const library = useLibrary();
 
 	const navigate = useNavigate();
 	const handleClickCard = () => {

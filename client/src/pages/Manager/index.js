@@ -8,26 +8,28 @@ import {
 	getProjectInfo,
 } from "../../api/CharityApi";
 import { donate, startCharity, addBeneficiary } from "../../api/ProjectApi";
-import { getContract } from "../../helpers/Contract";
+import { getContract, getCharityAdress } from "../../helpers/Contract";
 import { useWeb3React } from "@web3-react/core";
 import { Link } from "react-router-dom";
-import { CHARITY_CONTRACT_ADDRESS } from "../../config";
 import Table from "../../components/Table";
 import Modal from "../../components/Modal";
+import { useLibrary } from "../../helpers/Hook";
 
 const Manager = () => {
-	const { active, library, account } = useWeb3React();
+	const { active, account } = useWeb3React();
 	const [rerender, setRerender] = useState(false);
 	const reRender = () => {
 		setRerender(!rerender);
 	};
+
+	const library = useLibrary();
 	useEffect(() => {
 		var timer = setInterval(() => reRender(), 5000);
 		return () => clearInterval(timer);
 	});
 
 	const getcontract = async () => {
-		return await getContract(library, CHARITY_CONTRACT_ADDRESS);
+		return await getContract(library, getCharityAdress());
 	};
 
 	const startProject = async (address) => {
@@ -126,6 +128,7 @@ const Manager = () => {
 			const projectInfo = [];
 			const contract = await getcontract();
 			const myProject = await getMyProject(contract, account);
+			console.log(myProject);
 			if (myProject.length < 1) return;
 			myProject.forEach((element) => {
 				projectInfo.push(getInfo(contract, element));

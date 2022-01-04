@@ -44,20 +44,20 @@ contract Charity {
     }
 
     //delete manager
-    function deleteManager(address _mangerAddress) public returns (bool) {
-        require(
-            msg.sender == owner,
-            "Kh%C3%B4ng%20c%C3%B3%20quy%E1%BB%81n%20th%E1%BB%B1c%20thi"
-        );
-        require(
-            indexOfManager(_mangerAddress) >= 0,
-            "Kh%C3%B4ng%20t%E1%BB%93n%20t%E1%BA%A1i"
-        );
+    // function deleteManager(address _mangerAddress) public returns (bool) {
+    //     require(
+    //         msg.sender == owner,
+    //         "Kh%C3%B4ng%20c%C3%B3%20quy%E1%BB%81n%20th%E1%BB%B1c%20thi"
+    //     );
+    //     require(
+    //         indexOfManager(_mangerAddress) >= 0,
+    //         "Kh%C3%B4ng%20t%E1%BB%93n%20t%E1%BA%A1i"
+    //     );
 
-        int256 index = indexOfManager(_mangerAddress);
-        removeManager(index);
-        return true;
-    }
+    //     int256 index = indexOfManager(_mangerAddress);
+    //     removeManager(index);
+    //     return true;
+    // }
 
     //update manager
     function updateManager(
@@ -134,5 +134,23 @@ contract Charity {
         listManager[uint256(index)] = listManager[listManager.length - 1];
         listManager.pop();
         return;
+    }
+
+    function getInfoCharity()
+        public
+        view
+        returns (
+            uint256 totalDonate,
+            uint256 totalDonator,
+            uint256 totalBeneficy
+        )
+    {
+        for (uint256 i = 0; i < listProject.length; i++) {
+            Project.ProjectInfo memory p = Project(listProject[i])
+                .getProjectInfo();
+            totalDonate += p.balance;
+            totalDonator += p.numberOfDonator;
+            totalBeneficy += p.numberOfBeneficy;
+        }
     }
 }

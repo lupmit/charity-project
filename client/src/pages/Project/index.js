@@ -10,40 +10,54 @@ import { AiOutlineClose } from "react-icons/ai";
 import styles from "./styles.module.scss";
 
 import Container from "../../components/Container";
-import { getContract } from "../../helpers/Contract";
+import { getContract, getCharityAdress } from "../../helpers/Contract";
 import { useWeb3React } from "@web3-react/core";
 
-import { CHARITY_CONTRACT_ADDRESS } from "../../config";
 import Loading from "../../components/Loading";
+import { useLibrary } from "../../helpers/Hook";
+import Modal from "../../components/Modal";
+import Button from "../../components/Button";
+import { useNavigate } from "react-router-dom";
 
 const Project = () => {
 	const [openModal, setOpenModal] = useState(false);
 	const [filter, setFilter] = useState({});
-	const { active, library } = useWeb3React();
+	const [search, setSearch] = useState("");
+	const { active } = useWeb3React();
 
-	console.log(library);
+	let library = useLibrary();
 
-	// const projectReducer = useSelector((state) => state.projectReducer);
-	// const dispatch = useDispatch();
-	// useEffect(() => {
-	// 	dispatch({ type: types.DATA_FETCH_STARTED });
+	const navigate = useNavigate();
+	const donateClick = (address) => {
+		navigate("/project/" + address);
+	};
 
-	// 	const success = (data) => {
-	// 		dispatch({ type: types.DATA_FETCH_SUCCESS, data });
-	// 	};
+	const renderHeader = () => {
+		return <div className={styles.modelFilterTitle}> Filter</div>;
+	};
+	const renderContent = () => {
+		return (
+			<div className={styles.filterContentWrapper}>
+				<div className={styles.filterStatus}>
+					<h4 className={styles.title}>Project Status</h4>
+					<div className={styles.statuses}>
+						<Button>All</Button>
+						<Button>Funding</Button>
+						<Button>Compeleted</Button>
+					</div>
+				</div>
+			</div>
+		);
+	};
 
-	// 	const error = (error) => {
-	// 		dispatch({ type: types.DATA_FETCH_FAILED, error });
-	// 	};
-
-	// 	const getData = async () => {
-	// 		const contract = await getContract(library, CHARITY_CONTRACT_ADDRESS);
-
-	// 		getAllProject(contract).then(success).catch(error);
-	// 	};
-
-	// 	getData();
-	// }, [dispatch, library]);
+	const renderFooter = () => {
+		return (
+			<div className={styles.actionFilter}>
+				<Button className={styles.reset}>Reset</Button>
+				<Button className={styles.go}>Go</Button>
+			</div>
+		);
+	};
 
 	const handleFilterClick = () => {
 		setOpenModal(true);
@@ -65,23 +79,51 @@ const Project = () => {
 	useEffect(() => {
 		const getData = async () => {
 			const promise = [];
-			const contract = await getContract(library, CHARITY_CONTRACT_ADDRESS);
+			let data = [];
+			const contract = await getContract(library, getCharityAdress());
 			const allProject = await getAllProject(contract);
-			if (allProject.length < 1) return;
-			allProject.forEach((element) => {
-				promise.push(getInfoProject(contract, element));
-			});
-			const data = await Promise.all(promise);
+			if (allProject.length >= 1) {
+				allProject.forEach((element) => {
+					promise.push(getInfoProject(contract, element));
+				});
+				data = await Promise.all(promise);
+			}
 			setInfoProject(data);
 			setLoading(false);
 		};
 		getData();
 	}, []);
 
-	const projectShow = infoProject?.filter((item) => {
+	let projectShow = infoProject?.filter((item) => {
 		return item.state > 0;
 	});
+	const getProjectHighlight = () => {
+		if (projectShow) {
+			const cloneArray = JSON.parse(JSON.stringify(projectShow));
+			cloneArray.sort((a, b) => {
+				return parseFloat(a[4]) < parseFloat(b[4])
+					? 1
+					: parseFloat(a[4]) === parseFloat(b[4])
+					? parseFloat(a[3]) < parseFloat(b[3])
+						? 1
+						: -1
+					: -1;
+			});
+			return cloneArray[0];
+		}
+		return;
+	};
 
+	//search
+	let projectList = projectShow?.filter((item) => {
+		let result = item.name
+			.toLowerCase()
+			.match(new RegExp(search.toLowerCase()));
+		console.log(result);
+		return result !== null && result.length > 0;
+	});
+
+	let hightlight = getProjectHighlight();
 	return loading ? (
 		<Loading />
 	) : (
@@ -90,33 +132,30 @@ const Project = () => {
 				<img src="https://resource.binance.charity/images/3e39d9ef77344ad29feda41184add5b5_covidfitured.jpg" />
 				<div class={styles.contentWrapper}>
 					<div class={styles.content}>
-						<h2 class={styles.name}>Binance Charity Wallet</h2>
-						<p class={styles.desc}>
-							The Charity Wallet is designed for donors who do not specify the
-							donation projects and allow BCF to distribute the fund
-							accordingly. Our blockchain-based system will allow people to
-							track the flow of financial transactions with transparency. Our
-							team will perform professional and rigorous due diligence to
-							select projects and on-ground collaborative organizations,
-							ensuring that the social impact of each currency unit will be
-							maximized. On behalf of the end-beneficiaries, we would like to
-							express our thankfulness for your generosity.
-						</p>
+						<h2 class={styles.name}>{hightlight[1]}</h2>
+						<p class={styles.desc}>{hightlight[2]}</p>
 						<div class={styles.footer}>
 							<div class={styles.infoWrapper}>
 								<div class={styles.valueWrapper}>
-									<span class={styles.value}>805</span>
+									<span class={styles.value}>{hightlight[5]}</span>
 								</div>
 								<div class={styles.key}>Donations</div>
 							</div>
 							<div class={styles.infoWrapper}>
 								<div class={styles.valueWrapper}>
-									<span class={styles.value}>1,576.3 BTC</span>
-									<span class={styles.valueExtend}>≈ 78,810,466.7 USD</span>
+									<span class={styles.value}>
+										{library.utils.fromWei(hightlight[4])} ETH
+									</span>
+									{/* <span class={styles.valueExtend}>≈ 78,810,466.7 USD</span> */}
 								</div>
 								<div class={styles.key}>Total Donations</div>
 							</div>
-							<button class={styles.button}>Donate</button>
+							<button
+								class={styles.button}
+								onClick={() => donateClick(hightlight[0])}
+							>
+								Donate
+							</button>
 						</div>
 					</div>
 				</div>
@@ -126,12 +165,11 @@ const Project = () => {
 					<div
 						className={styles.filter}
 						style={{ background: !_.isEmpty(filter) && "rgb(252, 213, 53)" }}
-						onClick={handleFilterClick}
 					>
-						<GrFilter />
-						<span>Filter</span>
+						<GrFilter onClick={handleFilterClick} />
+						<span onClick={handleFilterClick}>Filter</span>
 						{_.isEmpty(filter) ? (
-							<AiFillCaretDown />
+							<AiFillCaretDown onClick={handleFilterClick} />
 						) : (
 							<AiOutlineClose onClick={handleClearFilter} />
 						)}
@@ -139,16 +177,25 @@ const Project = () => {
 					<div className={styles.search}>
 						<Search
 							placeholder="Search"
-							onChange={(event) => console.log(event.target.value)}
+							onChange={(event) => setSearch(event.target.value)}
 						/>
 					</div>
 				</div>
 				<div className={styles.listProject}>
-					{projectShow?.map((item, key) => {
+					{projectList?.map((item, key) => {
 						return <ProjectCard data={item} key={key} />;
 					})}
 				</div>
 			</Container>
+			<Modal
+				show={openModal}
+				onHide={() => {
+					setOpenModal(false);
+				}}
+				header={renderHeader()}
+				content={renderContent()}
+				footer={renderFooter()}
+			></Modal>
 		</div>
 	);
 };

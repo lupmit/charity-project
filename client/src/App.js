@@ -13,18 +13,20 @@ import Project from "./pages/Project";
 import Donate from "./pages/Donate";
 import ProjectDetail from "./pages/ProjectDetail";
 import Admin from "./pages/Admin";
-import Login from "./pages/Login";
+import Test from "./pages/Test";
 import Home from "./pages/Home";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Manager from "./pages/Manager";
+import ScrollToTop from "./components/ScrollToTop";
 import { useEagerConnect, useInactiveListener } from "./helpers/Hook";
+import { injected } from "./components/Wallet";
 
 import "./App.css";
 import Container from "./components/Container";
 
 function App() {
-	const { active, connector } = useWeb3React();
+	const { active, connector, activate } = useWeb3React();
 
 	const [activatingConnector, setActivatingConnector] = useState();
 	useEffect(() => {
@@ -49,19 +51,19 @@ function App() {
 	return (
 		<div className="App">
 			<Router>
-				<Header />
-				<Routes>
-					<Route path="/login" element={<Login />} />
-					<Route element={<RequireAuth auth={active} />}>
+				<ScrollToTop>
+					<Header />
+					<Routes>
+						<Route path="/login" element={<Test />} />
 						<Route path="/" element={<Home />} />
 						<Route path="/project" element={<Project />} />
 						<Route path="/project/:address" element={<ProjectDetail />} />
 						<Route path="/project/:address/donate" element={<Donate />} />
 						<Route path="/admin" element={<Admin />} />
 						<Route path="/manager" element={<Manager />} />
-					</Route>
-				</Routes>
-				<Footer />
+					</Routes>
+					<Footer />
+				</ScrollToTop>
 			</Router>
 		</div>
 	);

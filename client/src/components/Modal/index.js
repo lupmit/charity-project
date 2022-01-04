@@ -1,13 +1,20 @@
 import React from "react";
 import { Modal as ModalComponent } from "react-bootstrap";
+import styles from "./styles.module.scss";
 
 const Modal = ({ show, onHide, header, content, footer, ...etc }) => {
 	return (
-		<div>
+		<div className={styles.wrapper}>
 			<ModalComponent centered show={show} onHide={onHide} {...etc}>
-				<ModalComponent.Header closeButton>{header}</ModalComponent.Header>
+				<ModalComponent.Header className={styles.modalHeader} closeButton>
+					{header}
+				</ModalComponent.Header>
 				<ModalComponent.Body>{content}</ModalComponent.Body>
-				<ModalComponent.Footer>{footer}</ModalComponent.Footer>
+				{footer ? (
+					<ModalComponent.Footer className={styles.modalFooter}>
+						{footer}
+					</ModalComponent.Footer>
+				) : null}
 			</ModalComponent>
 		</div>
 	);

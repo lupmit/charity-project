@@ -10,6 +10,7 @@ import Container from "../../components/Container";
 import Button from "../../components/Button";
 import Loading from "../../components/Loading";
 import styles from "./styles.module.scss";
+import { useLibrary } from "../../helpers/Hook";
 
 const ProjectDetail = (props) => {
 	const [info, setInfo] = useState();
@@ -20,10 +21,22 @@ const ProjectDetail = (props) => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const { library } = useWeb3React();
+	const library = useLibrary();
 
 	const getcontract = async () => {
 		return await getContract(library, address, "Project");
+	};
+
+	const getStatus = (status) => {
+		console.log(status);
+		status = parseInt(status);
+		if (status === 0) {
+			return "Setup";
+		} else if (status === 1) {
+			return "Funding";
+		} else {
+			return "Compeleted";
+		}
 	};
 
 	useEffect(() => {
@@ -41,7 +54,24 @@ const ProjectDetail = (props) => {
 		navigate(location.pathname + "/donate");
 	};
 
-	console.log(info);
+	const getChartData = (item) => {
+		return {
+			series: [
+				{
+					data: [
+						{
+							y: parseFloat(library.utils.fromWei(item.target)),
+							color: "#6fcf97",
+						},
+						{
+							y: parseFloat(library.utils.fromWei(item.balance)),
+							color: "#f0b90b",
+						},
+					],
+				},
+			],
+		};
+	};
 
 	return loading ? (
 		<Loading />
@@ -51,23 +81,29 @@ const ProjectDetail = (props) => {
 				<img src="https://resource.binance.charity/images/a5ded15f1fae4b47b55264374adc845a_WechatIMG701.jpeg" />
 				<div className={styles.contentWrapper}>
 					<div className={styles.content}>
-						<h5>Funding</h5>
-						<h2>Crypto Against COVID</h2>
-						<p>Join Binance Charity and help the world fight COVID-19. </p>
+						<h5>{getStatus(info.state)}</h5>
+						<h2>{info.name}</h2>
+						<p>{info.description} </p>
 						<div className={styles.progressContent}>
 							<ProgressBar animated now={(info.balance / info.target) * 100} />
 						</div>
 						<div className={styles.infoDonate}>
-							<span className={styles.balance}>$ {info.balance}</span>
-							<span className={styles.target}>Raised of $ {info.target}</span>
+							<span className={styles.balance}>
+								{library.utils.fromWei(info.balance)} ETH
+							</span>
+							<span className={styles.target}>
+								Raised of {library.utils.fromWei(info.target)} ETH
+							</span>
 						</div>
 						<div className={styles.action}>
 							<Button className={styles.donate} onClick={donateClick}>
 								Donate
 							</Button>
-							<Button className={styles.download} type="outline">
-								Download
-							</Button>
+							{info.status === 2 ? (
+								<Button className={styles.download} typeButton="outline">
+									Download
+								</Button>
+							) : null}
 						</div>
 					</div>
 				</div>
@@ -98,19 +134,22 @@ const ProjectDetail = (props) => {
 						</div>
 						<div className={styles.rightContent}>
 							<div className={styles.chart}>
-								<Chart width="300px" height="300px" />
+								<Chart
+									width="300px"
+									height="300px"
+									dataChart={getChartData(info)}
+								/>
 							</div>
 							<div className={styles.chartTitle}>
 								Total donated
-								<span> {info.balance} BTC ≈ $7,166,244.18</span>
+								<span> {library.utils.fromWei(info.balance)} ETH</span>
 							</div>
 							<div className={styles.allocated}>
-								Total allocated
-								<span> ≈ $1,249,351.24</span>
+								Total allocated <span>1 ETH</span>
 							</div>
 							<div className={styles.pending}>
 								Total pending
-								<span> ≈ $1,249,351.24</span>
+								<span>2 ETH</span>
 							</div>
 						</div>
 					</div>

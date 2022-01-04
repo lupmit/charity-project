@@ -3,7 +3,7 @@ import classnames from "classnames";
 import styles from "./styles.module.scss";
 
 const Button = (props) => {
-	const { children, className, type, ...rest } = props;
+	const { children, className, typeButton, ...rest } = props;
 	const getClassName = (type) => {
 		switch (type) {
 			case "outline":
@@ -13,7 +13,10 @@ const Button = (props) => {
 		}
 	};
 	return (
-		<button className={classnames(className, getClassName(type))} {...rest}>
+		<button
+			className={classnames(className, getClassName(typeButton))}
+			{...rest}
+		>
 			{children}
 		</button>
 	);

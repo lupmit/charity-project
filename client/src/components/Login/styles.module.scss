@@ -1,0 +1,48 @@
+.connectWrapper {
+	display: grid;
+	grid-auto-rows: auto;
+	row-gap: 16px;
+	.wallet {
+		margin-top: 0px;
+		opacity: 1;
+
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		padding: 1rem;
+
+		background-color: rgb(237, 238, 242);
+		outline: none;
+		border: 1px solid rgb(206, 208, 217);
+		border-radius: 12px;
+		width: 100% !important;
+		&:hover {
+			cursor: pointer;
+			border: 1px solid #f0b90b;
+		}
+		.nameWrapper {
+			display: flex;
+			flex-flow: column nowrap;
+			justify-content: center;
+			height: 100%;
+			.name {
+				display: flex;
+				flex-flow: row nowrap;
+				color: rgb(0, 0, 0);
+				font-size: 1rem;
+				font-weight: 500;
+			}
+		}
+		.icon {
+			display: flex;
+			flex-flow: column nowrap;
+			align-items: center;
+			justify-content: center;
+			& > img {
+				height: 24px;
+				width: 24px;
+			}
+		}
+	}
+}

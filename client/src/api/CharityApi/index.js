@@ -38,6 +38,10 @@ const getMyProject = (contract, address) => {
 	return contract.methods.getMyProject(address).call();
 };
 
+const getCharityInfo = (contract) => {
+	return contract.methods.getInfoCharity().call();
+};
+
 export {
 	addManager,
 	deleteManager,
@@ -47,4 +51,5 @@ export {
 	getAllManager,
 	getMyProject,
 	getProjectInfo,
+	getCharityInfo,
 };

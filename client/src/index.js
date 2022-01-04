@@ -15,7 +15,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "react-multi-carousel/lib/styles.css";
 
 const getLibrary = (provider) => {
-	return new Web3(provider);
+	const library = new Web3(provider);
+	return library;
 };
 const store = createStore(reducers, applyMiddleware(thunk));
 

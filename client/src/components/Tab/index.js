@@ -9,6 +9,7 @@ import {
 } from "../../api/ProjectApi";
 import * as moment from "moment";
 import styles from "./styles.module.scss";
+import { useLibrary } from "../../helpers/Hook";
 
 const columnsDonator = [
 	{
@@ -60,7 +61,7 @@ const Tab = (props) => {
 	const [donatorRecord, setDonatorRecord] = useState([]);
 	const [beneficyRecord, setBeneficyRecord] = useState([]);
 	const { address } = props;
-	const { library } = useWeb3React();
+	const library = useLibrary();
 
 	useEffect(() => {
 		const getData = async () => {

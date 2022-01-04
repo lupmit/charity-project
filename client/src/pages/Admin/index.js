@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { getAllManager, addManager } from "../../api/CharityApi";
 import { donate, startCharity, addBeneficiary } from "../../api/ProjectApi";
-import { getContract } from "../../helpers/Contract";
+import { getContract, getCharityAdress } from "../../helpers/Contract";
 import { useWeb3React } from "@web3-react/core";
 import { Link } from "react-router-dom";
-import { CHARITY_CONTRACT_ADDRESS } from "../../config";
 import styles from "./styles.module.scss";
 
 const Admin = () => {
@@ -15,7 +14,7 @@ const Admin = () => {
 	console.log(library.utils);
 
 	const getcontract = async () => {
-		return await getContract(library, CHARITY_CONTRACT_ADDRESS);
+		return await getContract(library, getCharityAdress());
 	};
 	const addmanager = async (e) => {
 		e.preventDefault();
