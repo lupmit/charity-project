@@ -171,9 +171,7 @@ const Footer = () => {
 					</div>
 					<div className={styles.contentRight}>
 						<div className={styles.mainContent}>
-							<div>
-								<Logo />
-							</div>
+							<div className={styles.logo}>Charity Project</div>
 							Copyright © 2018-2021 Blockchain Charity Foundation USA. All
 							rights reserved.
 						</div>

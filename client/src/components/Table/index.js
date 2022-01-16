@@ -6,7 +6,7 @@ const paginationComponentOptions = {
 	noRowsPerPage: true,
 };
 
-const Table = ({ columns, data }) => {
+const Table = ({ columns, data, ...etc }) => {
 	return (
 		<div className={styles.tableComponent}>
 			<DataTable
@@ -15,6 +15,7 @@ const Table = ({ columns, data }) => {
 				pagination
 				paginationComponentOptions={paginationComponentOptions}
 				persistTableHead={true}
+				{...etc}
 			/>
 		</div>
 	);

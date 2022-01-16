@@ -1,0 +1,17 @@
+.wrapper {
+	> div {
+		margin-top: 10px;
+	}
+	input {
+		box-sizing: border-box;
+		margin: 10px 0px 0px;
+		min-width: 0px;
+		height: 28px;
+		border-width: 0.5px;
+		border-style: solid;
+		border-color: transparent transparent rgb(223, 226, 231);
+		border-image: initial;
+		outline: 0px;
+		width: 100%;
+	}
+}

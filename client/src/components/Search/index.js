@@ -5,10 +5,10 @@ import { FiSearch } from "react-icons/fi";
 import styles from "./styles.module.scss";
 
 const Search = (props) => {
-	const { className, ...rest } = props;
+	const { className, hideIcon, ...rest } = props;
 	return (
 		<div className={classNames(styles.search, className)}>
-			<FiSearch />
+			{!hideIcon && <FiSearch />}
 			<DebounceInput debounceTimeout={300} {...rest} />
 		</div>
 	);

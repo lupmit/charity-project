@@ -73,6 +73,11 @@
 			border-radius: 5px;
 			overflow: hidden;
 		}
+		:global {
+			.progress-bar {
+				background: rgb(252, 213, 53);
+			}
+		}
 	}
 	.information {
 		margin: 0 16px 16px;

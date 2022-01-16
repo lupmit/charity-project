@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as _ from "lodash";
+import { getProjectByAddress } from "../../api/ServerApi";
 import Search from "../../components/Search";
 import ProjectCard from "../../components/ProjectCard";
 import { getAllProject, getProjectInfo } from "../../api/CharityApi";
@@ -76,43 +77,78 @@ const Project = () => {
 		return getProjectInfo(contract, address);
 	};
 
+	const ProjectInfoToObj = (projects) => {
+		if (projects.length < 1) return [];
+		return projects.map((item) => {
+			return {
+				projectAddress: item[0],
+				name: item[1],
+				target: item[2],
+				balance: item[3],
+				allocated: item[4],
+				numberOfDonator: item[5],
+				numberOfBeneficy: item[6],
+				beneficiaries: item[7],
+				state: item[8],
+			};
+		});
+	};
+
 	useEffect(() => {
 		const getData = async () => {
-			const promise = [];
-			let data = [];
+			const promise1 = [];
+			const promise2 = [];
+			let data1 = [];
+			let data2 = [];
 			const contract = await getContract(library, getCharityAdress());
 			const allProject = await getAllProject(contract);
 			if (allProject.length >= 1) {
 				allProject.forEach((element) => {
-					promise.push(getInfoProject(contract, element));
+					promise1.push(getInfoProject(contract, element));
+					promise2.push(getProjectByAddress(element));
 				});
-				data = await Promise.all(promise);
+				data1 = await Promise.all(promise1);
+				data1 = ProjectInfoToObj(data1);
+				data2 = await Promise.all(promise2);
+				data2 = data2.map((item) => item.data.data);
+				if (!_.isEmpty(data1) && !_.isEmpty(data2)) {
+					const data = _.map(data1, function (item) {
+						return _.extend(
+							item,
+							_.find(data2, { address: item.projectAddress })
+						);
+					});
+					setInfoProject(data);
+				}
 			}
-			setInfoProject(data);
-			setLoading(false);
 		};
-		getData();
+		getData().then((res) => {
+			setLoading(false);
+		});
 	}, []);
 
 	let projectShow = infoProject?.filter((item) => {
 		return item.state > 0;
 	});
+
 	const getProjectHighlight = () => {
 		if (projectShow) {
 			const cloneArray = JSON.parse(JSON.stringify(projectShow));
 			cloneArray.sort((a, b) => {
-				return parseFloat(a[4]) < parseFloat(b[4])
+				return parseFloat(a.allocated) < parseFloat(b.allocated)
 					? 1
-					: parseFloat(a[4]) === parseFloat(b[4])
-					? parseFloat(a[3]) < parseFloat(b[3])
+					: parseFloat(a.allocated) === parseFloat(b.allocated)
+					? parseFloat(a.balance) < parseFloat(b.balance)
 						? 1
 						: -1
 					: -1;
 			});
-			return cloneArray[0];
+			return cloneArray;
 		}
-		return;
+		return [];
 	};
+
+	let hightlight = getProjectHighlight();
 
 	//search
 	let projectList = projectShow?.filter((item) => {
@@ -123,28 +159,34 @@ const Project = () => {
 		return result !== null && result.length > 0;
 	});
 
-	let hightlight = getProjectHighlight();
+	console.log(projectList);
 	return loading ? (
 		<Loading />
 	) : (
 		<div className={styles.wrapper}>
 			<div className={styles.headerDetail}>
-				<img src="https://resource.binance.charity/images/3e39d9ef77344ad29feda41184add5b5_covidfitured.jpg" />
+				<img src={`http://localhost:5000/${hightlight[0].image}`} />
 				<div class={styles.contentWrapper}>
 					<div class={styles.content}>
-						<h2 class={styles.name}>{hightlight[1]}</h2>
-						<p class={styles.desc}>{hightlight[2]}</p>
+						<h2 class={styles.name}>{hightlight[0].name}</h2>
+						<p class={styles.desc}>{hightlight[0].description}</p>
 						<div class={styles.footer}>
 							<div class={styles.infoWrapper}>
 								<div class={styles.valueWrapper}>
-									<span class={styles.value}>{hightlight[5]}</span>
+									<span class={styles.value}>
+										{hightlight[0].numberOfDonator}
+									</span>
 								</div>
 								<div class={styles.key}>Donations</div>
 							</div>
 							<div class={styles.infoWrapper}>
 								<div class={styles.valueWrapper}>
 									<span class={styles.value}>
-										{library.utils.fromWei(hightlight[4])} ETH
+										{parseFloat(library.utils.fromWei(hightlight[0].balance)) +
+											parseFloat(
+												library.utils.fromWei(hightlight[0].allocated)
+											)}{" "}
+										ETH
 									</span>
 									{/* <span class={styles.valueExtend}>≈ 78,810,466.7 USD</span> */}
 								</div>
@@ -152,7 +194,7 @@ const Project = () => {
 							</div>
 							<button
 								class={styles.button}
-								onClick={() => donateClick(hightlight[0])}
+								onClick={() => donateClick(hightlight[0].address)}
 							>
 								Donate
 							</button>

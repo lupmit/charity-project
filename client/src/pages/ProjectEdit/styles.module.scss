@@ -1,0 +1,52 @@
+.wrapper {
+	text-align: left;
+
+	.imageUpload {
+		display: flex;
+		flex-direction: column;
+		margin-top: 20px;
+		margin-bottom: 20px;
+		> p {
+			margin-bottom: 10px;
+		}
+		.imageReview {
+			> label {
+				display: block;
+				text-align: center;
+			}
+			.reviewWrapper {
+				display: block;
+				margin-right: auto;
+				margin-left: auto;
+				position: relative;
+				width: 450px;
+				> img {
+					width: 100%;
+				}
+				> svg {
+					position: absolute;
+					font-size: 25px;
+					top: 0;
+					right: 0;
+				}
+			}
+		}
+	}
+	.editItem {
+		.actionAddBeneficy {
+			> p {
+				cursor: pointer;
+			}
+		}
+		padding-top: 20px;
+		> div {
+			margin-bottom: 10px;
+		}
+		.actionTable {
+			display: flex;
+			> svg {
+				margin: 5px;
+			}
+		}
+	}
+}

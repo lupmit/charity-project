@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import * as _ from "lodash";
 import Carousel from "react-multi-carousel";
 import Container from "../../components/Container";
 import { ReactComponent as Icon } from "../../assets/images/icon.svg";
@@ -17,6 +18,7 @@ import { useLibrary } from "../../helpers/Hook";
 import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { getProjectByAddress } from "../../api/ServerApi";
 import styles from "./styles.module.scss";
 
 const responsive = {
@@ -73,19 +75,51 @@ function Home(props) {
 		return getProjectInfo(contract, address);
 	};
 
+	const ProjectInfoToObj = (projects) => {
+		if (projects.length < 1) return [];
+		return projects.map((item) => {
+			return {
+				projectAddress: item[0],
+				name: item[1],
+				target: item[2],
+				balance: item[3],
+				allocated: item[4],
+				numberOfDonator: item[5],
+				numberOfBeneficy: item[6],
+				beneficiaries: item[7],
+				state: item[8],
+			};
+		});
+	};
+
 	useEffect(() => {
 		const getData = async () => {
-			const promise = [];
-			let data = [];
+			const promise1 = [];
+			const promise2 = [];
+			let data1 = [];
+			let data2 = [];
 			const contract = await getContract(library, getCharityAdress());
 			const allProject = await getAllProject(contract);
 			if (allProject.length >= 1) {
 				allProject.forEach((element) => {
-					promise.push(getInfoProject(contract, element));
+					promise1.push(getInfoProject(contract, element));
+					promise2.push(getProjectByAddress(element));
 				});
-				data = await Promise.all(promise);
+				data1 = await Promise.all(promise1);
+				data1 = ProjectInfoToObj(data1);
+				data2 = await Promise.all(promise2);
+				data2 = data2.map((item) => item.data.data);
+				if (!_.isEmpty(data1) && !_.isEmpty(data2)) {
+					const data = _.map(data1, function (item) {
+						return _.extend(
+							item,
+							_.find(data2, { address: item.projectAddress })
+						);
+					});
+					console.log(data);
+					setInfoProject(data);
+				}
 			}
-			setInfoProject(data);
 
 			const info = await getCharityInfo(contract);
 
@@ -107,10 +141,10 @@ function Home(props) {
 				return item.state > 0;
 			});
 			cloneArray.sort((a, b) => {
-				return parseFloat(a[4]) < parseFloat(b[4])
+				return parseFloat(a.allocated) < parseFloat(b.allocated)
 					? 1
-					: parseFloat(a[4]) === parseFloat(b[4])
-					? parseFloat(a[3]) < parseFloat(b[3])
+					: parseFloat(a.allocated) === parseFloat(b.allocated)
+					? parseFloat(a.balance) < parseFloat(b.balance)
 						? 1
 						: -1
 					: -1;
@@ -121,7 +155,6 @@ function Home(props) {
 	};
 
 	let hightlight = getProjectHighlight();
-	console.log(hightlight);
 	return loading ? (
 		<Loading />
 	) : (
@@ -134,7 +167,7 @@ function Home(props) {
 					showDots={true}
 				>
 					<div className={styles.image}>
-						<img src="https://resource.binance.charity/images/3e39d9ef77344ad29feda41184add5b5_covidfitured.jpg" />
+						<img src={`http://localhost:5000/${hightlight[0].image}`} />
 
 						<div class={styles.projectInfo}>
 							<div className={styles.feature}>Featured project</div>
@@ -142,7 +175,6 @@ function Home(props) {
 							<div className={styles.projectDesc}>
 								{hightlight[0].description}
 							</div>
-							{console.log(hightlight[0])}
 							<Link
 								to={`/project/${hightlight[0].projectAddress}`}
 								class={styles.link}
@@ -154,7 +186,7 @@ function Home(props) {
 						</div>
 					</div>
 					<div className={styles.image}>
-						<img src="https://resource.binance.charity/images/3e39d9ef77344ad29feda41184add5b5_covidfitured.jpg" />
+						<img src={`http://localhost:5000/${hightlight[1].image}`} />
 
 						<div class={styles.projectInfo}>
 							<div className={styles.feature}>Featured project</div>
@@ -177,7 +209,6 @@ function Home(props) {
 
 			<div className={styles.impact}>
 				<Container>
-					{console.log(library)}
 					<h5 className={styles.title}>Our Impact</h5>
 					<div className={styles.info}>
 						<div className={styles.item}>
@@ -204,7 +235,7 @@ function Home(props) {
 									className={styles.image}
 									onClick={() => handleClickCard(item)}
 								>
-									<img src="https://resource.binance.charity/images/3e39d9ef77344ad29feda41184add5b5_covidfitured.jpg" />
+									<img src={`http://localhost:5000/${item.image}`} />
 									<div class={styles.infoProject}>
 										<div class={styles.name}>{item.name}</div>
 									</div>

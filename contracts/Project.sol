@@ -24,11 +24,12 @@ contract Project {
     struct ProjectInfo {
         address projectAddress;
         string name;
-        string description;
         uint256 target;
         uint256 balance;
+        uint256 allocated;
         uint256 numberOfDonator;
         uint256 numberOfBeneficy;
+        Beneficiary[] beneficiaries;
         charity_state state;
     }
 
@@ -39,10 +40,9 @@ contract Project {
     }
 
     string public name;
-    string public description;
     address public owner;
     uint256 public target;
-    uint256 public amountRaised;
+    uint256 public allocated;
     uint256 public startTime;
     uint256 public endTime;
     mapping(address => Donator[]) public myDonation;
@@ -53,17 +53,12 @@ contract Project {
 
     constructor(
         string memory _name,
-        string memory _description,
         uint256 _target,
-        address _ownerAddess
+        address _ownerAddress
     ) {
-        require(
-            _target > 0,
-            "M%E1%BB%A5c%20ti%C3%AAu%20c%E1%BB%A7a%20d%E1%BB%B1%20%C3%A1n%20ph%E1%BA%A3i%20l%E1%BB%9Bn%20h%C6%A1n%200"
-        );
+        require(_target > 0, "Target must be greater than zero");
         name = _name;
-        description = _description;
-        owner = _ownerAddess;
+        owner = _ownerAddress;
         target = _target;
         state = charity_state.SETUP;
     }
@@ -77,38 +72,27 @@ contract Project {
     );
 
     //manager methods
-    function startCharity() public returns (bool) {
-        require(
-            msg.sender == owner,
-            "Kh%C3%B4ng%20c%C3%B3%20quy%E1%BB%81n%20th%E1%BB%B1c%20thi"
-        );
-        require(
-            state == charity_state.SETUP,
-            "D%E1%BB%B1%20%C3%A1n%20n%C3%A0y%20%C4%91%C3%A3%20ho%E1%BA%A1t%20%C4%91%E1%BB%99ng"
-        );
-        require(beneficiaries.length > 0);
-
-        state = charity_state.START;
-        startTime = block.timestamp;
-        return true;
-    }
-
-    function addBeneficiary(Beneficiary[] memory _beneficiaries)
-        public
-        returns (bool)
-    {
-        require(
-            msg.sender == owner,
-            "Kh%C3%B4ng%20c%C3%B3%20quy%E1%BB%81n%20th%E1%BB%B1c%20thi"
-        );
+    function upadateAndStartCharity(
+        string memory _name,
+        uint256 _target,
+        Beneficiary[] memory _beneficiaries
+    ) public returns (bool) {
+        require(msg.sender == owner, "No permission");
         require(
             state == charity_state.SETUP,
-            "D%E1%BB%B1%20%C3%A1n%20n%C3%A0y%20%C4%91%C3%A3%20ho%E1%BA%A1t%20%C4%91%E1%BB%99ng"
+            "Project is running or has ended"
         );
+        require(_beneficiaries.length > 0);
 
         for (uint256 i = 0; i < _beneficiaries.length; i++) {
             beneficiaries.push(_beneficiaries[i]);
         }
+
+        name = _name;
+        target = _target;
+
+        state = charity_state.START;
+        startTime = block.timestamp;
         return true;
     }
 
@@ -120,15 +104,12 @@ contract Project {
     {
         require(
             state == charity_state.START,
-            "D%E1%BB%B1%20%C3%A1n%20n%C3%A0y%20ch%C6%B0a%20b%E1%BA%AFt%20%C4%91%E1%BA%A7u%20ho%E1%BA%B7c%20%C4%91%C3%A3%20k%E1%BA%BFt%20th%C3%BAc"
+            "Project has not started or has ended"
         );
-        require(
-            msg.value > 0,
-            "S%E1%BB%91%20ti%E1%BB%81n%20quy%C3%AAn%20g%C3%B3p%20ph%E1%BA%A3i%20l%E1%BB%9Bn%20h%C6%A1n%200"
-        );
+        require(msg.value > 0, "Amount must be greater than zero");
         require(
             msg.sender.balance > msg.value,
-            "S%E1%BB%91%20d%C6%B0%20kh%C3%B4ng%20%C4%91%E1%BB%A7"
+            "Balance of account is not enough"
         );
 
         Donator memory donator = Donator(
@@ -142,12 +123,13 @@ contract Project {
         myDonation[msg.sender].push(donator);
         donators.push(donator);
 
-        amountRaised += msg.value;
         emit donateEvent(donator);
 
         if (checkTarget() == true) {
-            state = charity_state.FINISH;
-            endTime = block.timestamp;
+            if (checkEnd() == true) {
+                state = charity_state.FINISH;
+                endTime = block.timestamp;
+            }
             tranferToBeneficiary();
         }
 
@@ -155,7 +137,12 @@ contract Project {
     }
 
     function checkTarget() public view returns (bool) {
-        if (getBalance() >= target) return true;
+        if (getBalance() >= target / 2) return true;
+        return false;
+    }
+
+    function checkEnd() public view returns (bool) {
+        if (address(this).balance + allocated >= target) return true;
         return false;
     }
 
@@ -165,10 +152,6 @@ contract Project {
 
     function getAddress() public view returns (address) {
         return address(this);
-    }
-
-    function getAmountRaised() public view returns (uint256) {
-        return amountRaised;
     }
 
     function getAllDonator() public view returns (Donator[] memory) {
@@ -195,17 +178,19 @@ contract Project {
             ProjectInfo(
                 getAddress(),
                 name,
-                description,
                 target,
-                getAmountRaised(),
+                getBalance(),
+                allocated,
                 donators.length,
                 beneficiaries.length,
+                beneficiaries,
                 state
             );
     }
 
     // private methods
     function tranferToBeneficiary() private {
+        allocated += address(this).balance;
         uint256 totalBeneficiary = beneficiaries.length;
         uint256 amountPerPerson = address(this).balance / totalBeneficiary;
         for (uint256 i = 0; i < totalBeneficiary; i++) {

@@ -21,7 +21,7 @@ const ProjectCard = (props) => {
 				<Card className={styles.projectCard}>
 					<div className={styles.imageGroup} onClick={handleClickCard}>
 						<Card.Img
-							src="https://resource.binance.charity/images/a5ded15f1fae4b47b55264374adc845a_WechatIMG701.jpeg"
+							src={`http://localhost:5000/${data.image}`}
 							alt="Card image"
 							className={styles.imageBg}
 						/>
@@ -34,7 +34,9 @@ const ProjectCard = (props) => {
 						<div className={styles.progressGroup}>
 							<div className={styles.content}>
 								<span className={styles.amount}>
-									{library.utils.fromWei(data.balance)} ETH
+									{parseFloat(library.utils.fromWei(data.balance)) +
+										parseFloat(library.utils.fromWei(data.allocated))}{" "}
+									ETH
 								</span>
 								<span className={styles.target}>
 									/ {library.utils.fromWei(data.target)} ETH
@@ -43,7 +45,12 @@ const ProjectCard = (props) => {
 							<div className={styles.progress}>
 								<ProgressBar
 									animated
-									now={(data.balance / data.target) * 100}
+									now={
+										((parseFloat(library.utils.fromWei(data.balance)) +
+											parseFloat(library.utils.fromWei(data.allocated))) /
+											parseFloat(library.utils.fromWei(data.target))) *
+										100
+									}
 								/>
 							</div>
 						</div>

@@ -1,10 +1,6 @@
-const startCharity = (contract, account) => {
-	return contract.methods.startCharity().send({ from: account, gas: 3000000 });
-};
-
-const addBeneficiary = (contract, account, beneficiaries) => {
+const updateAndStartCharity = (contract, account, name, target, beneficies) => {
 	return contract.methods
-		.addBeneficiary(beneficiaries)
+		.upadateAndStartCharity(name, target, beneficies)
 		.send({ from: account, gas: 3000000 });
 };
 
@@ -31,8 +27,7 @@ const getProjectInfo = (contract) => {
 };
 
 export {
-	startCharity,
-	addBeneficiary,
+	updateAndStartCharity,
 	donate,
 	getAllDonator,
 	getAllBeneficiary,

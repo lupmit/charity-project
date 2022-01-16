@@ -30,12 +30,15 @@ const Header = (props) => {
 						<Link to="/project">
 							<li className={styles.link}>Project</li>
 						</Link>
+						<Link to="/explorer">
+							<li className={styles.link}>Explorer</li>
+						</Link>
 						<Link to="/manager">
 							<li className={styles.link}>Manager</li>
 						</Link>
-						<Link to="/admin">
+						{/* <Link to="/admin">
 							<li className={styles.link}>Admin</li>
-						</Link>
+						</Link> */}
 					</ul>
 					{console.log(library)}
 					<div className={styles.action}>

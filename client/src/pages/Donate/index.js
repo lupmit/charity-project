@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import Login from "../../components/Login";
 import { useLibrary } from "../../helpers/Hook";
+import Input from "../../components/Input";
 
 const Donate = () => {
 	const navigate = useNavigate();
@@ -74,7 +75,7 @@ const Donate = () => {
 						<div className={styles.leftContent}>
 							<div className={styles.top}>
 								<img
-									src="https://resource.binance.charity/images/2cb9816b62254787a32e3fd34d59dea9_pinktoken.jpg"
+									src={`http://localhost:5000/uploads/${info.projectAddress}.jpg`}
 									alt="Pink Care Token Project for Period Poverty"
 								/>
 							</div>
@@ -93,12 +94,9 @@ const Donate = () => {
 							</div>
 							<div className={styles.form}>
 								<form onSubmit={handleSumit}>
-									<span>Name</span>
-									<input name="name"></input>
-									<span>Description</span>
-									<input name="desc"></input>
-									<span>Amount</span>
-									<input name="amount"></input>
+									<Input label="Name" name="name"></Input>
+									<Input label="Description" name="desc"></Input>
+									<Input label="Amount" name="amount"></Input>
 									{active ? (
 										<div className={styles.buttonDonate}>
 											<Button type="submit">Proceed to donation</Button>
