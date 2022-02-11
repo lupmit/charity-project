@@ -32,12 +32,15 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "6.0.0",
     "react-scripts": "4.0.3",
+    "react-to-pdf": "^0.0.14",
+    "react-toastify": "^8.1.0",
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.0",
     "sass": "^1.43.4",
     "styled-components": "^5.3.3",
     "web-vitals": "^1.0.1",
-    "web3": "^1.6.1"
+    "web3": "^1.6.1",
+    "web3-token": "^0.2.5"
   },
   "scripts": {
     "start": "react-scripts start",

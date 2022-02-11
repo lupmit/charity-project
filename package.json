@@ -17,6 +17,7 @@
   },
   "scripts": {
     "dev": "truffle migrate --network development --reset & cd client && yarn start",
+    "production": "truffle migrate --network ropsten --reset & cd client && yarn start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

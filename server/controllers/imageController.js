@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
+const authMiddleware = require("../middlewares/middleware");
 
 var router = express.Router();
 
@@ -55,7 +56,7 @@ router.post("/", (req, res) => {
 					error: null,
 					data: `uploads/${req.file.filename}`,
 					uploaded: true,
-					url: `uploads/${req.file.filename}`,
+					url: `http://localhost:5000/uploads/${req.file.filename}`,
 				});
 			}
 		}

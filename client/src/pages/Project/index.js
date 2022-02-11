@@ -22,7 +22,8 @@ import { useNavigate } from "react-router-dom";
 
 const Project = () => {
 	const [openModal, setOpenModal] = useState(false);
-	const [filter, setFilter] = useState({});
+	const [filter, setFilter] = useState(0);
+	const [applyFilter, setApplyFilter] = useState(0);
 	const [search, setSearch] = useState("");
 	const { active } = useWeb3React();
 
@@ -42,9 +43,30 @@ const Project = () => {
 				<div className={styles.filterStatus}>
 					<h4 className={styles.title}>Project Status</h4>
 					<div className={styles.statuses}>
-						<Button>All</Button>
-						<Button>Funding</Button>
-						<Button>Compeleted</Button>
+						<Button
+							onClick={() => {
+								setFilter(0);
+							}}
+							style={{ background: filter === 0 && "rgb(252, 213, 53)" }}
+						>
+							All
+						</Button>
+						<Button
+							onClick={() => {
+								setFilter(1);
+							}}
+							style={{ background: filter === 1 && "rgb(252, 213, 53)" }}
+						>
+							Funding
+						</Button>
+						<Button
+							onClick={() => {
+								setFilter(2);
+							}}
+							style={{ background: filter === 2 && "rgb(252, 213, 53)" }}
+						>
+							Compeleted
+						</Button>
 					</div>
 				</div>
 			</div>
@@ -54,19 +76,44 @@ const Project = () => {
 	const renderFooter = () => {
 		return (
 			<div className={styles.actionFilter}>
-				<Button className={styles.reset}>Reset</Button>
-				<Button className={styles.go}>Go</Button>
+				<Button
+					className={styles.reset}
+					onClick={() => {
+						onClickReset();
+					}}
+				>
+					Reset
+				</Button>
+				<Button
+					className={styles.go}
+					onClick={() => {
+						onClickGo();
+					}}
+				>
+					Go
+				</Button>
 			</div>
 		);
 	};
 
+	const onClickGo = () => {
+		setApplyFilter(filter);
+		setOpenModal(false);
+	};
+
+	const onClickReset = () => {
+		setFilter(0);
+		setApplyFilter(0);
+		setOpenModal(false);
+	};
+
 	const handleFilterClick = () => {
 		setOpenModal(true);
-		setFilter({ a: 1 });
 	};
 
 	const handleClearFilter = () => {
-		setFilter({});
+		setFilter(0);
+		setApplyFilter(0);
 	};
 
 	////
@@ -155,45 +202,50 @@ const Project = () => {
 		let result = item.name
 			.toLowerCase()
 			.match(new RegExp(search.toLowerCase()));
-		console.log(result);
+		if (applyFilter !== 0) {
+			return (
+				result !== null &&
+				result.length > 0 &&
+				parseInt(item.state) === applyFilter
+			);
+		}
 		return result !== null && result.length > 0;
 	});
 
-	console.log(projectList);
 	return loading ? (
 		<Loading />
 	) : (
 		<div className={styles.wrapper}>
 			<div className={styles.headerDetail}>
 				<img src={`http://localhost:5000/${hightlight[0].image}`} />
-				<div class={styles.contentWrapper}>
-					<div class={styles.content}>
-						<h2 class={styles.name}>{hightlight[0].name}</h2>
-						<p class={styles.desc}>{hightlight[0].description}</p>
-						<div class={styles.footer}>
-							<div class={styles.infoWrapper}>
-								<div class={styles.valueWrapper}>
-									<span class={styles.value}>
+				<div className={styles.contentWrapper}>
+					<div className={styles.content}>
+						<h2 className={styles.name}>{hightlight[0].name}</h2>
+						<p className={styles.desc}>{hightlight[0].description}</p>
+						<div className={styles.footer}>
+							<div className={styles.infoWrapper}>
+								<div className={styles.valueWrapper}>
+									<span className={styles.value}>
 										{hightlight[0].numberOfDonator}
 									</span>
 								</div>
-								<div class={styles.key}>Donations</div>
+								<div className={styles.key}>Donations</div>
 							</div>
-							<div class={styles.infoWrapper}>
-								<div class={styles.valueWrapper}>
-									<span class={styles.value}>
+							<div className={styles.infoWrapper}>
+								<div className={styles.valueWrapper}>
+									<span className={styles.value}>
 										{parseFloat(library.utils.fromWei(hightlight[0].balance)) +
 											parseFloat(
 												library.utils.fromWei(hightlight[0].allocated)
 											)}{" "}
 										ETH
 									</span>
-									{/* <span class={styles.valueExtend}>≈ 78,810,466.7 USD</span> */}
+									{/* <span className={styles.valueExtend}>≈ 78,810,466.7 USD</span> */}
 								</div>
-								<div class={styles.key}>Total Donations</div>
+								<div className={styles.key}>Total Donations</div>
 							</div>
 							<button
-								class={styles.button}
+								className={styles.button}
 								onClick={() => donateClick(hightlight[0].address)}
 							>
 								Donate
@@ -206,11 +258,11 @@ const Project = () => {
 				<div className={styles.filterGroup}>
 					<div
 						className={styles.filter}
-						style={{ background: !_.isEmpty(filter) && "rgb(252, 213, 53)" }}
+						style={{ background: applyFilter !== 0 && "rgb(252, 213, 53)" }}
 					>
 						<GrFilter onClick={handleFilterClick} />
 						<span onClick={handleFilterClick}>Filter</span>
-						{_.isEmpty(filter) ? (
+						{applyFilter === 0 ? (
 							<AiFillCaretDown onClick={handleFilterClick} />
 						) : (
 							<AiOutlineClose onClick={handleClearFilter} />

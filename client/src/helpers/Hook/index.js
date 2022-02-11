@@ -77,6 +77,6 @@ export function useLibrary() {
 	if (active) {
 		return library;
 	}
-	const provider = "http://127.0.0.1:7545";
+	const provider = "http://172.20.10.3:7545";
 	return new Web3(provider);
 }

@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, ProgressBar } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { getContract } from "../../helpers/Contract";
-import { useWeb3React } from "@web3-react/core";
-import { getProjectInfo } from "../../api/CharityApi";
 import styles from "./styles.module.scss";
 import { useLibrary } from "../../helpers/Hook";
 

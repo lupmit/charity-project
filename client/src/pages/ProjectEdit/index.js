@@ -16,15 +16,21 @@ import Modal from "../../components/Modal";
 import { getProjectByAddress } from "../../api/ServerApi";
 import { updateAndStartCharity } from "../../api/ProjectApi";
 import { useWeb3React } from "@web3-react/core";
+import { useNavigate } from "react-router-dom";
+import * as _ from "lodash";
+import Web3Token from "web3-token";
 import styles from "./styles.module.scss";
 
 const ProjectEdit = () => {
 	const [info, setInfo] = useState();
 	const [loading, setLoading] = useState(true);
+	const [token, setToken] = useState();
 	const params = useParams();
 	const address = params.address;
 
 	const { account, error } = useWeb3React();
+
+	const navigate = useNavigate();
 
 	//Change
 	const [name, setName] = useState("");
@@ -47,7 +53,7 @@ const ProjectEdit = () => {
 	};
 
 	const handleUploadImage = (e) => {
-		uploadImage(e.target.files[0])
+		uploadImage(token, e.target.files[0])
 			.then((res) => {
 				setImage(res.data.data);
 			})
@@ -55,6 +61,30 @@ const ProjectEdit = () => {
 				console.log(err);
 			});
 	};
+
+	//token
+
+	useEffect(() => {
+		const newToken = async () => {
+			const newToken = await Web3Token.sign(
+				(msg) => library.eth.personal.sign(msg, account),
+				"1d"
+			);
+			localStorage.setItem("token", newToken);
+			setToken(newToken);
+		};
+		let token = localStorage.getItem("token");
+		if (!_.isEmpty(token)) {
+			try {
+				Web3Token.verify(token);
+				setToken(token);
+				return;
+			} catch (e) {
+				console.log(e);
+			}
+		}
+		newToken();
+	}, []);
 
 	//beneficy
 	const [beneficy, setBeneficy] = useState([]);
@@ -212,7 +242,9 @@ const ProjectEdit = () => {
 					infomation: infomation,
 					problem: problem,
 				};
-				createOrUpdate(newInfo);
+				createOrUpdate(token, newInfo).then((res) => {
+					navigate("/auth/manager");
+				});
 			})
 			.catch((e) => {
 				console.log(e);
@@ -227,7 +259,10 @@ const ProjectEdit = () => {
 			infomation: infomation,
 			problem: problem,
 		};
-		createOrUpdate(newInfo);
+		console.log(newInfo);
+		createOrUpdate(token, newInfo).then((res) => {
+			navigate("/auth/manager");
+		});
 	};
 
 	const benficyToObj = (beneficies) => {
@@ -248,15 +283,18 @@ const ProjectEdit = () => {
 		});
 	};
 
-	return loading ? (
+	return loading || _.isEmpty(token) ? (
 		<Loading />
 	) : (
 		<div className={styles.wrapper}>
 			<Container>
 				<div className={styles.titleEdit}>
-					<h3>Project Edit</h3>
-					<p>{info.name}</p>
-					<p>{info.projectAddress}</p>
+					<h3 className={styles.title}>Project Edit</h3>
+					<div className={styles.titleMore}>
+						<p>
+							{info.name} - {info.projectAddress}
+						</p>
+					</div>
 				</div>
 
 				<Input
@@ -365,7 +403,7 @@ const ProjectEdit = () => {
 					{parseInt(info.state) == 0 ? (
 						<>
 							<Button onClick={handleStartProject}>Start Project</Button>
-							<Button>Delete Project</Button>
+							<Button className={styles.deleteButton}>Delete Project</Button>
 						</>
 					) : (
 						<Button onClick={handleSaveProject}>Save</Button>

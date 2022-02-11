@@ -1,6 +1,18 @@
 .wrapper {
 	text-align: left;
 
+	.titleEdit {
+		padding-bottom: 5px;
+		.title {
+			text-align: left;
+			padding-top: 50px;
+			font-weight: 600;
+		}
+		.titleMore {
+			color: rgb(94, 102, 115);
+		}
+	}
+
 	.imageUpload {
 		display: flex;
 		flex-direction: column;
@@ -8,6 +20,7 @@
 		margin-bottom: 20px;
 		> p {
 			margin-bottom: 10px;
+			font-weight: 600;
 		}
 		.imageReview {
 			> label {
@@ -41,12 +54,26 @@
 		padding-top: 20px;
 		> div {
 			margin-bottom: 10px;
+			font-weight: 600;
 		}
 		.actionTable {
 			display: flex;
 			> svg {
 				margin: 5px;
 			}
+		}
+	}
+	.editProjectAction {
+		margin-bottom: 80px;
+		margin-top: 50px;
+		> button {
+			padding: 8px 10px;
+			margin-right: 10px;
+		}
+
+		.deleteButton {
+			background: #d45e78;
+			color: #f2f5f7;
 		}
 	}
 }

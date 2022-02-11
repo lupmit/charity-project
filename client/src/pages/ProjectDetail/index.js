@@ -16,10 +16,12 @@ import Loading from "../../components/Loading";
 import { getProjectByAddress } from "../../api/ServerApi";
 import styles from "./styles.module.scss";
 import { useLibrary } from "../../helpers/Hook";
+import ReactToPdf from "react-to-pdf";
 import * as moment from "moment";
 import Table from "../../components/Table";
 
 const ProjectDetail = (props) => {
+	const ref = React.createRef();
 	const [info, setInfo] = useState();
 	const [infoFromBE, setInfoFromBE] = useState();
 	const [loading, setLoading] = useState(true);
@@ -68,17 +70,25 @@ const ProjectDetail = (props) => {
 	};
 
 	const getChartData = (item) => {
+		let allocated = parseFloat(library.utils.fromWei(item.allocated));
+		let balance = parseFloat(library.utils.fromWei(item.balance));
+		let target = parseFloat(library.utils.fromWei(item.target));
+
 		return {
 			series: [
 				{
 					data: [
 						{
-							y: parseFloat(library.utils.fromWei(item.allocated)),
+							y: allocated,
 							color: "#6fcf97",
 						},
 						{
-							y: parseFloat(library.utils.fromWei(item.balance)),
+							y: balance,
 							color: "#f0b90b",
+						},
+						{
+							y: target - (allocated + balance),
+							color: "#f5f5f5",
 						},
 					],
 				},
@@ -111,7 +121,7 @@ const ProjectDetail = (props) => {
 				currency: "ETH",
 				amount: library.utils.fromWei(item.amount),
 				message: item.message,
-				time: moment.unix(item.timestamp).format("YYYY-MM-DD hh:mm:ss"),
+				time: moment.unix(item.timestamp).format("YYYY-MM-DD"),
 			};
 		});
 	};
@@ -122,7 +132,7 @@ const ProjectDetail = (props) => {
 				address: item.beneficiary.name,
 				currency: "ETH",
 				amount: library.utils.fromWei(item.amount),
-				time: moment.unix(item.timestamp).format("YYYY-MM-DD hh:mm:ss"),
+				time: moment.unix(item.timestamp).format("YYYY-MM-DD"),
 			};
 		});
 	};
@@ -141,6 +151,7 @@ const ProjectDetail = (props) => {
 		{
 			name: "Name",
 			selector: (row) => row.name,
+			width: "200px",
 		},
 		{
 			name: "Method",
@@ -157,10 +168,12 @@ const ProjectDetail = (props) => {
 		{
 			name: "Message",
 			selector: (row) => row.message,
+			width: "250px",
 		},
 		{
 			name: "Date",
 			selector: (row) => row.time,
+			width: "150px",
 		},
 	];
 
@@ -186,21 +199,33 @@ const ProjectDetail = (props) => {
 		{
 			name: "Wallet address",
 			selector: (row) => row.address,
+			width: "400px",
 		},
 		{
 			name: "Full Name",
 			selector: (row) => row.name,
+			width: "300px",
 		},
 		{
 			name: "Description",
 			selector: (row) => row.description,
+			width: "300px",
 		},
 	];
+
+	let floatBalance = 0,
+		floatAllocated = 0,
+		floatTarget = 0;
+	if (!loading) {
+		floatBalance = parseFloat(library.utils.fromWei(info.balance));
+		floatAllocated = parseFloat(library.utils.fromWei(info.allocated));
+		floatTarget = parseFloat(library.utils.fromWei(info.target));
+	}
 
 	return loading ? (
 		<Loading />
 	) : (
-		<div className={styles.wrapper}>
+		<div className={styles.wrapper} ref={ref}>
 			<div className={styles.headerWrapper}>
 				<img src={`http://localhost:5000/${infoFromBE.image}`} />
 				<div className={styles.contentWrapper}>
@@ -211,33 +236,33 @@ const ProjectDetail = (props) => {
 						<div className={styles.progressContent}>
 							<ProgressBar
 								animated
-								now={
-									((parseFloat(library.utils.fromWei(info.balance)) +
-										parseFloat(library.utils.fromWei(info.allocated))) /
-										parseFloat(library.utils.fromWei(info.target))) *
-									100
-								}
+								now={((floatBalance + floatAllocated) / floatTarget) * 100}
 							/>
 						</div>
 						<div className={styles.infoDonate}>
 							<span className={styles.balance}>
-								{parseFloat(library.utils.fromWei(info.balance)) +
-									parseFloat(library.utils.fromWei(info.allocated))}{" "}
-								ETH
+								{floatBalance + floatAllocated} ETH
 							</span>
-							<span className={styles.target}>
-								Raised of {library.utils.fromWei(info.target)} ETH
-							</span>
+							<span className={styles.target}>Raised of {floatTarget} ETH</span>
 						</div>
 						<div className={styles.action}>
-							<Button className={styles.donate} onClick={donateClick}>
-								Donate
-							</Button>
-							{info.status === 2 ? (
-								<Button className={styles.download} typeButton="outline">
-									Download
+							{parseInt(info.state) === 2 ? (
+								<ReactToPdf targetRef={ref} filename="export.pdf">
+									{({ toPdf }) => (
+										<Button
+											onClick={toPdf}
+											className={styles.download}
+											typeButton="outline"
+										>
+											Download
+										</Button>
+									)}
+								</ReactToPdf>
+							) : (
+								<Button className={styles.donate} onClick={donateClick}>
+									Donate
 								</Button>
-							) : null}
+							)}
 						</div>
 					</div>
 				</div>
@@ -268,21 +293,15 @@ const ProjectDetail = (props) => {
 								/>
 							</div>
 							<div className={styles.chartTitle}>
-								Total donated
-								<span>
-									{" "}
-									{library.utils.fromWei(info.balance) +
-										library.utils.fromWei(info.allocated)}{" "}
-									ETH
-								</span>
+								Total donated <span>{floatBalance + floatAllocated} ETH</span>
 							</div>
 							<div className={styles.allocated}>
-								Total allocated{" "}
-								<span> {library.utils.fromWei(info.allocated)} ETH</span>
+								Total allocated
+								<span style={{ marginLeft: "5px" }}>{floatAllocated} ETH</span>
 							</div>
 							<div className={styles.pending}>
 								Total pending
-								<span> {library.utils.fromWei(info.balance)} ETH</span>
+								<span style={{ marginLeft: "5px" }}>{floatBalance} ETH</span>
 							</div>
 						</div>
 					</div>

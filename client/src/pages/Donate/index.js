@@ -12,6 +12,8 @@ import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import Login from "../../components/Login";
 import { useLibrary } from "../../helpers/Hook";
+import { getProjectByAddress } from "../../api/ServerApi";
+import Modal from "../../components/Modal";
 import Input from "../../components/Input";
 
 const Donate = () => {
@@ -23,7 +25,10 @@ const Donate = () => {
 	const library = useLibrary();
 
 	const [info, setInfo] = useState();
+	const [info1, setInfo1] = useState();
 	const [loading, setLoading] = useState(true);
+
+	const [swap, setSwap] = useState(false);
 
 	const [show, setShow] = useState(false);
 
@@ -38,12 +43,19 @@ const Donate = () => {
 	useEffect(() => {
 		const getData = async () => {
 			const contract = await getcontract();
-			getProjectInfo(contract).then((res) => {
-				setInfo(res);
-				setLoading(false);
-			});
+			await Promise.all([
+				getProjectInfo(contract).then((res) => {
+					setInfo(res);
+				}),
+				getProjectByAddress(address).then((res) => {
+					console.log(res);
+					setInfo1(res.data.data);
+				}),
+			]);
 		};
-		getData();
+		getData().then((res) => {
+			setLoading(false);
+		});
 	}, []);
 
 	const handleSumit = async (e) => {
@@ -65,6 +77,10 @@ const Donate = () => {
 			});
 	};
 
+	if (parseInt(info?.state) !== 1) {
+		navigate("/project/" + address);
+	}
+
 	return loading ? (
 		<Loading />
 	) : (
@@ -75,7 +91,7 @@ const Donate = () => {
 						<div className={styles.leftContent}>
 							<div className={styles.top}>
 								<img
-									src={`http://localhost:5000/uploads/${info.projectAddress}.jpg`}
+									src={`http://localhost:5000/${info1.image}`}
 									alt="Pink Care Token Project for Period Poverty"
 								/>
 							</div>
@@ -111,10 +127,33 @@ const Donate = () => {
 										</Login>
 									)}
 								</form>
+								<Button onClick={() => setSwap(true)}>Swap Token</Button>
 							</div>
 						</div>
 					</div>
 				</div>
+				<Modal
+					onHide={() => {
+						setSwap(false);
+					}}
+					show={swap}
+					content={
+						<iframe
+							src="https://app.uniswap.org/#/swap?exactField=input&exactAmount=10&inputCurrency=0x6b175474e89094c44da98b954eedeac495271d0f"
+							height="500px"
+							width="100%"
+							style={{
+								border: 0,
+								margin: "0 auto",
+								marginBottom: ".5rem",
+								display: "block",
+								borderRadius: "10px",
+								maxWidth: "960px",
+								minWidth: "300px",
+							}}
+						></iframe>
+					}
+				></Modal>
 			</Container>
 		</div>
 	);

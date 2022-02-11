@@ -1,6 +1,7 @@
 const express = require("express");
 var router = express.Router();
 const ProjectModel = require("../models/projectModel");
+const authMiddleware = require("../middlewares/middleware");
 
 router.get("/", (req, res) => {
 	ProjectModel.find((err, docs) => {
@@ -34,7 +35,7 @@ router.get("/:address", (req, res) => {
 	});
 });
 
-router.post("/", (req, res) => {
+router.post("/", [authMiddleware], (req, res) => {
 	ProjectModel.findOne({ address: req.body.address }, (err, doc) => {
 		if (!err && !doc) {
 			insertRecord(req, res);
@@ -87,7 +88,7 @@ function updateRecord(req, res) {
 	);
 }
 
-router.get("/delete/:address", (req, res) => {
+router.get("/delete/:address", [authMiddleware], (req, res) => {
 	ProjectModel.findOneAndRemove({ address: req.params.address }, (err) => {
 		if (!err) {
 			res.status(200).json({

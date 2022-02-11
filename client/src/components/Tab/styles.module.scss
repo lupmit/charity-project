@@ -1,29 +1,37 @@
 .tabWrapper {
-	margin-top: 50px;
+	display: flex;
+	overflow-x: scroll;
+	overflow-y: hidden;
+	flex-direction: row;
+	margin-top: 25px;
+	flex-wrap: unset !important;
+	&::-webkit-scrollbar {
+		display: none;
+	}
 	:global {
 		width: 100%;
 		border-bottom: 1px solid rgb(132, 142, 156);
 		.nav-link {
 			margin-bottom: inherit;
-			border-color: #fff;
+			border: none !important;
 			padding: 0 30px;
 			color: rgb(72, 81, 93);
 			&.active {
-				border-color: #fff !important;
 				color: rgb(240, 185, 11) !important;
-				border-bottom: 3px solid rgb(240, 185, 11) !important;
+				border-bottom: 4px solid rgb(240, 185, 11) !important;
 				padding-bottom: 7px;
 				margin-bottom: -2px;
+				background-color: inherit !important;
 			}
 			&:hover:not(.active) {
-				border-color: #fff;
+				color: rgb(240, 185, 11) !important;
 			}
 		}
 	}
 }
 :global {
 	.tab-content {
-		padding-top: 40px;
+		padding-top: 10px;
 		text-align: left;
 	}
 }

@@ -87,9 +87,11 @@
 				box-sizing: border-box;
 				color: rgba(255, 255, 255, 0.5);
 				.logo {
-					font-size: 40px;
-					color: #ffff;
-					margin-bottom: 70px;
+					img {
+						width: auto;
+						max-width: 100%;
+						max-height: 100px;
+					}
 				}
 			}
 			svg {

@@ -16,11 +16,10 @@
 		height: 100%;
 		width: 100%;
 		.logo {
-			& > a {
-				text-decoration: none;
-				font-size: 18px;
-				list-style: none;
-				color: rgba(255, 255, 255, 0.5);
+			img {
+				width: auto;
+				max-width: 100%;
+				max-height: 70px;
 			}
 		}
 
@@ -51,6 +50,220 @@
 		.action {
 			.button {
 				padding: 5px 10px;
+			}
+		}
+
+		.buttonOpenMenu {
+			display: none;
+		}
+
+		@media (max-width: 73.74875em) {
+			.navLink,
+			.action {
+				display: none;
+			}
+			.buttonOpenMenu {
+				display: block;
+				box-sizing: border-box;
+				margin: 0;
+				min-width: 0;
+				width: 24px;
+				height: 24px;
+				font-size: 24px;
+				fill: #1e2329;
+				color: #caced3;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+		}
+	}
+}
+
+:global {
+	.offcanvas-end {
+		width: 350px !important;
+		.offcanvas-body {
+			background: rgb(30, 35, 41);
+		}
+	}
+}
+
+.mobileWrapper {
+	position: relative;
+	> svg {
+		box-sizing: border-box;
+		margin: 0px;
+		min-width: 0px;
+		fill: currentcolor;
+		width: 1em;
+		height: 1em;
+		position: absolute;
+		padding: 10px;
+		top: 22px;
+		right: 25px;
+		color: rgb(183, 189, 198);
+		font-size: 36px;
+		cursor: pointer;
+	}
+	.navLink {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		max-width: 374px;
+		padding: 80px 0px 0px;
+		list-style: none;
+		& > a {
+			text-decoration: none;
+		}
+		.link {
+			height: 56px;
+			padding: 10px 60px;
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			font-size: 18px;
+			list-style: none;
+			color: rgba(255, 255, 255, 0.5);
+			&:hover {
+				color: #f8d33a;
+				cursor: pointer;
+			}
+		}
+	}
+	.action {
+		padding: 10px 60px;
+		.button {
+			padding: 5px 10px;
+		}
+	}
+}
+
+.accountModal {
+	.accountWrapper {
+		padding: 1rem;
+		border: 1px solid rgb(206, 208, 217);
+		border-radius: 20px;
+		position: relative;
+		display: grid;
+		row-gap: 12px;
+		margin-bottom: 20px;
+		.titleWrapper {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			font-weight: 400;
+			color: rgb(0, 0, 0);
+			.title {
+				width: initial;
+				font-size: 0.825rem;
+				font-weight: 500;
+				color: rgb(110, 114, 125);
+			}
+			.titleAction {
+				font-size: 0.825rem;
+				font-weight: 400;
+			}
+		}
+		.contentWrapper {
+			display: flex;
+			flex-flow: row nowrap;
+			justify-content: space-between;
+			align-items: center;
+			color: rgb(0, 0, 0);
+			min-width: 0px;
+			width: 100%;
+			font-weight: 500;
+			font-size: 1.25rem;
+			> div {
+				display: flex;
+				flex-flow: row nowrap;
+				align-items: center;
+				p {
+					min-width: 0px;
+					margin: 0px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+				.iconWrapper {
+					height: 1rem;
+					width: 1rem;
+					border-radius: 1.125rem;
+					background-color: rgb(136, 141, 155);
+					font-size: initial;
+					justify-content: center;
+					margin-right: 8px;
+					overflow: hidden;
+				}
+			}
+		}
+		.contentAction {
+			display: flex;
+			flex-flow: row nowrap;
+			justify-content: space-between;
+			align-items: center;
+			font-weight: 400;
+			color: rgb(0, 0, 0);
+			.viewExplorer {
+				color: rgb(110, 114, 125);
+				font-size: 0.825rem;
+				display: flex;
+				text-decoration: none;
+				cursor: pointer;
+				font-weight: 500;
+				&:hover {
+					text-decoration: underline;
+					color: rgb(86, 90, 105);
+				}
+			}
+		}
+	}
+	.historyWrapper {
+		display: flex;
+		flex-flow: column nowrap;
+		padding: 1.5rem;
+		-webkit-box-flex: 1;
+		flex-grow: 1;
+		overflow: auto;
+		background-color: rgb(237, 238, 242);
+		border-radius: 20px;
+		.historyTitle {
+			box-sizing: border-box;
+			margin: 0px;
+			min-width: 0px;
+			font-weight: 400;
+			font-size: 16px;
+			color: rgb(0, 0, 0);
+			margin: 0px 0px 1rem;
+		}
+		.historyItemWrapper {
+			display: flex;
+			flex-flow: column nowrap;
+			max-height: 150px;
+			.historyItem {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				border-radius: 0.5rem;
+				padding: 0.25rem 0rem;
+				font-weight: 500;
+				font-size: 0.825rem;
+				color: rgb(0, 0, 0);
+				text-decoration: none !important;
+
+				.titleWrapper {
+					display: flex;
+					padding: 0px;
+					width: 100%;
+					align-items: center;
+					justify-content: flex-start;
+					&:hover {
+						text-decoration: underline;
+					}
+				}
+				.iconDone {
+					color: rgb(0, 125, 53);
+				}
 			}
 		}
 	}

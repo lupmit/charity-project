@@ -22,56 +22,66 @@
 			}
 			.projectInfo {
 				position: absolute;
-				left: 50%;
-				top: 30%;
+				left: 0;
+				top: 0;
 				text-align: left;
-				.feature {
-					font-size: 24px;
-					line-height: 32px;
-					margin-bottom: 24px;
-					color: rgb(238, 238, 238);
-				}
-				.projectName {
-					font-size: 52px;
-					line-height: 61px;
-					margin-bottom: 26px;
-					color: rgb(255, 255, 255);
-				}
-				.projectDesc {
-					font-size: 18px;
-					line-height: 28px;
-					margin-bottom: 64px;
-					letter-spacing: 0.16px;
-					color: rgb(255, 255, 255);
-					overflow: hidden;
-				}
-				.link {
-					display: block;
-					height: 48px;
-					width: 177px;
-					margin-right: 395px;
-					color: rgb(240, 185, 11);
-					.button {
+				background: rgb(0, 0, 0, 0.4);
+				width: 100%;
+				height: 100%;
+				.projectInfoWrapper {
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+					color: white;
+					.feature {
+						font-size: 24px;
+						line-height: 32px;
+						margin-bottom: 24px;
+						color: rgb(238, 238, 238);
+					}
+					.projectName {
+						font-size: 52px;
+						line-height: 61px;
+						margin-bottom: 26px;
+						color: rgb(255, 255, 255);
+					}
+					.projectDesc {
+						font-size: 18px;
+						line-height: 28px;
+						margin-bottom: 64px;
+						letter-spacing: 0.16px;
+						color: rgb(255, 255, 255);
+						text-overflow: ellipsis;
+					}
+					.link {
+						display: block;
 						height: 48px;
-						width: 100%;
-						cursor: pointer;
-						overflow: hidden;
-						align-items: center;
-						justify-content: center;
-						text-align: center;
-						text-decoration: none;
-						outline: none;
-						padding: 6px 12px;
-						font-weight: 500;
-						border: none;
-						background-image: linear-gradient(
-							rgb(248, 209, 47) 0%,
-							rgb(240, 185, 11) 100%
-						);
-						font-size: 16px;
-						line-height: 24px;
-						color: rgb(30, 35, 41);
-						border-radius: 4px;
+						width: 177px;
+						margin-right: 395px;
+						color: rgb(240, 185, 11);
+						.button {
+							height: 48px;
+							width: 100%;
+							cursor: pointer;
+							overflow: hidden;
+							align-items: center;
+							justify-content: center;
+							text-align: center;
+							text-decoration: none;
+							outline: none;
+							padding: 6px 12px;
+							font-weight: 500;
+							border: none;
+							background-image: linear-gradient(
+								rgb(248, 209, 47) 0%,
+								rgb(240, 185, 11) 100%
+							);
+							font-size: 16px;
+							line-height: 24px;
+							color: rgb(30, 35, 41);
+							border-radius: 4px;
+						}
 					}
 				}
 			}

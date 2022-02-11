@@ -20,30 +20,61 @@ import EthIcon from "../../assets/images/icon-eth.png";
 import { createOrUpdate } from "../../api/ServerApi";
 import Loading from "../../components/Loading";
 import Input from "../../components/Input";
+import { deleteCharityProject } from "../../api/CharityApi";
+import { deleteProjectByAddress } from "../../api/ServerApi";
+import * as _ from "lodash";
+import Web3Token from "web3-token";
 
 const Manager = () => {
 	const { active, account } = useWeb3React();
+	const [loading, setLoading] = useState(false);
 	const [rerender, setRerender] = useState(false);
+	const [token, setToken] = useState();
 	const [search, setSearch] = useState("");
 
 	const navigate = useNavigate();
 	const handleClickEdit = (address) => {
-		navigate("/project/" + address + "/edit");
+		navigate("/auth/project/" + address + "/edit");
+	};
+
+	const handleClickDelete = async (address) => {
+		const contract = await getcontract();
+		deleteCharityProject(contract, account, address).then(() => {
+			setRerender(!rerender);
+			deleteProjectByAddress(token, address);
+		});
 	};
 
 	const handleCopyClick = (address) => {
 		navigator.clipboard.writeText(address);
 	};
 
-	const reRender = () => {
-		setRerender(!rerender);
-	};
-
 	const library = useLibrary();
+
 	useEffect(() => {
-		var timer = setInterval(() => reRender(), 5000);
-		return () => clearInterval(timer);
-	});
+		if (!account) {
+			return navigate("/");
+		}
+		const newToken = async () => {
+			const newToken = await Web3Token.sign(
+				(msg) => library.eth.personal.sign(msg, account),
+				"1d"
+			);
+			localStorage.setItem("token", newToken);
+			setToken(newToken);
+		};
+		let token = localStorage.getItem("token");
+		if (!_.isEmpty(token)) {
+			try {
+				Web3Token.verify(token);
+				setToken(token);
+				return;
+			} catch (e) {
+				console.log(e);
+			}
+		}
+		newToken();
+	}, [active]);
 
 	const getcontract = async () => {
 		return await getContract(library, getCharityAdress());
@@ -105,7 +136,9 @@ const Manager = () => {
 			selector: (row) => (
 				<div className={styles.actionTable}>
 					<AiOutlineEdit onClick={() => handleClickEdit(row.address)} />
-					<AiOutlineDelete />
+					{row.status === "Setup" && (
+						<AiOutlineDelete onClick={() => handleClickDelete(row.address)} />
+					)}
 				</div>
 			),
 			ignoreRowClick: true,
@@ -135,6 +168,7 @@ const Manager = () => {
 	};
 
 	useEffect(() => {
+		setLoading(true);
 		const getData = async () => {
 			const projectInfo = [];
 			const contract = await getcontract();
@@ -145,7 +179,8 @@ const Manager = () => {
 				projectInfo.push(getInfo(contract, element));
 			});
 			const data = await Promise.all(projectInfo);
-			setInfo(data);
+			setInfo(data.reverse());
+			setLoading(false);
 		};
 		getData();
 	}, [rerender]);
@@ -156,6 +191,7 @@ const Manager = () => {
 	const addProject = async (e) => {
 		e.preventDefault();
 		const contract = await getcontract();
+		setShowAddProject(false);
 		addCharityProject(
 			contract,
 			account,
@@ -163,6 +199,7 @@ const Manager = () => {
 			library.utils.toWei(e.target[1].value)
 		)
 			.then((res) => {
+				setRerender(!rerender);
 				let tempProject = {
 					address: res.events.addCharityProjectEvent.returnValues[1],
 					image: "",
@@ -170,8 +207,7 @@ const Manager = () => {
 					problem: "",
 					infomation: "",
 				};
-				createOrUpdate(tempProject);
-				setShowAddProject(false);
+				createOrUpdate(token, tempProject);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -184,7 +220,9 @@ const Manager = () => {
 	const showModalAddProject = () => {
 		setShowAddProject(true);
 	};
-	return (
+	return _.isEmpty(token) ? (
+		<Loading />
+	) : (
 		<div className={styles.wrapper}>
 			<Container>
 				<h3 className={styles.title}>Projects</h3>

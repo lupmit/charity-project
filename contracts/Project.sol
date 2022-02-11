@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity >=0.7.0 <0.9.0;
 
 contract Project {
@@ -156,6 +157,15 @@ contract Project {
 
     function getAllDonator() public view returns (Donator[] memory) {
         Donator[] memory d = donators;
+        return d;
+    }
+
+    function getMyDonator(address _address)
+        public
+        view
+        returns (Donator[] memory)
+    {
+        Donator[] memory d = myDonation[_address];
         return d;
     }
 

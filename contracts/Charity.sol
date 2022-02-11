@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity >=0.7.0 <0.9.0;
 
 import "./Project.sol";
@@ -35,6 +36,26 @@ contract Charity {
         return true;
     }
 
+    function deleteCharityProject(address _address) public {
+        require(msg.sender == owner, "No Permission");
+
+        uint256 i = findProject(_address);
+        removeProjectByIndex(i);
+    }
+
+    function findProject(address _address) public view returns (uint256) {
+        uint256 i = 0;
+        while (listProject[i] != _address) {
+            i++;
+        }
+        return i;
+    }
+
+    function removeProjectByIndex(uint256 i) public {
+        listProject[i] = listProject[listProject.length - 1];
+        listProject.pop();
+    }
+
     function getAllProject() public view returns (address[] memory) {
         return listProject;
     }
@@ -46,6 +67,10 @@ contract Charity {
     {
         Project pi = Project(_address);
         return pi.getProjectInfo();
+    }
+
+    function getOwner() public view returns (address) {
+        return owner;
     }
 
     function getInfoCharity()

@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import * as _ from "lodash";
 import Carousel from "react-multi-carousel";
 import Container from "../../components/Container";
-import { ReactComponent as Icon } from "../../assets/images/icon.svg";
+import { ReactComponent as Icon1 } from "../../assets/images/icon1.svg";
+import { ReactComponent as Icon2 } from "../../assets/images/icon2.svg";
+import { ReactComponent as Icon3 } from "../../assets/images/icon3.svg";
 import {
 	addCharityProject,
 	addManager,
@@ -155,7 +157,7 @@ function Home(props) {
 	};
 
 	let hightlight = getProjectHighlight();
-	return loading ? (
+	return loading || _.isEmpty(hightlight) ? (
 		<Loading />
 	) : (
 		<div className={styles.wrapper}>
@@ -167,43 +169,49 @@ function Home(props) {
 					showDots={true}
 				>
 					<div className={styles.image}>
-						<img src={`http://localhost:5000/${hightlight[0].image}`} />
+						<img src={`http://172.20.10.3:5000/${hightlight[0].image}`} />
 
-						<div class={styles.projectInfo}>
-							<div className={styles.feature}>Featured project</div>
-							<h2 className={styles.projectName}>{hightlight[0].name}</h2>
-							<div className={styles.projectDesc}>
-								{hightlight[0].description}
+						<div className={styles.projectInfo}>
+							<div className={styles.projectInfoWrapper}>
+								<div className={styles.feature}>Featured project</div>
+								<h2 className={styles.projectName}>{hightlight[0].name}</h2>
+								<div className={styles.projectDesc}>
+									{hightlight[0].description}
+								</div>
+								<Link
+									to={`/project/${hightlight[0].projectAddress}`}
+									className={styles.link}
+								>
+									<button data-bn-type="button" className={styles.button}>
+										Learn more
+									</button>
+								</Link>
 							</div>
-							<Link
-								to={`/project/${hightlight[0].projectAddress}`}
-								class={styles.link}
-							>
-								<button data-bn-type="button" class={styles.button}>
-									Learn more
-								</button>
-							</Link>
 						</div>
 					</div>
-					<div className={styles.image}>
-						<img src={`http://localhost:5000/${hightlight[1].image}`} />
+					{hightlight.length > 2 ? (
+						<div className={styles.image}>
+							<img src={`http://localhost:5000/${hightlight[1].image}`} />
 
-						<div class={styles.projectInfo}>
-							<div className={styles.feature}>Featured project</div>
-							<h2 className={styles.projectName}>{hightlight[1].name}</h2>
-							<div className={styles.projectDesc}>
-								{hightlight[1].description}
+							<div className={styles.projectInfo}>
+								<div className={styles.projectInfoWrapper}>
+									<div className={styles.feature}>Featured project</div>
+									<h2 className={styles.projectName}>{hightlight[1].name}</h2>
+									<div className={styles.projectDesc}>
+										{hightlight[1].description}
+									</div>
+									<Link
+										to={`/project/${hightlight[1].projectAddress}`}
+										className={styles.link}
+									>
+										<button data-bn-type="button" className={styles.button}>
+											Learn more
+										</button>
+									</Link>
+								</div>
 							</div>
-							<Link
-								to={`/project/${hightlight[1].projectAddress}`}
-								class={styles.link}
-							>
-								<button data-bn-type="button" class={styles.button}>
-									Learn more
-								</button>
-							</Link>
 						</div>
-					</div>
+					) : null}
 				</Carousel>
 			</div>
 
@@ -236,8 +244,8 @@ function Home(props) {
 									onClick={() => handleClickCard(item)}
 								>
 									<img src={`http://localhost:5000/${item.image}`} />
-									<div class={styles.infoProject}>
-										<div class={styles.name}>{item.name}</div>
+									<div className={styles.infoProject}>
+										<div className={styles.name}>{item.name}</div>
 									</div>
 								</div>
 							);
@@ -250,8 +258,8 @@ function Home(props) {
 					<h5 className={styles.title}>Our Impact</h5>
 					<div className={styles.info}>
 						<div className={styles.item}>
-							<Icon />
-							<div className={styles.value}>Changemakers</div>
+							<Icon1 />
+							<div className={styles.value}>Direct Impact</div>
 							<div className={styles.key}>
 								We transfer your donation directly to the end beneficiary -
 								meaning 100% of your money goes to those who need it most. We
@@ -259,17 +267,17 @@ function Home(props) {
 							</div>
 						</div>
 						<div className={styles.item}>
-							<Icon />
+							<Icon2 />
 							<div className={styles.value}>Changemakers</div>
 							<div className={styles.key}>
-								We transfer your donation directly to the end beneficiary -
-								meaning 100% of your money goes to those who need it most. We
-								accept crypto as well as Visa/MasterCard.
+								Through the power of blockchain technology, we are transforming
+								global giving, by providing a process that's entirely traceable,
+								accountable and immutable.
 							</div>
 						</div>
 						<div className={styles.item}>
-							<Icon />
-							<div className={styles.value}>Changemakers</div>
+							<Icon3 />
+							<div className={styles.value}>Transparency</div>
 							<div className={styles.key}>
 								We transfer your donation directly to the end beneficiary -
 								meaning 100% of your money goes to those who need it most. We
