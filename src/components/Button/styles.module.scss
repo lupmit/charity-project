@@ -1,0 +1,28 @@
+.buttonDefault {
+	background: #fcd535;
+	border-radius: 4px;
+	outline: none;
+	border: none;
+	cursor: pointer;
+}
+
+.buttonOutline {
+	background: none;
+	border: 1px solid #fcd535;
+	color: #fcd535;
+	border-radius: 4px;
+	outline: none;
+	cursor: pointer;
+}
+
+.buttonAction {
+	background: none;
+	border: 1px solid rgb(234, 236, 239);
+	color: rgb(30, 35, 41);
+	border-radius: 4px;
+	outline: none;
+	cursor: pointer;
+	&:hover {
+		border-color: rgb(240, 185, 11);
+	}
+}

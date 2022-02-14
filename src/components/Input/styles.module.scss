@@ -1,0 +1,32 @@
+.wrapper {
+	> div {
+		margin-top: 10px;
+		font-weight: 500;
+	}
+	input {
+		box-sizing: border-box;
+		margin: 10px 0px 0px;
+		min-width: 0px;
+		height: 28px;
+		border-width: 0.5px;
+		border-style: solid;
+		border-color: transparent transparent rgb(223, 226, 231);
+		border-image: initial;
+		outline: 0px;
+		width: 100%;
+		&:focus {
+			border-color: transparent transparent #f0b90b;
+		}
+	}
+
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		/* display: none; <- Crashes Chrome on hover */
+		-webkit-appearance: none;
+		margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+	}
+
+	input[type="number"] {
+		-moz-appearance: textfield; /* Firefox */
+	}
+}

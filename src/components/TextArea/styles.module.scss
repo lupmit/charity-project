@@ -1,0 +1,21 @@
+.wrapper {
+	> div {
+		margin-top: 10px;
+		font-weight: 500;
+	}
+	textarea {
+		box-sizing: border-box;
+		margin: 10px 0px 0px;
+		min-width: 0px;
+		border-width: 0.5px;
+		border-style: solid;
+		border-color: rgb(223, 226, 231);
+		border-image: initial;
+		outline: 0px;
+		width: 100%;
+		padding: 5px 10px;
+		&:focus {
+			border-color: #f0b90b;
+		}
+	}
+}

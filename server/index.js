@@ -1,5 +1,6 @@
 const express = require("express");
-var cors = require("cors");
+const cors = require("cors");
+const path = require("path");
 const imageController = require("./controllers/imageController");
 const projectController = require("./controllers/projectController");
 
@@ -9,6 +10,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.use(cors());
+
+const buildPath = path.join(__dirname, "..", "build");
+app.use(express.static(buildPath));
 
 const mongoose = require("mongoose");
 mongoose.connect(
@@ -23,13 +27,19 @@ mongoose.connect(
 	}
 );
 
-app.get("/", (req, res) => res.status(200).json({ error: null, data: "halo" }));
+app.get("/api", (req, res) =>
+	res.status(200).json({ error: null, data: "halo api!" })
+);
 
 //image
-app.use("/upload", imageController);
+app.use("/api/upload", imageController);
 
 //project
-app.use("/project", projectController);
+app.use("/api/project", projectController);
+
+app.get("*", (req, res) => {
+	res.sendFile(path.join(__dirname, "..", "build/index.html"));
+});
 
 const port = 5000;
 app.listen(port, () => console.log(`Server started on port ${port}`));

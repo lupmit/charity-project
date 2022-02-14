@@ -1,0 +1,121 @@
+.wrapper {
+	text-align: left;
+
+	.titleEdit {
+		padding-bottom: 5px;
+		.title {
+			text-align: left;
+			padding-top: 50px;
+			font-weight: 700;
+		}
+		.titleMore {
+			color: rgb(94, 102, 115);
+		}
+	}
+
+	.amountGroup {
+		position: relative;
+		.logoGroup {
+			position: absolute;
+			top: 30%;
+			right: 0;
+			width: 116px;
+			padding: 8px;
+			flex-shrink: 0;
+			align-items: center;
+			background-color: rgb(250, 250, 250);
+			border-radius: 50px;
+			& > img {
+				width: 24px;
+			}
+		}
+	}
+
+	.imageUpload {
+		display: flex;
+		flex-direction: column;
+		margin-top: 20px;
+		margin-bottom: 20px;
+		> p {
+			margin-bottom: 10px;
+		}
+		.imageReview {
+			> label {
+				display: block;
+				text-align: center;
+			}
+			.reviewWrapper {
+				display: block;
+				margin-right: auto;
+				margin-left: auto;
+				position: relative;
+				max-width: 450px;
+				> img {
+					width: 100%;
+				}
+				> svg {
+					position: absolute;
+					font-size: 25px;
+					top: 0;
+					right: 0;
+				}
+			}
+		}
+	}
+	.editItem {
+		.actionAddBeneficy {
+			> p {
+				cursor: pointer;
+			}
+		}
+		padding-top: 20px;
+		> div {
+			margin-bottom: 10px;
+		}
+		.actionTable {
+			display: flex;
+			> svg {
+				margin: 5px;
+			}
+		}
+	}
+	.editProjectAction {
+		margin-bottom: 80px;
+		margin-top: 50px;
+		> button {
+			padding: 8px 10px;
+			margin-right: 10px;
+		}
+
+		.deleteButton {
+			background: #d45e78;
+			color: #f2f5f7;
+		}
+	}
+}
+
+form {
+	.modalAction {
+		display: flex;
+		flex-direction: row;
+		padding-top: 20px;
+		> button {
+			font-size: 14px;
+			padding: 10px 20px;
+			margin: 5px;
+		}
+	}
+}
+
+.deleteGroup {
+	.modalAction {
+		display: flex;
+		flex-direction: row;
+		padding-top: 20px;
+		> button {
+			font-size: 14px;
+			padding: 10px 20px;
+			margin: 5px;
+		}
+	}
+}

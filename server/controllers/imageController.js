@@ -1,18 +1,27 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const authMiddleware = require("../middlewares/middleware");
 
 var router = express.Router();
 
+cloudinary.config({
+	cloud_name: "db62zt51p",
+	api_key: "895199457838725",
+	api_secret: "38_KLD9bmHpCRiby5sG7xj_yY8g",
+});
 // Set The Storage Engine
-const storage = multer.diskStorage({
-	destination: "./public/uploads/",
-	filename: function (req, file, cb) {
-		let filename = req.body?.name
-			? req.body.name + ".jpg"
-			: file.fieldname + "-" + Date.now() + ".jpg";
-		cb(null, filename);
+const storage = new CloudinaryStorage({
+	cloudinary: cloudinary,
+	params: {
+		folder: "uploads/",
+		format: async (req, file) => "jpg", // supports promises as well
+		public_id: (req, file) =>
+			req.body?.name
+				? req.body.name + ".jpg"
+				: file.fieldname + "-" + Date.now(),
 	},
 });
 
@@ -38,7 +47,7 @@ function checkFileType(file, cb) {
 	}
 }
 
-router.post("/", (req, res) => {
+router.post("/", [authMiddleware], (req, res) => {
 	upload(req, res, (err) => {
 		if (err) {
 			res.status(400).json({
@@ -54,9 +63,9 @@ router.post("/", (req, res) => {
 			} else {
 				res.status(200).json({
 					error: null,
-					data: `uploads/${req.file.filename}`,
+					data: req.file.path,
 					uploaded: true,
-					url: `http://localhost:5000/uploads/${req.file.filename}`,
+					url: req.file.path,
 				});
 			}
 		}
