@@ -19,6 +19,7 @@ import NotFound from "../../assets/images/not-found.png";
 const ExplorerDetail = () => {
 	const [newAddress, setNewAddress] = useState();
 	const [data1, setData1] = useState([]);
+	const [data2, setData2] = useState([]);
 	const [balance, setBalance] = useState();
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
@@ -28,6 +29,76 @@ const ExplorerDetail = () => {
 	const params = useParams();
 	const address = params.address;
 
+	const columnsInternal = [
+		{
+			name: "Txn Hash",
+			selector: (row) => (
+				<a
+					href={`https://kovan.etherscan.io/tx/${row.hash}`}
+					target={"_blank"}
+					style={{ textDecoration: "none" }}
+				>
+					{row.hash}
+				</a>
+			),
+			width: "200px",
+		},
+		{
+			name: "Block",
+			selector: (row) => row.blockNumber,
+			width: "100px",
+		},
+		{
+			name: "Time",
+			selector: (row) => moment.unix(row.timeStamp).format("YYYY-MM-DD"),
+			width: "120px",
+		},
+		{
+			name: "From",
+			selector: (row) => (
+				<Link to={`/explorer/${row.from}`} style={{ textDecoration: "none" }}>
+					{row.from}
+				</Link>
+			),
+			width: "200px",
+		},
+		{
+			selector: (row) => (
+				<div
+					// {console.log(row.to, address}
+					style={{
+						color:
+							row.to.toLowerCase() === address.toLowerCase()
+								? "#02977e"
+								: "#b47d00",
+						backgroundColor:
+							row.to.toLowerCase() === address.toLowerCase()
+								? "rgba(0,201,167,.2)"
+								: "rgba(219,154,4,.2)",
+						padding: "3px 8px",
+						fontWeight: "500",
+					}}
+				>
+					{row.to.toLowerCase() === address.toLowerCase() ? "IN" : "OUT"}
+				</div>
+			),
+			width: "90px",
+		},
+		{
+			name: "To",
+			selector: (row) => (
+				<Link to={`/explorer/${row.to}`} style={{ textDecoration: "none" }}>
+					{row.to}
+				</Link>
+			),
+			width: "200px",
+		},
+		{
+			name: "Value",
+			selector: (row) => <span>{row.value / 1000000000000000000} ETH</span>,
+			width: "100px",
+		},
+	];
 	const columnsTransaction = [
 		{
 			name: "Txn Hash",
@@ -108,11 +179,13 @@ const ExplorerDetail = () => {
 			const getData = async () => {
 				const promise = [];
 				promise.push(getNormal(address));
+				promise.push(getInternal(address));
 				promise.push(getBalace(address));
 				console.log(address);
-				let [res1, res2] = await Promise.all(promise);
+				let [res1, res2, res3] = await Promise.all(promise);
 				setData1(res1.data.result);
-				setBalance(res2.data.result);
+				setData2(res2.data.result);
+				setBalance(res3.data.result);
 			};
 			getData().then((res) => {
 				setLoading(false);
@@ -120,6 +193,7 @@ const ExplorerDetail = () => {
 		}
 	}, [address]);
 
+	console.log(data2);
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.headerDetail}>
@@ -193,9 +267,9 @@ const ExplorerDetail = () => {
 							<TabComponent eventKey="desc" title="Transactions">
 								<Table data={data1} columns={columnsTransaction} />
 							</TabComponent>
-							{/* <TabComponent eventKey="internal-txns" title="Internal Txns">
+							<TabComponent eventKey="internal-txns" title="Internal Txns">
 								<Table data={data2} columns={columnsInternal} />
-							</TabComponent> */}
+							</TabComponent>
 						</Tab>
 					</div>
 				</Container>
