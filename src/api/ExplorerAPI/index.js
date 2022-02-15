@@ -14,7 +14,7 @@ const getBalace = (address) => {
 const getInternal = (address) => {
 	return axios({
 		method: "get",
-		url: `${URL}&module=account&action=txlistinternal&address=${address}&startblock=0&endblock=2702578&sort=asc`,
+		url: `${URL}&module=account&action=txlistinternal&address=${address}&startblock=0&endblock=99999999&sort=asc`,
 	});
 };
 

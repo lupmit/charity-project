@@ -11,7 +11,7 @@ const transactionReceiptAsync = async function (txnHash, resolve, reject) {
 		if (receipt === null) {
 			setTimeout(function () {
 				transactionReceiptAsync(txnHash, resolve, reject);
-			}, 500);
+			}, 1000);
 		} else resolve(receipt);
 	} catch (e) {
 		reject(e);
