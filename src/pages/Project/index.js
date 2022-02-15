@@ -209,7 +209,7 @@ const Project = () => {
 		return result !== null && result.length > 0;
 	});
 
-	return loading ? (
+	return loading || _.isEmpty(hightlight) ? (
 		<Loading />
 	) : (
 		<div className={styles.wrapper}>
