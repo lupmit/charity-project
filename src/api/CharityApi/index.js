@@ -21,7 +21,7 @@ const transactionReceiptAsync = async function (txnHash, resolve, reject) {
 const addCharityProject = (contract, account, name, target) => {
 	return contract.methods
 		.addCharityProject(name, target)
-		.send({ from: account, gas: 3000000 }, function (err, transactionHash) {
+		.send({ from: account, gas: 3500000 }, function (err, transactionHash) {
 			if (!err)
 				toast.promise(
 					new Promise(function (resolve, reject) {
@@ -51,7 +51,7 @@ const getCharityInfo = (contract) => {
 const deleteCharityProject = (contract, account, address) => {
 	return contract.methods
 		.deleteCharityProject(address)
-		.send({ from: account, gas: 3000000 }, function (err, transactionHash) {
+		.send({ from: account, gas: 3500000 }, function (err, transactionHash) {
 			if (!err)
 				toast.promise(
 					new Promise(function (resolve, reject) {
