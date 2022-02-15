@@ -42,6 +42,12 @@
 		margin-top: 20px;
 		margin-bottom: 20px;
 		align-items: center;
+		@media (max-width: 400px) {
+			flex-direction: column !important;
+			.add {
+				margin-bottom: 20px;
+			}
+		}
 		.add {
 			padding: 6px 10px;
 		}
