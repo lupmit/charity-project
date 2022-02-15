@@ -33,7 +33,7 @@ const ExplorerDetail = () => {
 			name: "Txn Hash",
 			selector: (row) => (
 				<a
-					href={`https://ropsten.etherscan.io/tx/${row.hash}`}
+					href={`https://kovan.etherscan.io/tx/${row.hash}`}
 					target={"_blank"}
 					style={{ textDecoration: "none" }}
 				>
@@ -161,7 +161,7 @@ const ExplorerDetail = () => {
 							<a
 								className={styles.viewInExplorer}
 								target={"_blank"}
-								href={`https://ropsten.etherscan.io/address/${address}`}
+								href={`https://kovan.etherscan.io/address/${address}`}
 							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"

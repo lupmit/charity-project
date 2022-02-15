@@ -3,7 +3,7 @@ export const CHARITY_CONTRACT_ADDRESS =
 
 const isDEV = false;
 
-export const BASE_SERVER_URL = "http://192.168.98.123:5000/api";
+export const BASE_SERVER_URL = "/api";
 
 export const BASE_PROVIDER_URL = isDEV
 	? "http://localhost:7545"
