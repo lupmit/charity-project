@@ -27,32 +27,36 @@
 				.content {
 					.name {
 						font-size: 20px !important;
-						line-height: 24px !important;
+						margin: 0 0 10px !important;
 					}
 					.desc {
 						font-size: 15px !important;
+						margin: 0 0 20px !important;
 					}
 					.footer {
-						@media (max-width: 400px) {
+						@media (max-width: 500px) {
 							display: flex !important;
 							flex-direction: column !important;
+							.infoWrapper {
+								margin-top: 10px !important;
+							}
 						}
 						.infoWrapper {
 							.valueWrapper {
 								.value {
-									font-size: 12px !important;
+									font-size: 15px !important;
 								}
 								.valueExtend {
-									font-size: 12px !important;
+									font-size: 15px !important;
 								}
 							}
 							.key {
-								font-size: 12px !important;
+								font-size: 15px !important;
 							}
 						}
 						.button {
 							padding: 10px 25px !important;
-							font-size: 12px !important;
+							font-size: 15px !important;
 						}
 					}
 				}

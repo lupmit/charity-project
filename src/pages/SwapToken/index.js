@@ -7,15 +7,12 @@ const SwapToken = () => {
 		<div className={styles.wrapper}>
 			<Container>
 				<iframe
-					src="https://app.uniswap.org/#/swap?exactField=input&exactAmount=10&inputCurrency=0x6b175474e89094c44da98b954eedeac495271d0f"
+					src="https://app.uniswap.org/#/swap?theme=light"
 					width="100%"
-					height="100%"
+					height="auto"
 					style={{
-						border: 0,
-						margin: "0 auto",
-						marginBottom: ".5rem",
-						display: "block",
-						borderRadius: "10px",
+						borderRadius: "4px",
+						minHeight: "600px",
 					}}
 				></iframe>
 			</Container>

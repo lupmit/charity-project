@@ -141,9 +141,15 @@
 		border-radius: 4px;
 	}
 	.backgroundNotFound {
+		.searchNotFound {
+			padding-top: 30px;
+			font-size: 20px;
+			font-weight: 700;
+			text-align: center;
+		}
 		img {
 			width: 100%;
-			max-width: 416px;
+			max-width: 320px;
 		}
 	}
 }

@@ -202,6 +202,7 @@ const ExplorerDetail = () => {
 			) : (
 				<Container>
 					<div className={styles.backgroundNotFound}>
+						<div className={styles.searchNotFound}>Search Not Found!</div>
 						<img src={NotFound} />
 					</div>
 				</Container>
