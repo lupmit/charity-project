@@ -28,10 +28,12 @@
 					.name {
 						font-size: 20px !important;
 						margin: 0 0 10px !important;
+						line-height: unset !important;
 					}
 					.desc {
 						font-size: 15px !important;
 						margin: 0 0 20px !important;
+						line-height: unset !important;
 					}
 					.footer {
 						@media (max-width: 500px) {
