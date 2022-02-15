@@ -42,6 +42,7 @@ const Manager = () => {
 		const contract = await getcontract();
 		deleteCharityProject(contract, account, address).then(() => {
 			setRerender(!rerender);
+			setShowDeleteProject(false);
 			deleteProjectByAddress(token, address);
 		});
 	};
@@ -330,7 +331,13 @@ const Manager = () => {
 								<input type="number" name="target" required /> */}
 								<Input label="Project name" name="name" required />
 								<div className={styles.amountGroup}>
-									<Input label="Target" name="target" required type="number" />
+									<Input
+										label="Target"
+										name="target"
+										required
+										type="number"
+										step=".01"
+									/>
 									<div className={styles.logoGroup}>
 										<img src={EthIcon} /> <span> ETH</span>
 									</div>

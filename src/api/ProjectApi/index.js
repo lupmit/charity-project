@@ -21,7 +21,7 @@ const transactionReceiptAsync = async function (txnHash, resolve, reject) {
 const updateAndStartCharity = (contract, account, name, target, beneficies) => {
 	return contract.methods
 		.upadateAndStartCharity(name, target, beneficies)
-		.send({ from: account, gas: 3000000 }, function (err, transactionHash) {
+		.send({ from: account, gas: 3500000 }, function (err, transactionHash) {
 			if (!err)
 				toast.promise(
 					new Promise(function (resolve, reject) {
@@ -40,7 +40,7 @@ const donate = (contract, account, name, message, value) => {
 	return contract.methods
 		.donate(name, message)
 		.send(
-			{ from: account, value: value, gas: 3000000 },
+			{ from: account, value: value, gas: 3500000 },
 			function (err, transactionHash) {
 				if (!err)
 					toast.promise(

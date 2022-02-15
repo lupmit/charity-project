@@ -38,24 +38,24 @@
 // 		const contact = await initContarct();
 // 		const res = await contact.methods
 // 			.addManager("0x452bFfebe7E0D0C0Ee7FE3C3745881Ce34D039C3", "phuc", "test")
-// 			.send({ from: account, gas: 3000000 });
+// 			.send({ from: account, gas: 3500000 });
 // 		console.log(res);
 // 		// const res = await contact.methods
 // 		// 	.deleteManager("0x452bFfebe7E0D0C0Ee7FE3C3745881Ce34D039C3")
-// 		// 	.send({ from: account, gas: 3000000 });
+// 		// 	.send({ from: account, gas: 3500000 });
 // 		// console.log(res);
 // 	};
 // 	const Delete = async () => {
 // 		const contact = await initContarct();
 // 		// const res = await contact.methods
 // 		// 	.addManager("0x452bFfebe7E0D0C0Ee7FE3C3745881Ce34D039C3", "phuc", "test")
-// 		// 	.send({ from: account, gas: 3000000 });
+// 		// 	.send({ from: account, gas: 3500000 });
 // 		// console.log(res);
 // 		const res = await contact.methods
 // 			.deleteManager("0x452bFfebe7E0D0C0Ee7FE3C3745881Ce34D039C3")
 // 			.send({
 // 				from: account,
-// 				gas: 3000000,
+// 				gas: 3500000,
 // 			});
 // 		console.log(res);
 // 	};
