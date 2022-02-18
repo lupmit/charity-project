@@ -43,7 +43,7 @@ const About = () => {
 				</div>
 				<div className={styles.contentWrapper}>
 					<div className={styles.contentText}>
-						<h1 className={styles.title}>Ý tưởng</h1>
+						<h1 className={styles.title}>Ý TƯỞNG</h1>
 						<div className={styles.text}>
 							Crypto Charity muốn thúc đẩy các giải pháp sáng tạo mới hướng tới
 							các dự án từ thiện xã hội, nhân rộng chúng một cách hiệu quả để
@@ -62,7 +62,7 @@ const About = () => {
 						<img src={Pic3} className={styles.image} />
 					</div>
 					<div className={styles.contentText}>
-						<h1 className={styles.title}>Cách tiếp cận</h1>
+						<h1 className={styles.title}>CÁCH TIẾP CẬN</h1>
 						<div className={styles.text}>
 							Hệ thống quyên góp minh bạch Chúng tôi tạo ra một hệ thống quyên
 							góp dựa trên blockchain giúp cho mỗi giao dịch trở nên minh bạch,

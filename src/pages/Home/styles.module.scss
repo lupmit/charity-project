@@ -35,17 +35,18 @@
 						padding: 0 80px;
 						.feature {
 							font-size: 20px !important;
-							margin-bottom: 20px;
+							margin-bottom: 10px;
 						}
 						.projectName {
 							font-size: 30px !important;
 							overflow: hidden;
 							margin-bottom: 15px;
-							line-height: unset !important;
+							line-height: 35px !important;
 						}
 						.projectDesc {
 							font-size: 15px !important;
 							line-height: unset !important;
+							margin-bottom: 35px !important;
 						}
 					}
 				}
@@ -60,7 +61,8 @@
 						font-size: 24px;
 						line-height: 32px;
 						margin-bottom: 24px;
-						color: rgb(238, 238, 238);
+						color: #fcd535;
+						font-weight: 600;
 					}
 					.projectName {
 						font-size: 52px;
