@@ -1,0 +1,133 @@
+.wrapper {
+	background: #fafafa;
+	height: 100vh;
+
+	//project status
+	.projectStatus {
+		.running {
+			border-radius: 4px;
+			padding: 5px 10px;
+			border: 1px solid;
+			color: #1d39c4;
+			background: #f0f5ff;
+			border-color: #adc6ff;
+		}
+		.finnish {
+			border-radius: 4px;
+			padding: 5px 10px;
+			border: 1px solid;
+			color: #d4380d;
+			background: #fff2e8;
+			border-color: #ffbb96;
+		}
+		.setup {
+			border-radius: 4px;
+			padding: 5px 10px;
+			border: 1px solid;
+			color: #389e0d;
+			background: #f6ffed;
+			border-color: #b7eb8f;
+		}
+	}
+
+	.title {
+		text-align: left;
+		padding-top: 50px;
+		font-weight: 700;
+	}
+	.action {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		margin-top: 20px;
+		margin-bottom: 20px;
+		align-items: center;
+		@media (max-width: 400px) {
+			flex-direction: column !important;
+			.add {
+				margin-bottom: 20px;
+			}
+		}
+		.add {
+			padding: 6px 10px;
+		}
+		.search {
+			height: 40px;
+		}
+	}
+	.actionTable {
+		display: flex;
+		flex-direction: row;
+		margin: 3px;
+		> svg {
+			margin: 4px;
+			cursor: pointer;
+		}
+	}
+	.currencyTable {
+		display: flex;
+		align-items: center;
+		> img {
+			width: 18px;
+			margin-right: 6px;
+		}
+	}
+	.addressTable {
+		display: flex;
+		align-items: center;
+		> svg {
+			margin-left: 6px;
+			cursor: pointer;
+		}
+	}
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	& > input {
+		margin-bottom: 10px;
+	}
+
+	.modalAction {
+		display: flex;
+		flex-direction: row;
+		padding-top: 20px;
+		> button {
+			font-size: 14px;
+			padding: 10px 20px;
+			margin: 5px;
+		}
+	}
+
+	.amountGroup {
+		position: relative;
+		.logoGroup {
+			position: absolute;
+			top: 30%;
+			right: 0;
+			width: 116px;
+			padding: 8px;
+			flex-shrink: 0;
+			align-items: center;
+			background-color: rgb(250, 250, 250);
+			border-radius: 50px;
+			& > img {
+				width: 24px;
+			}
+		}
+	}
+}
+
+.deleteGroup {
+	.modalAction {
+		display: flex;
+		flex-direction: row;
+		padding-top: 20px;
+		> button {
+			font-size: 14px;
+			padding: 10px 20px;
+			margin: 5px;
+		}
+	}
+}

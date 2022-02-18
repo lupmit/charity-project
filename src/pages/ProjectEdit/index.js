@@ -13,7 +13,7 @@ import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import Table from "../../components/Table";
 import Button from "../../components/Button";
 import Modal from "../../components/Modal";
-import { getProjectByAddress } from "../../api/ServerApi";
+import { getProjectByAddress, getAllBeneficy } from "../../api/ServerApi";
 import { updateAndStartCharity } from "../../api/ProjectApi";
 import { useWeb3React } from "@web3-react/core";
 import { useNavigate } from "react-router-dom";
@@ -22,11 +22,15 @@ import Web3Token from "web3-token";
 import styles from "./styles.module.scss";
 import TextArea from "../../components/TextArea";
 import EthIcon from "../../assets/images/icon-eth.png";
+import Autocomplete from "react-autocomplete";
+import Autosuggest from "react-autosuggest";
 
 const ProjectEdit = () => {
 	const [info, setInfo] = useState();
 	const [loading, setLoading] = useState(true);
 	const [token, setToken] = useState();
+	const [listBeneficy, setListBeneficy] = useState([]);
+	const [sugget, setSugget] = useState([]);
 	const params = useParams();
 	const address = params.address;
 
@@ -90,85 +94,49 @@ const ProjectEdit = () => {
 
 	//beneficy
 	const [beneficy, setBeneficy] = useState([]);
-	const [openAddBeneficy, setOpenAddBeneficy] = useState(false);
-	const [editOrDelete, setEditOrDelete] = useState(0);
+	const [showDelete, setShowDelete] = useState(false);
 
 	const columnsProject = [
 		{
-			name: "Address",
+			name: "Địa chỉ ví",
 			selector: (row) => row.address,
 		},
 		{
-			name: "Name",
+			name: "Họ và tên",
 			selector: (row) => row.name,
 		},
 		{
-			name: "Description",
+			name: "Thông tin",
 			selector: (row) => row.description,
 		},
 		{
-			name: "Action",
+			name: "",
 			selector: (row) =>
 				parseInt(info.state) == 0 ? (
 					<div className={styles.actionTable}>
-						<AiOutlineEdit onClick={() => setEditOrDelete(1)} />
-						<AiOutlineDelete onClick={() => setEditOrDelete(2)} />
+						<AiOutlineDelete onClick={() => setShowDelete(true)} />
 						<Modal
-							show={editOrDelete}
-							onHide={() => setEditOrDelete(0)}
-							header={editOrDelete === 1 ? "Edit Beneficy" : "Delete Beneficy"}
+							show={showDelete}
+							onHide={() => setShowDelete(false)}
+							header={"Xóa"}
 							content={
 								<div>
-									{editOrDelete === 1 ? (
-										<form onSubmit={hanldeSubmitAddBeneficy}>
-											<Input
-												label="Wallet address"
-												name="address"
-												defaultValue={row.address}
-												required
-											/>
-											<Input
-												label="Name"
-												name="name"
-												defaultValue={row.name}
-												required
-											/>
-											<Input
-												label="Description"
-												name="description"
-												defaultValue={row.description}
-												required
-											/>
-											<input value={row.address} name="old-address" hidden />
-											<div className={styles.modalAction}>
-												<Button type="submit">Save</Button>
-												<Button
-													typeButton="action"
-													type="button"
-													onClick={() => setEditOrDelete(0)}
-												>
-													Cancel
-												</Button>
-											</div>
-										</form>
-									) : (
-										<div className={styles.deleteGroup}>
-											<div className={styles.content}>Are you sure?</div>
-											<div className={styles.modalAction}>
-												<Button
-													onClick={() => handleDeleteBeneficy(row.address)}
-												>
-													Delete
-												</Button>
-												<Button
-													typeButton="action"
-													onClick={() => setEditOrDelete(0)}
-												>
-													Cancel
-												</Button>
-											</div>
+									<div className={styles.deleteGroup}>
+										<div className={styles.content}>
+											Bạn có chắc chắn muốn xóa?
 										</div>
-									)}
+										<div className={styles.modalAction}>
+											<Button onClick={() => handleDeleteBeneficy(row.address)}>
+												Xóa
+											</Button>
+											<Button
+												typeButton="action"
+												onClick={() => setShowDelete(false)}
+											>
+												Hủy
+											</Button>
+										</div>
+									</div>
 								</div>
 							}
 						></Modal>
@@ -180,31 +148,12 @@ const ProjectEdit = () => {
 		},
 	];
 
-	const hanldeSubmitAddBeneficy = (e) => {
-		e.preventDefault();
-		let newListBeneficy = [...beneficy];
-		if (e.target[3]) {
-			newListBeneficy = newListBeneficy.filter((item) => {
-				return item.address !== e.target[3].value;
-			});
-		}
-		newListBeneficy.push({
-			address: e.target[0].value,
-			name: e.target[1].value,
-			description: e.target[2].value,
-		});
-		setBeneficy(newListBeneficy);
-		setOpenAddBeneficy(false);
-		if (e.target[3]) {
-			setEditOrDelete(0);
-		}
-	};
-
 	const handleDeleteBeneficy = (address) => {
 		const newListBeneficy = beneficy.filter((item) => {
 			return item.address !== address;
 		});
 		setBeneficy(newListBeneficy);
+		setShowDelete(false);
 	};
 
 	useEffect(() => {
@@ -214,7 +163,8 @@ const ProjectEdit = () => {
 			let tempProject = await getProjectInfo(contract);
 			console.log(tempProject);
 			setName(tempProject.name);
-			setBeneficy(benficyToObj(tempProject.beneficiaries));
+			if (!_.isEmpty(tempProject.beneficiaries))
+				setBeneficy(benficyToObj(tempProject.beneficiaries));
 			setTarget(library.utils.fromWei(tempProject.target));
 			let infoProject = await getProjectByAddress(tempProject.projectAddress);
 			setDesc(infoProject.data.data.description);
@@ -223,9 +173,12 @@ const ProjectEdit = () => {
 			setProblem(infoProject.data.data.problem);
 
 			setInfo(tempProject);
-			setLoading(false);
+			let res = await getAllBeneficy();
+			setListBeneficy(res.data.data);
 		};
-		getData();
+		getData().then((res) => {
+			setLoading(false);
+		});
 	}, []);
 
 	const handleStartProject = async () => {
@@ -286,13 +239,51 @@ const ProjectEdit = () => {
 		});
 	};
 
+	const [searchBeneficy, setSearchBeneficy] = useState();
+	const searchItem = (item, value) => {
+		const keyword = value.toLowerCase();
+		return (
+			item.address.toLowerCase().includes(keyword) ||
+			item.name.toLowerCase().includes(keyword)
+		);
+	};
+
+	const handleSelect = (val) => {
+		sugget.forEach((item) => {
+			if (item.address === val) {
+				let temp = [...beneficy];
+				temp.push({
+					address: item.address,
+					name: item.name,
+					description: item.description,
+				});
+				setBeneficy(temp);
+			}
+		});
+	};
+
+	useEffect(() => {
+		let newListBeneficy = listBeneficy.filter((item) => {
+			let status = true;
+			beneficy.forEach((i) => {
+				if (item.address === i.address) {
+					status = false;
+				}
+			});
+			return status;
+		});
+		setSugget(newListBeneficy);
+	}, [beneficy, listBeneficy]);
+
+	console.log(showDelete);
+
 	return loading || _.isEmpty(token) ? (
 		<Loading />
 	) : (
 		<div className={styles.wrapper}>
 			<Container>
 				<div className={styles.titleEdit}>
-					<h3 className={styles.title}>Project Edit</h3>
+					<h3 className={styles.title}>Dự án từ thiện</h3>
 					<div className={styles.titleMore}>
 						<p>
 							{info.name} - {info.projectAddress}
@@ -301,7 +292,7 @@ const ProjectEdit = () => {
 				</div>
 
 				<Input
-					label="Project name"
+					label="Tên dự án"
 					name="name"
 					defaultValue={name}
 					disabled={parseInt(info.state) !== 0}
@@ -311,7 +302,7 @@ const ProjectEdit = () => {
 				/>
 				<div className={styles.amountGroup}>
 					<Input
-						label="Target"
+						label="Mục tiêu"
 						name="target"
 						type="number"
 						defaultValue={target}
@@ -325,7 +316,7 @@ const ProjectEdit = () => {
 					</div>
 				</div>
 				<div className={styles.imageUpload}>
-					<p>Project image</p>
+					<p style={{ fontWeight: 600 }}>Hình ảnh</p>
 					<div className={styles.imageReview}>
 						{image && image !== "" && (
 							<div className={styles.reviewWrapper}>
@@ -350,14 +341,14 @@ const ProjectEdit = () => {
 					</div>
 				</div>
 				<TextArea
-					label="Description"
+					label="Thông tin"
 					defaultValue={desc}
 					onChange
 					name="description"
 					onChange={(e) => setDesc(e.target.value)}
 				/>
 				<TextArea
-					label="What is problem"
+					label="Vấn đề gặp phải"
 					defaultValue={problem}
 					name="problem"
 					onChange={(e) => setProblem(e.target.value)}
@@ -365,44 +356,43 @@ const ProjectEdit = () => {
 
 				<div className={styles.editItem}>
 					<div className={styles.actionAddBeneficy}>
-						<div>Beneficies</div>
+						<div style={{ fontWeight: 600 }}>Người thụ hưởng</div>
 						{parseInt(info.state) == 0 && (
-							<p onClick={() => setOpenAddBeneficy(true)}>+ Add</p>
-						)}
-						<Modal
-							show={openAddBeneficy}
-							onHide={() => setOpenAddBeneficy(false)}
-							header={"Add Beneficy"}
-							content={
-								<div>
-									<form onSubmit={hanldeSubmitAddBeneficy}>
-										<Input label="Wallet address" name="address" required />
-										<Input label="Name" name="name" required />
-										<Input label="Description" name="description" required />
-										<div className={styles.modalAction}>
-											<Button type="submit">Save</Button>
-											<Button
-												typeButton="action"
-												type="button"
-												onClick={() => setOpenAddBeneficy(false)}
-											>
-												Cancel
-											</Button>
+							<>
+								<Autocomplete
+									getItemValue={(item) => item.address}
+									items={sugget}
+									shouldItemRender={(item, value) => searchItem(item, value)}
+									renderItem={(item, isHighlighted) => (
+										<div
+											style={{
+												background: isHighlighted ? "lightgray" : "white",
+												zIndex: 1000,
+												cursor: "pointer",
+												margin: "10px 10px",
+											}}
+										>
+											{item.address} - {item.name}
 										</div>
-									</form>
-								</div>
-							}
-						></Modal>
+									)}
+									menuStyle={{
+										zIndex: 1,
+									}}
+									value={searchBeneficy}
+									onChange={(e) => setSearchBeneficy(e.target.value)}
+									onSelect={(val) => handleSelect(val)}
+								/>
+							</>
+						)}
 					</div>
 					<Table
-						fixedHeader={true}
 						fixedHeaderScrollHeight={"100%"}
 						columns={columnsProject}
 						data={beneficy}
 					></Table>
 				</div>
 				<div className={styles.editItem}>
-					<div>More infomation</div>
+					<div style={{ fontWeight: 600 }}>Thông tin thêm</div>
 					<Editor
 						name="infomation"
 						onChange={(data) => {
@@ -414,11 +404,11 @@ const ProjectEdit = () => {
 				<div className={styles.editProjectAction}>
 					{parseInt(info.state) == 0 ? (
 						<>
-							<Button onClick={handleStartProject}>Start Project</Button>
-							<Button className={styles.deleteButton}>Delete Project</Button>
+							<Button onClick={handleStartProject}>Bắt đầu dự án</Button>
+							<Button className={styles.deleteButton}>Xóa</Button>
 						</>
 					) : (
-						<Button onClick={handleSaveProject}>Save Project</Button>
+						<Button onClick={handleSaveProject}>Lưu</Button>
 					)}
 				</div>
 			</Container>

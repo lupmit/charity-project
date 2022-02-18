@@ -12,13 +12,11 @@ const About = () => {
 			<Container>
 				<div className={styles.contentWrapper}>
 					<div className={styles.contentText}>
-						<h1 className={styles.title}>About Us</h1>
+						<h1 className={styles.title}>VỀ CHÚNG TÔI</h1>
 						<div className={styles.text}>
-							Our aim is to create last-mile solutions for impactful social
-							projects and scaling them up quickly to fundamentally change
-							millions of lives. People with non-smart phones can now own crypto
-							wallets to receive and transfer crypto currencies that serve as
-							alternative assets to protect their property value.
+							Mục đích của chúng tôi là tạo ra giải pháp cho các dự án xã hội và
+							nhân rộng chúng một cách nhanh chóng để thay đổi, giúp đỡ hàng
+							triệu hoàn cảnh khó khăn.
 						</div>
 					</div>
 					<div className={styles.imageWrapper}>
@@ -30,32 +28,29 @@ const About = () => {
 						<img src={Pic1} className={styles.image} />
 					</div>
 					<div className={styles.contentText}>
-						<h1 className={styles.title}>Our Mission</h1>
+						<h1 className={styles.title}>NHIỆM VỤ</h1>
 						<div className={styles.text}>
-							With our partners and donors, we aim to not only create thoughtful
-							solutions and long-term change for some of the world's most
-							complex problems, but also a brand new experience for donating. We
-							also want to give everyone the ability to see how their
-							contributions via blockchain technology are making visible changes
-							in the world. We envision a world where blockchain technology can
-							be used for philanthropy as a social contract to end all forms of
-							poverty and inequality, and advance sustainable development to
-							ensure no one is left behind.
+							Với các đối tác và nhà tài trợ, chúng tôi mong muốn không chỉ tạo
+							ra các giải pháp tối ưu và giải quyết vấn đề mình bạch trong từ
+							thiện mà còn là một trải nghiệm hoàn toàn mới cho việc quyên góp.
+							Chúng tôi cũng muốn mang đến cho mọi người khả năng xem những đóng
+							góp của họ thông qua công nghệ blockchain . Chúng tôi hình dung
+							một thế giới nơi công nghệ blockchain có thể được sử dụng cho hoạt
+							động từ thiện như một hợp đồng xã hội nhằm chấm dứt tình trạng
+							nghèo đói và bất bình đẳng.
 						</div>
 					</div>
 				</div>
 				<div className={styles.contentWrapper}>
 					<div className={styles.contentText}>
-						<h1 className={styles.title}>2022 Initiative</h1>
+						<h1 className={styles.title}>Ý tưởng</h1>
 						<div className={styles.text}>
-							Binance Charity wants to spearhead new innovative solutions
-							towards impactful social projects and efficiently scaling them up
-							to fundamentally change millions of lives. We want to give people
-							without smartphones the ability to receive and transfer crypto
-							currencies as an alternative form of safeguarding their assets. We
-							are also looking at empowering more NGOs and volunteers by giving
-							them an efficient and engaging volunteer management solution with
-							Binance's blockchain infrastructure.
+							Crypto Charity muốn thúc đẩy các giải pháp sáng tạo mới hướng tới
+							các dự án từ thiện xã hội, nhân rộng chúng một cách hiệu quả để
+							giúp đỡ cuộc sống của hàng triệu người. Chúng tôi muốn cung cấp
+							cho những người không có điện thoại thông minh khả năng nhận và
+							chuyển tiền điện tử như một hình thức thay thế để bảo vệ tài sản
+							của họ.
 						</div>
 					</div>
 					<div className={styles.imageWrapper}>
@@ -67,14 +62,12 @@ const About = () => {
 						<img src={Pic3} className={styles.image} />
 					</div>
 					<div className={styles.contentText}>
-						<h1 className={styles.title}>Our Approach</h1>
+						<h1 className={styles.title}>Cách tiếp cận</h1>
 						<div className={styles.text}>
-							Transparent Donation System We create a blockchain-based donation
-							system that makes each transaction flow transparent, accountable,
-							and efficient. Developing & Testing Innovative Solutions We work
-							onsite to understand local needs and develop solutions for
-							specific social problems. We continually test and improve on our
-							solutions to scale up the social impact.
+							Hệ thống quyên góp minh bạch Chúng tôi tạo ra một hệ thống quyên
+							góp dựa trên blockchain giúp cho mỗi giao dịch trở nên minh bạch,
+							có trách nhiệm và hiệu quả. Chúng tôi liên tục thử nghiệm và cải
+							tiến các giải pháp của mình để có tác động tích cực với xã hội.
 						</div>
 					</div>
 				</div>

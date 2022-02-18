@@ -24,7 +24,7 @@ const Explorer = () => {
 						<h1 className={styles.title}>Charity Project Explorer</h1>
 						<div className={styles.searhWrapper}>
 							<Search
-								placeholder="Search by Address"
+								placeholder="Tìm kiếm theo địa chỉ ví/ địa chỉ dự án"
 								hideIcon={true}
 								className={styles.searchInput}
 								onChange={(event) => setAddress(event.target.value)}

@@ -32,6 +32,36 @@
 			& > a {
 				text-decoration: none;
 			}
+
+			.dropdownGroup {
+				display: flex;
+				align-items: center;
+				.nav {
+					color: rgba(255, 255, 255, 0.5);
+					background-color: rgb(24, 26, 32);
+					border-color: rgb(24, 26, 32);
+					height: 56px;
+					font-size: 18px;
+					&:hover {
+						color: #f8d33a;
+						border-color: rgb(24, 26, 32);
+					}
+					&:focus {
+						box-shadow: none;
+					}
+				}
+				.navMenu {
+					background-color: rgb(24, 26, 32);
+					.navItem {
+						color: rgba(255, 255, 255, 0.5);
+						font-size: 18px;
+						&:hover {
+							background-color: rgb(24, 26, 32);
+							color: #f8d33a;
+						}
+					}
+				}
+			}
 			.link {
 				height: 56px;
 				padding: 0 20px;
@@ -115,6 +145,7 @@
 		& > a {
 			text-decoration: none;
 		}
+
 		.link {
 			height: 56px;
 			padding: 10px 60px;
@@ -127,6 +158,58 @@
 			&:hover {
 				color: #f8d33a;
 				cursor: pointer;
+			}
+		}
+
+		.linkGroup {
+			padding: 10px 60px;
+			.groupTitle {
+				display: flex;
+				font-size: 18px;
+				list-style: none;
+				padding: 10px 0;
+				color: rgba(255, 255, 255, 0.5);
+				&:hover {
+					color: #f8d33a;
+					cursor: pointer;
+				}
+				.iconDown {
+					box-sizing: border-box;
+					margin: 0px;
+					min-width: 0px;
+					color: currentcolor;
+					font-size: 24px;
+					fill: currentcolor;
+					width: 1em;
+					height: 1em;
+				}
+			}
+			.managerGroup {
+				padding: 0 0 0 24px;
+				&::before {
+					content: "";
+					display: block;
+					position: absolute;
+					left: 60px;
+					right: 60px;
+					height: 1px;
+					background: rgb(71, 77, 87);
+				}
+				& > a {
+					text-decoration: none;
+					.linkItem {
+						padding: 5px 10px;
+						display: flex;
+						font-size: 18px;
+						align-items: center;
+						list-style: none;
+						color: rgba(255, 255, 255, 0.5);
+						&:hover {
+							color: #f8d33a;
+							cursor: pointer;
+						}
+					}
+				}
 			}
 		}
 	}

@@ -44,11 +44,11 @@ const ProjectDetail = (props) => {
 		console.log(status);
 		status = parseInt(status);
 		if (status === 0) {
-			return "Setup";
+			return "Chưa diễn ra";
 		} else if (status === 1) {
-			return "Funding";
+			return "Đang diễn ra";
 		} else {
-			return "Compeleted";
+			return "Đã kết thúc";
 		}
 	};
 
@@ -59,7 +59,7 @@ const ProjectDetail = (props) => {
 	const reactToPrintTrigger = React.useCallback(() => {
 		return (
 			<Button className={styles.download} typeButton="outline">
-				Download
+				Sao kê
 			</Button>
 		);
 	}, []);
@@ -149,7 +149,7 @@ const ProjectDetail = (props) => {
 		return rawData?.map((item) => {
 			return {
 				name: item.name,
-				method: "Currency",
+				method: "Tiền số",
 				currency: "ETH",
 				amount: library.utils.fromWei(item.amount),
 				message: item.message,
@@ -181,16 +181,16 @@ const ProjectDetail = (props) => {
 
 	const columnsDonator = [
 		{
-			name: "Name",
+			name: "Người quyên góp",
 			selector: (row) => row.name,
 			width: "200px",
 		},
 		{
-			name: "Method",
+			name: "Phương thức",
 			selector: (row) => row.method,
 		},
 		{
-			name: "Currency",
+			name: "Loại tiền",
 			selector: (row) => (
 				<div className={styles.currencyTable}>
 					<img src={EthIcon} />
@@ -199,16 +199,16 @@ const ProjectDetail = (props) => {
 			),
 		},
 		{
-			name: "Amount",
+			name: "Số lượng",
 			selector: (row) => row.amount,
 		},
 		{
-			name: "Message",
+			name: "Lời nhắn",
 			selector: (row) => row.message,
 			width: "250px",
 		},
 		{
-			name: "Date",
+			name: "Thời gian",
 			selector: (row) => row.time,
 			width: "150px",
 		},
@@ -216,11 +216,11 @@ const ProjectDetail = (props) => {
 
 	const columnsBeneficy = [
 		{
-			name: "Receiver Name",
+			name: "Người nhận",
 			selector: (row) => row.address,
 		},
 		{
-			name: "Currency",
+			name: "Loại tiền",
 			selector: (row) => (
 				<div className={styles.currencyTable}>
 					<img src={EthIcon} />
@@ -229,27 +229,27 @@ const ProjectDetail = (props) => {
 			),
 		},
 		{
-			name: "Amount",
+			name: "Số lượng",
 			selector: (row) => row.amount,
 		},
 		{
-			name: "Date",
+			name: "Thời gian",
 			selector: (row) => row.time,
 		},
 	];
 	const columnsAllBeneficy = [
 		{
-			name: "Wallet address",
+			name: "Đại chỉ ví",
 			selector: (row) => row.address,
 			width: "400px",
 		},
 		{
-			name: "Full Name",
+			name: "Họ và tên",
 			selector: (row) => row.name,
 			width: "300px",
 		},
 		{
-			name: "Description",
+			name: "Thông tin",
 			selector: (row) => row.description,
 			width: "300px",
 		},
@@ -287,7 +287,7 @@ const ProjectDetail = (props) => {
 							<span className={styles.balance}>
 								{floatBalance + floatAllocated} ETH
 							</span>
-							<span className={styles.target}>Raised of {floatTarget} ETH</span>
+							<span className={styles.target}>mục tiêu {floatTarget} ETH</span>
 						</div>
 						<div className={styles.action}>
 							{parseInt(info.state) === 2 ? (
@@ -300,7 +300,7 @@ const ProjectDetail = (props) => {
 								/>
 							) : (
 								<Button className={styles.donate} onClick={donateClick}>
-									Donate
+									Quyên góp
 								</Button>
 							)}
 						</div>
@@ -309,18 +309,18 @@ const ProjectDetail = (props) => {
 			</div>
 			<div className={styles.problemWrapper}>
 				<Container>
-					<h3 className={styles.title}>What’s the problem?</h3>
+					<h3 className={styles.title}>Vấn đề gặp phải?</h3>
 					<div className={styles.mainContent}>
 						<div className={styles.leftContent}>
 							<p>{infoFromBE.problem}</p>
 							<ul className={styles.info}>
 								<li className={styles.item}>
 									<span className={styles.value}>{info.numberOfDonator}</span>
-									<span className={styles.key}>Donors</span>
+									<span className={styles.key}>Người đóng góp</span>
 								</li>
 								<li className={styles.item}>
 									<span className={styles.value}>{info.numberOfBeneficy}</span>
-									<span className={styles.key}>End-beneficiaries</span>
+									<span className={styles.key}>Người thụ hưởng</span>
 								</li>
 							</ul>
 						</div>
@@ -333,14 +333,15 @@ const ProjectDetail = (props) => {
 								/>
 							</div>
 							<div className={styles.chartTitle}>
-								Total donated <span>{floatBalance + floatAllocated} ETH</span>
+								Số tiền đã đóng góp
+								<span> {floatBalance + floatAllocated} ETH</span>
 							</div>
 							<div className={styles.allocated}>
-								Total allocated
+								Số tiền đã được gửi đi
 								<span style={{ marginLeft: "5px" }}>{floatAllocated} ETH</span>
 							</div>
 							<div className={styles.pending}>
-								Total pending
+								Số tiền đang gửi
 								<span style={{ marginLeft: "5px" }}>{floatBalance} ETH</span>
 							</div>
 						</div>
@@ -351,14 +352,14 @@ const ProjectDetail = (props) => {
 				{onPrint ? (
 					<Container>
 						<div style={{ fontWeight: 600, fontSize: "20px" }}>
-							Project Infomation
+							Thông tin thêm
 						</div>
 						<div
 							dangerouslySetInnerHTML={{ __html: infoFromBE.infomation }}
 						></div>
 
 						<div style={{ fontWeight: 600, fontSize: "20px" }}>
-							Donator Record
+							Danh sách đóng góp
 						</div>
 						<Table
 							data={getDataDonator(donatorRecord)}
@@ -367,7 +368,7 @@ const ProjectDetail = (props) => {
 						/>
 
 						<div style={{ fontWeight: 600, fontSize: "20px" }}>
-							Beneficy Record
+							Danh sách đã gửi
 						</div>
 						<Table
 							data={getDatabeneficy(beneficyRecord)}
@@ -377,27 +378,27 @@ const ProjectDetail = (props) => {
 					</Container>
 				) : (
 					<Container>
-						<h3 className={styles.title}>More Information</h3>
+						<h3 className={styles.title}>Thông tin thêm</h3>
 						<Tab address={address} className={styles.tab}>
-							<TabComponent eventKey="desc" title="Project Description">
+							<TabComponent eventKey="desc" title="Thông tin dự án">
 								<div
 									style={{ paddingTop: "20px" }}
 									dangerouslySetInnerHTML={{ __html: infoFromBE.infomation }}
 								></div>
 							</TabComponent>
-							<TabComponent eventKey="all-benficy" title="All Beneficy">
+							<TabComponent eventKey="all-benficy" title="Người thụ hưởng">
 								<Table
 									data={getDataAllBeneficy(info)}
 									columns={columnsAllBeneficy}
 								/>
 							</TabComponent>
-							<TabComponent eventKey="donator" title="Donator Records">
+							<TabComponent eventKey="donator" title="Danh sách đóng góp">
 								<Table
 									data={getDataDonator(donatorRecord)}
 									columns={columnsDonator}
 								/>
 							</TabComponent>
-							<TabComponent eventKey="beneficy" title="Beneficy Records">
+							<TabComponent eventKey="beneficy" title="Danh sách đã gửi">
 								<Table
 									data={getDatabeneficy(beneficyRecord)}
 									columns={columnsBeneficy}

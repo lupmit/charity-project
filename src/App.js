@@ -16,7 +16,7 @@ import Test from "./pages/Test";
 import Home from "./pages/Home";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Manager from "./pages/Manager";
+import ProjectManager from "./pages/ProjectManager";
 import ExplorerDetail from "./pages/ExplorerDetail";
 import Explorer from "./pages/Explorer";
 import ScrollToTop from "./components/ScrollToTop";
@@ -35,6 +35,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { add } from "lodash";
 import SwapToken from "./pages/SwapToken";
+import BeneficyManager from "./pages/BeneficyManager";
 
 function App() {
 	const { active, connector, activate, account } = useWeb3React();
@@ -94,7 +95,14 @@ function App() {
 						<Route path="/swap" element={<SwapToken />} />
 						<Route path="/explorer/:address" element={<ExplorerDetail />} />
 						<Route path="/auth" element={<RequireAuth />}>
-							<Route path="/auth/manager" element={<Manager />} />
+							<Route
+								path="/auth/project-manager"
+								element={<ProjectManager />}
+							/>
+							<Route
+								path="/auth/beneficy-manager"
+								element={<BeneficyManager />}
+							/>
 							<Route
 								path="/auth/project/:address/edit"
 								element={<ProjectEdit />}

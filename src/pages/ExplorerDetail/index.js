@@ -205,7 +205,7 @@ const ExplorerDetail = () => {
 						<h1 className={styles.title}>Charity Project Explorer</h1>
 						<div className={styles.searhWrapper}>
 							<Search
-								placeholder="Search by Address"
+								placeholder="Tìm kiếm theo địa chỉ ví/ địa chỉ dự án"
 								hideIcon={true}
 								className={styles.searchInput}
 								onChange={(event) => setNewAddress(event.target.value)}
@@ -229,7 +229,7 @@ const ExplorerDetail = () => {
 					<div className={styles.headerCard}>
 						<div className={styles.cardWrapper}>
 							<div className={styles.titleAddress}>
-								<div className={styles.address}>ADDRESS</div>
+								<div className={styles.address}>Địa chỉ ví</div>
 								<div className={styles.value}>{address}</div>
 							</div>
 							<a
@@ -252,11 +252,13 @@ const ExplorerDetail = () => {
 									<polyline points="15 3 21 3 21 9"></polyline>
 									<line x1="10" y1="14" x2="21" y2="3"></line>
 								</svg>
-								<span style={{ marginLeft: "4px" }}>View on Explorer</span>
+								<span style={{ marginLeft: "4px" }}>
+									Xem thêm trên EtherScan
+								</span>
 							</a>
 						</div>
 						<div className={styles.titleBalance}>
-							Balance:
+							Số dư:
 							<span className={styles.value}>
 								{balance && library.utils.fromWei(balance)} ETH
 							</span>
@@ -276,7 +278,7 @@ const ExplorerDetail = () => {
 			) : (
 				<Container>
 					<div className={styles.backgroundNotFound}>
-						<div className={styles.searchNotFound}>Search Not Found!</div>
+						<div className={styles.searchNotFound}>Không tìm thấy!</div>
 						<img src={NotFound} />
 					</div>
 				</Container>

@@ -54,11 +54,11 @@ const ProjectCard = (props) => {
 						<div className={styles.information}>
 							<div className={styles.itemInfo}>
 								<div className={styles.value}>{data.numberOfDonator}</div>
-								<div className={styles.label}>Donations</div>
+								<div className={styles.label}>Người đóng góp</div>
 							</div>
 							<div className={styles.itemInfo}>
 								<div className={styles.value}>{data.numberOfBeneficy}</div>
-								<div className={styles.label}>End-Beneficiaries</div>
+								<div className={styles.label}>Người thụ hưởng</div>
 							</div>
 							<button
 								onClick={handleClickCard}
@@ -66,7 +66,7 @@ const ProjectCard = (props) => {
 									data.state === "1" ? styles.btnDonate : styles.btnView
 								}
 							>
-								{data.state === "1" ? "Donate" : "View Details"}
+								{data.state === "1" ? "Quyên góp" : "Xem thông tin"}
 							</button>
 						</div>
 					</Card.Body>

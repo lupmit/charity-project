@@ -38,7 +38,7 @@ const Project = () => {
 		return (
 			<div className={styles.filterContentWrapper}>
 				<div className={styles.filterStatus}>
-					<h4 className={styles.title}>Project Status</h4>
+					<h4 className={styles.title}>Trạng thái của dự án</h4>
 					<div className={styles.statuses}>
 						<Button
 							onClick={() => {
@@ -46,7 +46,7 @@ const Project = () => {
 							}}
 							style={{ background: filter === 0 && "rgb(252, 213, 53)" }}
 						>
-							All
+							Tất cả
 						</Button>
 						<Button
 							onClick={() => {
@@ -54,7 +54,7 @@ const Project = () => {
 							}}
 							style={{ background: filter === 1 && "rgb(252, 213, 53)" }}
 						>
-							Funding
+							Đang diễn ra
 						</Button>
 						<Button
 							onClick={() => {
@@ -62,7 +62,7 @@ const Project = () => {
 							}}
 							style={{ background: filter === 2 && "rgb(252, 213, 53)" }}
 						>
-							Compeleted
+							Đã kết thúc
 						</Button>
 					</div>
 				</div>
@@ -79,7 +79,7 @@ const Project = () => {
 						onClickReset();
 					}}
 				>
-					Reset
+					Đặt lại
 				</Button>
 				<Button
 					className={styles.go}
@@ -87,7 +87,7 @@ const Project = () => {
 						onClickGo();
 					}}
 				>
-					Go
+					OK
 				</Button>
 			</div>
 		);
@@ -226,7 +226,7 @@ const Project = () => {
 										{hightlight[0].numberOfDonator}
 									</span>
 								</div>
-								<div className={styles.key}>Donations</div>
+								<div className={styles.key}>Người đóng góp</div>
 							</div>
 							<div className={styles.infoWrapper}>
 								<div className={styles.valueWrapper}>
@@ -239,13 +239,13 @@ const Project = () => {
 									</span>
 									{/* <span className={styles.valueExtend}>≈ 78,810,466.7 USD</span> */}
 								</div>
-								<div className={styles.key}>Total Donations</div>
+								<div className={styles.key}>Đã quyên góp</div>
 							</div>
 							<button
 								className={styles.button}
 								onClick={() => donateClick(hightlight[0].address)}
 							>
-								Donate
+								Quyên góp
 							</button>
 						</div>
 					</div>
@@ -258,7 +258,7 @@ const Project = () => {
 						style={{ background: applyFilter !== 0 && "rgb(252, 213, 53)" }}
 					>
 						<GrFilter onClick={handleFilterClick} />
-						<span onClick={handleFilterClick}>Filter</span>
+						<span onClick={handleFilterClick}>Bộ lọc</span>
 						{applyFilter === 0 ? (
 							<AiFillCaretDown onClick={handleFilterClick} />
 						) : (
@@ -267,7 +267,7 @@ const Project = () => {
 					</div>
 					<div className={styles.search}>
 						<Search
-							placeholder="Search"
+							placeholder="Tìm kiếm"
 							onChange={(event) => setSearch(event.target.value)}
 						/>
 					</div>
@@ -283,7 +283,7 @@ const Project = () => {
 				onHide={() => {
 					setOpenModal(false);
 				}}
-				header={"Filter"}
+				header={"Bộ lọc"}
 				content={renderContent()}
 				footer={renderFooter()}
 			></Modal>

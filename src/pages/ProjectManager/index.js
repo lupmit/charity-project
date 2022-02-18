@@ -26,7 +26,7 @@ import * as _ from "lodash";
 import Web3Token from "web3-token";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
-const Manager = () => {
+const ProjectManager = () => {
 	const { active, account } = useWeb3React();
 	const [loading, setLoading] = useState(false);
 	const [rerender, setRerender] = useState(false);
@@ -99,7 +99,7 @@ const Manager = () => {
 	////
 	const columnsProject = [
 		{
-			name: "Address",
+			name: "Địa chỉ dự án",
 			selector: (row) => (
 				<div className={styles.addressTable}>
 					{getShort(row.address)}
@@ -117,12 +117,12 @@ const Manager = () => {
 			maxWidth: "200px",
 		},
 		{
-			name: "Name",
+			name: "Tên dự án",
 			selector: (row) => row.name,
 			sortable: true,
 		},
 		{
-			name: "Currency",
+			name: "Loại tiền",
 			selector: (row) => (
 				<div className={styles.currencyTable}>
 					<img src={EthIcon} />
@@ -132,26 +132,26 @@ const Manager = () => {
 			maxWidth: "100px",
 		},
 		{
-			name: "Balance",
+			name: "Số dư",
 			selector: (row) => row.balance,
 			maxWidth: "100px",
 			sortable: true,
 		},
 		{
-			name: "Target",
+			name: "Mục tiêu",
 			selector: (row) => row.target,
-			maxWidth: "100px",
+			maxWidth: "120px",
 			sortable: true,
 		},
 		{
-			name: "Status",
+			name: "Trạng thái",
 			selector: (row) => (
 				<div className={styles.projectStatus}>
 					<div
 						className={
-							row.status === "Setup"
+							row.status === "Chưa diễn ra"
 								? styles.setup
-								: row.status === "Running"
+								: row.status === "Đang diễn ra"
 								? styles.running
 								: styles.finnish
 						}
@@ -160,31 +160,33 @@ const Manager = () => {
 					</div>
 				</div>
 			),
-			maxWidth: "110px",
+			maxWidth: "150px",
 			sortable: true,
 		},
 		{
-			name: "Action",
+			name: "",
 			selector: (row) => (
 				<div className={styles.actionTable}>
 					<AiOutlineEdit onClick={() => handleClickEdit(row.address)} />
-					{row.status === "Setup" && (
+					{row.status === "Chưa diễn ra" && (
 						<>
 							<AiOutlineDelete onClick={() => setShowDeleteProject(true)} />
 
 							<Modal
 								show={showDeleteProject}
 								onHide={hideDeleteProject}
-								header={"Delete Project"}
+								header={"Xóa dự án"}
 								content={
 									<div className={styles.deleteGroup}>
-										<div className={styles.content}>Are you sure?</div>
+										<div className={styles.content}>
+											Bạn có chắc chắn muốn xóa?
+										</div>
 										<div className={styles.modalAction}>
 											<Button onClick={() => handleClickDelete(row.address)}>
-												Delete
+												Xóa
 											</Button>
 											<Button typeButton="action" onClick={hideDeleteProject}>
-												Cancel
+												Hủy
 											</Button>
 										</div>
 									</div>
@@ -197,6 +199,7 @@ const Manager = () => {
 			ignoreRowClick: true,
 			allowOverflow: true,
 			button: true,
+			width: "60px",
 		},
 	];
 
@@ -208,7 +211,11 @@ const Manager = () => {
 				balance: library.utils.fromWei(item[3]),
 				target: library.utils.fromWei(item[2]),
 				status:
-					item[8] === "0" ? "Setup" : item[8] === "1" ? "Running" : "Finnish",
+					item[8] === "0"
+						? "Chưa diễn ra"
+						: item[8] === "1"
+						? "Đang diễn ra"
+						: "Đã kết thúc",
 			};
 		});
 	};
@@ -299,14 +306,14 @@ const Manager = () => {
 	) : (
 		<div className={styles.wrapper}>
 			<Container>
-				<h3 className={styles.title}>Projects</h3>
+				<h3 className={styles.title}>Dự án từ thiện</h3>
 				<div className={styles.action}>
 					<Button className={styles.add} onClick={showModalAddProject}>
-						Add Project
+						Thêm mới
 					</Button>
 					<Search
 						className={styles.search}
-						placeholder="Search"
+						placeholder="Tìm kiếm"
 						onChange={(event) => setSearch(event.target.value)}
 					/>
 				</div>
@@ -321,7 +328,7 @@ const Manager = () => {
 				<Modal
 					show={showAddProject}
 					onHide={hideAddProject}
-					header={"Add Project"}
+					header={"Thêm mới"}
 					content={
 						<div>
 							<form className={styles.form} onSubmit={addProject}>
@@ -329,10 +336,10 @@ const Manager = () => {
 								<input type="text" name="name" required />
 								<span>Target</span>
 								<input type="number" name="target" required /> */}
-								<Input label="Project name" name="name" required />
+								<Input label="Tên dự án" name="name" required />
 								<div className={styles.amountGroup}>
 									<Input
-										label="Target"
+										label="Mục tiêu"
 										name="target"
 										required
 										type="number"
@@ -343,13 +350,13 @@ const Manager = () => {
 									</div>
 								</div>
 								<div className={styles.modalAction}>
-									<Button type="submit">Save</Button>
+									<Button type="submit">Lưu</Button>
 									<Button
 										typeButton="action"
 										type="button"
 										onClick={hideAddProject}
 									>
-										Cancel
+										Hủy
 									</Button>
 								</div>
 							</form>
@@ -361,4 +368,4 @@ const Manager = () => {
 	);
 };
 
-export default Manager;
+export default ProjectManager;

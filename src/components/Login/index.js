@@ -39,7 +39,7 @@ const Login = (props) => {
 	};
 
 	const renderHeader = () => {
-		return <div className={styles.title}>Connect a wallet</div>;
+		return <div className={styles.title}>Kết nối với ví điện tử</div>;
 	};
 
 	const renderContent = () => {
@@ -49,7 +49,9 @@ const Login = (props) => {
 					<div>Loading ...</div>
 				) : (
 					<>
-						{error ? <div>Error! Try again</div> : null}
+						{error ? (
+							<div>Đã xảy ra lỗi! Vui lòng kiểm tra ví Metamask của bạn</div>
+						) : null}
 						<button className={styles.wallet} onClick={connect}>
 							<div className={styles.nameWrapper}>
 								<div className={styles.name}>MetaMask</div>

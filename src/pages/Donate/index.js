@@ -91,10 +91,7 @@ const Donate = () => {
 					<div className={styles.left}>
 						<div className={styles.leftContent}>
 							<div className={styles.top}>
-								<img
-									src={info1.image}
-									alt="Pink Care Token Project for Period Poverty"
-								/>
+								<img src={info1.image} alt="" />
 							</div>
 							<div className={styles.bottom}>
 								<div className={styles.content}>
@@ -107,27 +104,27 @@ const Donate = () => {
 					<div className={styles.right}>
 						<div className={styles.rightContent}>
 							<div className={styles.header}>
-								<h3>Donate to help</h3>
+								<h3>Quyên góp để giúp đỡ</h3>
 							</div>
 							<div className={styles.form}>
 								<form onSubmit={handleSumit}>
-									<Input label="Name" name="name" required></Input>
-									<Input label="Description" name="desc" required></Input>
+									<Input label="Họ và tên" name="name" required></Input>
+									<Input label="Lời nhắn" name="desc" required></Input>
 									<div className={styles.amountGroup}>
-										<Input label="Amount" name="amount" required></Input>
+										<Input label="Số lượng" name="amount" required></Input>
 										<div className={styles.logoGroup}>
 											<img src={EthIcon} /> <span> ETH</span>
 										</div>
 									</div>
 									{active ? (
 										<div className={styles.buttonDonate}>
-											<Button type="submit">Proceed to donation</Button>
+											<Button type="submit">Quyên góp</Button>
 										</div>
 									) : (
 										<Login show={show} onHide={onHide}>
 											<div className={styles.buttonDonate}>
 												<Button type="button" onClick={() => setShow(true)}>
-													Connect Wallet
+													Kết nối với ví
 												</Button>
 											</div>
 										</Login>
