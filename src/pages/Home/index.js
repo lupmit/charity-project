@@ -13,6 +13,7 @@ import {
 	getProjectInfo,
 	getCharityInfo,
 } from "../../api/CharityApi";
+import { getAllBeneficy } from "../../api/ServerApi";
 import { donate, startCharity, addBeneficiary } from "../../api/ProjectApi";
 import { getContract, getCharityAdress } from "../../helpers/Contract";
 import { useWeb3React } from "@web3-react/core";
@@ -76,6 +77,7 @@ function Home(props) {
 	const [infoProject, setInfoProject] = useState();
 	const [infoCharity, setinfoCharity] = useState();
 	const [loading, setLoading] = useState(true);
+	const [beneficy, setBeneficy] = useState([]);
 
 	const library = useLibrary();
 	const getInfoProject = (contract, address) => {
@@ -131,6 +133,10 @@ function Home(props) {
 			const info = await getCharityInfo(contract);
 
 			setinfoCharity(info);
+
+			const beneficyFromServer = await getAllBeneficy();
+
+			setBeneficy(beneficyFromServer);
 		};
 		getData().then((res) => {
 			setLoading(false);
@@ -235,7 +241,7 @@ function Home(props) {
 							<div className={styles.key}>Số người đã đóng góp</div>
 						</div>
 						<div className={styles.item}>
-							<div className={styles.value}>{infoCharity[2]}</div>
+							<div className={styles.value}>{beneficy.length}</div>
 							<div className={styles.key}>Số người thụ hưởng</div>
 						</div>
 					</div>
