@@ -112,6 +112,7 @@
 :global {
 	.offcanvas-end {
 		width: 350px !important;
+		border-left: none !important;
 		.offcanvas-body {
 			background: rgb(30, 35, 41);
 		}

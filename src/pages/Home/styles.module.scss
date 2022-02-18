@@ -34,7 +34,7 @@
 						width: 100%;
 						padding: 0 80px;
 						.feature {
-							font-size: 20px !important;
+							font-size: 18px !important;
 							margin-bottom: 10px !important;
 						}
 						.projectName {
@@ -47,6 +47,12 @@
 							font-size: 15px !important;
 							line-height: unset !important;
 							margin-bottom: 35px !important;
+						}
+						.link {
+							.button {
+								height: 40px !important;
+								width: 80% !important;
+							}
 						}
 					}
 				}
