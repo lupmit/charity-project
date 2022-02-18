@@ -239,7 +239,7 @@ const ProjectDetail = (props) => {
 	];
 	const columnsAllBeneficy = [
 		{
-			name: "Đại chỉ ví",
+			name: "Địa chỉ ví",
 			selector: (row) => row.address,
 			width: "400px",
 		},
