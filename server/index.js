@@ -3,6 +3,7 @@ const cors = require("cors");
 const path = require("path");
 const imageController = require("./controllers/imageController");
 const projectController = require("./controllers/projectController");
+const beneficyController = require("./controllers/beneficyController");
 
 const app = express();
 
@@ -36,6 +37,9 @@ app.use("/api/upload", imageController);
 
 //project
 app.use("/api/project", projectController);
+
+//beneficy
+app.use("/api/beneficy", beneficyController);
 
 app.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname, "..", "build/index.html"));

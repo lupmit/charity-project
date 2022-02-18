@@ -15,40 +15,37 @@ const Footer = () => {
 							</div>
 							<div className={styles.listItem}>
 								<div className={styles.item}>
-									<div className={styles.itemName}>Home</div>
+									<div className={styles.itemName}>Trang chủ</div>
 								</div>
 								<div className={styles.item}>
-									<div className={styles.itemName}>Project</div>
+									<div className={styles.itemName}>Dự án</div>
 								</div>
 								<div className={styles.item}>
 									<div className={styles.itemName}>Explorer</div>
 								</div>
 								<div className={styles.item}>
-									<div className={styles.itemName}>Swap Token</div>
-								</div>
-								<div className={styles.item}>
-									<div className={styles.itemName}>About</div>
+									<div className={styles.itemName}>Hoán đổi</div>
 								</div>
 							</div>
 						</div>
 
 						<div className={styles.page}>
 							<div className={styles.title}>
-								<div>Information</div>
+								<div>Thông tin</div>
 							</div>
 							<div className={styles.listItem}>
 								<div className={styles.item}>
-									<div className={styles.itemName}>Donate with Crypto</div>
+									<div className={styles.itemName}>Quyên góp</div>
 								</div>
 								<div className={styles.item}>
-									<div className={styles.itemName}>Our Story</div>
+									<div className={styles.itemName}>Giới thiệu</div>
 								</div>
 							</div>
 						</div>
 
 						<div className={styles.page}>
 							<div className={styles.title}>
-								<div>Follow Us</div>
+								<div>Theo dõi</div>
 							</div>
 							<a
 								data-bn-type="link"
@@ -130,11 +127,11 @@ const Footer = () => {
 
 						<div className={styles.page}>
 							<div className={styles.title}>
-								<div>Contact Us</div>
+								<div>Liên hệ</div>
 							</div>
 							<div className={styles.listItem}>
 								<div className={styles.item}>
-									<div className={styles.itemName}>General Inquiry</div>
+									<div className={styles.itemName}>Admin</div>
 								</div>
 								<div className={styles.item}>
 									<div className={styles.itemName}>
@@ -142,7 +139,7 @@ const Footer = () => {
 									</div>
 								</div>
 								<div className={styles.item}>
-									<div className={styles.itemName}>Media Inquiry</div>
+									<div className={styles.itemName}>Hợp tác</div>
 								</div>
 								<div className={styles.item}>
 									<div className={styles.itemName}>

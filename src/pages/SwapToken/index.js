@@ -10,6 +10,7 @@ const SwapToken = () => {
 					src="https://app.uniswap.org/#/swap?theme=light"
 					width="100%"
 					height="auto"
+					title="Swap Token"
 					style={{
 						borderRadius: "4px",
 						minHeight: "600px",

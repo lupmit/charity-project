@@ -12,6 +12,7 @@ import { getCharityAdress } from "../../helpers/Contract";
 import { useWeb3React } from "@web3-react/core";
 import { useLibrary } from "../../helpers/Hook";
 import { getAllProject } from "../../api/CharityApi";
+import { Dropdown } from "react-bootstrap";
 import Modal from "../Modal";
 
 const Header = ({ auth }) => {
@@ -21,6 +22,7 @@ const Header = ({ auth }) => {
 	const { active, account, deactivate } = useWeb3React();
 	const [history, setHistory] = useState();
 	const [loading, setLoading] = useState(true);
+	const [showManager, setShowManager] = useState(false);
 
 	const library = useLibrary();
 	const navigate = useNavigate();
@@ -89,7 +91,7 @@ const Header = ({ auth }) => {
 			<div className={styles.accountModal}>
 				<div className={styles.accountWrapper}>
 					<div className={styles.titleWrapper}>
-						<div className={styles.title}>Connected with MetaMask</div>
+						<div className={styles.title}>Đã kết nối với ví MetaMask</div>
 						<div>
 							<Button
 								className={styles.titleAction}
@@ -97,7 +99,7 @@ const Header = ({ auth }) => {
 									hanldeClickLogout();
 								}}
 							>
-								Logout
+								Đăng xuất
 							</Button>
 						</div>
 					</div>
@@ -171,12 +173,12 @@ const Header = ({ auth }) => {
 								<polyline points="15 3 21 3 21 9" />
 								<line x1={10} y1={14} x2={21} y2={3} />
 							</svg>
-							<span style={{ marginLeft: "4px" }}>View on Explorer</span>
+							<span style={{ marginLeft: "4px" }}>Xem thêm trên EtherScan</span>
 						</a>
 					</div>
 				</div>
 				<div className={styles.historyWrapper}>
-					<div className={styles.historyTitle}>Recent Transactions</div>
+					<div className={styles.historyTitle}>Lịch sử quyên góp</div>
 					<div className={styles.historyItemWrapper}>
 						{history &&
 							loading === false &&
@@ -234,21 +236,42 @@ const Header = ({ auth }) => {
 					</div>
 					<ul className={styles.navLink}>
 						<Link to="/project">
-							<li className={styles.link}>Project</li>
+							<li className={styles.link}>Dự án</li>
 						</Link>
 						<Link to="/explorer">
 							<li className={styles.link}>Explorer</li>
 						</Link>
 						<Link to="/swap">
-							<li className={styles.link}>Swap Token</li>
+							<li className={styles.link}>Hoán đổi</li>
 						</Link>
 						<Link to="/about">
-							<li className={styles.link}>Our story</li>
+							<li className={styles.link}>Giới thiệu</li>
 						</Link>
 						{auth ? (
-							<Link to="/auth/manager">
-								<li className={styles.link}>Manager</li>
-							</Link>
+							<>
+								<Dropdown className={styles.dropdownGroup}>
+									<Dropdown.Toggle className={styles.nav}>
+										Quản lý
+									</Dropdown.Toggle>
+
+									<Dropdown.Menu className={styles.navMenu}>
+										<Dropdown.Item
+											className={styles.navItem}
+											as={Link}
+											to="/auth/project-manager"
+										>
+											Dự án
+										</Dropdown.Item>
+										<Dropdown.Item
+											className={styles.navItem}
+											as={Link}
+											to="/auth/beneficy-manager"
+										>
+											Người thụ hưởng
+										</Dropdown.Item>
+									</Dropdown.Menu>
+								</Dropdown>
+							</>
 						) : null}
 						{/* <Link to="/admin">
 							<li className={styles.link}>Admin</li>
@@ -267,7 +290,7 @@ const Header = ({ auth }) => {
 						) : (
 							<Login show={show} onHide={onHide}>
 								<Button onClick={() => setShow(true)} className={styles.button}>
-									Connect Wallet
+									Kết nối với ví điện tử
 								</Button>
 							</Login>
 						)}
@@ -291,7 +314,7 @@ const Header = ({ auth }) => {
 					onHide={() => {
 						setShowHistory(false);
 					}}
-					header={"Account"}
+					header={"Tài khoản"}
 					content={getContentHistory()}
 				></Modal>
 				<Offcanvas
@@ -314,23 +337,55 @@ const Header = ({ auth }) => {
 									fill="currentColor"
 								></path>
 							</svg>
-							<ul className={styles.navLink} onClick={() => setShow1(false)}>
-								<Link to="/project">
-									<li className={styles.link}>Project</li>
+							<ul className={styles.navLink}>
+								<Link to="/project" onClick={() => setShow1(false)}>
+									<li className={styles.link}>Dự án</li>
 								</Link>
-								<Link to="/explorer">
+								<Link to="/explorer" onClick={() => setShow1(false)}>
 									<li className={styles.link}>Explorer</li>
 								</Link>
-								<Link to="/swap">
-									<li className={styles.link}>Swap Token</li>
+								<Link to="/swap" onClick={() => setShow1(false)}>
+									<li className={styles.link}>Hoán đổi</li>
 								</Link>
-								<Link to="/about">
-									<li className={styles.link}>Our story</li>
+								<Link to="/about" onClick={() => setShow1(false)}>
+									<li className={styles.link}>Giới thiệu</li>
 								</Link>
 								{auth ? (
-									<Link to="/auth/manager">
-										<li className={styles.link}>Manager</li>
-									</Link>
+									<li className={styles.linkGroup}>
+										<div
+											className={styles.groupTitle}
+											onClick={() => setShowManager(!showManager)}
+										>
+											Quản lý
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												viewBox="0 0 24 24"
+												fill="none"
+												className={styles.iconDown}
+											>
+												<path
+													d="M15.5 10.29v1.75L12 15.75l-3.5-3.71v-1.75h7z"
+													fill="currentColor"
+												></path>
+											</svg>
+										</div>
+										{showManager && (
+											<div className={styles.managerGroup}>
+												<Link
+													to="/auth/project-manager"
+													onClick={() => setShow1(false)}
+												>
+													<li className={styles.linkItem}>Dự án</li>
+												</Link>
+												<Link
+													to="/auth/beneficy-manager"
+													onClick={() => setShow1(false)}
+												>
+													<li className={styles.linkItem}>Người thụ hưởng</li>
+												</Link>
+											</div>
+										)}
+									</li>
 								) : null}
 							</ul>
 							<div className={styles.action}>
@@ -348,7 +403,7 @@ const Header = ({ auth }) => {
 											onClick={() => setShow(true)}
 											className={styles.button}
 										>
-											Connect Wallet
+											Kết nối với ví điện tử
 										</Button>
 									</Login>
 								)}

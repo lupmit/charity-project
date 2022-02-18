@@ -47,10 +47,41 @@ const uploadImage = async (token, file) => {
 	});
 };
 
+const getAllBeneficy = () => {
+	return axios({
+		method: "get",
+		url: `${BASE_SERVER_URL}/beneficy`,
+	});
+};
+
+const deleteBeneficyByAddress = async (token, address) => {
+	return axios({
+		method: "get",
+		url: `${BASE_SERVER_URL}/beneficy/delete/${address}`,
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+};
+
+const createOrUpdateBeneficy = async (token, beneficy) => {
+	return axios({
+		method: "post",
+		url: `${BASE_SERVER_URL}/beneficy/`,
+		data: beneficy,
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+};
+
 export {
 	getAllProject,
 	getProjectByAddress,
 	deleteProjectByAddress,
 	createOrUpdate,
 	uploadImage,
+	getAllBeneficy,
+	deleteBeneficyByAddress,
+	createOrUpdateBeneficy,
 };

@@ -47,7 +47,7 @@ function checkFileType(file, cb) {
 	}
 }
 
-router.post("/", [authMiddleware], (req, res) => {
+router.post("/", (req, res) => {
 	upload(req, res, (err) => {
 		if (err) {
 			res.status(400).json({

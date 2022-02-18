@@ -134,7 +134,7 @@
 		.information {
 			.itemInfo {
 				width: 70px;
-				margin-right: 8px;
+				margin-right: 50px;
 				.value {
 					font-size: 16px;
 				}
@@ -146,6 +146,18 @@
 				width: 110px;
 				font-size: 14px;
 				bottom: 30px;
+			}
+		}
+	}
+	@media (max-width: 460px) {
+		.information {
+			display: flex;
+			flex-direction: column;
+			.itemInfo {
+				margin-bottom: 10px;
+			}
+			& > button {
+				bottom: 40px !important;
 			}
 		}
 	}

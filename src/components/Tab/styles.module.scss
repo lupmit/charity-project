@@ -11,6 +11,10 @@
 	:global {
 		width: 100%;
 		border-bottom: 1px solid rgb(132, 142, 156);
+		.nav-item {
+			display: inline;
+			white-space: pre;
+		}
 		.nav-link {
 			margin-bottom: inherit;
 			border: none !important;

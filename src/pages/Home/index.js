@@ -178,7 +178,7 @@ function Home(props) {
 
 						<div className={styles.projectInfo}>
 							<div className={styles.projectInfoWrapper}>
-								<div className={styles.feature}>Featured project</div>
+								<div className={styles.feature}>Dự án nổi bật</div>
 								<h2 className={styles.projectName}>{hightlight[0].name}</h2>
 								<div className={styles.projectDesc}>
 									{hightlight[0].description}
@@ -188,7 +188,7 @@ function Home(props) {
 									className={styles.link}
 								>
 									<button data-bn-type="button" className={styles.button}>
-										Learn more
+										Tìm hiểu thêm
 									</button>
 								</Link>
 							</div>
@@ -200,7 +200,7 @@ function Home(props) {
 
 							<div className={styles.projectInfo}>
 								<div className={styles.projectInfoWrapper}>
-									<div className={styles.feature}>Featured project</div>
+									<div className={styles.feature}>Dự án nổi bật</div>
 									<h2 className={styles.projectName}>{hightlight[1].name}</h2>
 									<div className={styles.projectDesc}>
 										{hightlight[1].description}
@@ -210,7 +210,7 @@ function Home(props) {
 										className={styles.link}
 									>
 										<button data-bn-type="button" className={styles.button}>
-											Learn more
+											Tìm hiểu thêm
 										</button>
 									</Link>
 								</div>
@@ -222,21 +222,21 @@ function Home(props) {
 
 			<div className={styles.impact}>
 				<Container>
-					<h5 className={styles.title}>Our Impact</h5>
+					<h5 className={styles.title}>Tác động của chúng tôi</h5>
 					<div className={styles.info}>
 						<div className={styles.item}>
 							<div className={styles.value}>
 								{library.utils.fromWei(infoCharity[0])} ETH
 							</div>
-							<div className={styles.key}>Amount raised</div>
+							<div className={styles.key}>Số tiền huy động được</div>
 						</div>
 						<div className={styles.item}>
 							<div className={styles.value}>{infoCharity[1]}</div>
-							<div className={styles.key}>Total donations</div>
+							<div className={styles.key}>Số người đã đóng góp</div>
 						</div>
 						<div className={styles.item}>
 							<div className={styles.value}>{infoCharity[2]}</div>
-							<div className={styles.key}>Total end Beneficiaries</div>
+							<div className={styles.key}>Số người thụ hưởng</div>
 						</div>
 					</div>
 				</Container>
@@ -260,33 +260,32 @@ function Home(props) {
 			</div>
 			<div className={styles.values}>
 				<Container>
-					<h5 className={styles.title}>Our Impact</h5>
+					<h5 className={styles.title}>Giá trị mang lại</h5>
 					<div className={styles.info}>
 						<div className={styles.item}>
 							<Icon1 />
-							<div className={styles.value}>Direct Impact</div>
+							<div className={styles.value}>Tác động trực tiếp</div>
 							<div className={styles.key}>
-								We transfer your donation directly to the end beneficiary -
-								meaning 100% of your money goes to those who need it most. We
-								accept crypto as well as Visa/MasterCard.
+								Chúng tôi chuyển khoản đóng góp của bạn trực tiếp đến người thụ
+								hưởng cuối cùng - nghĩa là 100% số tiền của bạn sẽ được chuyển
+								đến những người cần nó nhất
 							</div>
 						</div>
 						<div className={styles.item}>
 							<Icon2 />
-							<div className={styles.value}>Changemakers</div>
+							<div className={styles.value}>Thay đổi</div>
 							<div className={styles.key}>
-								Through the power of blockchain technology, we are transforming
-								global giving, by providing a process that's entirely traceable,
-								accountable and immutable.
+								Hướng tới một thế giới bình đẳng, phát triển bền vững. Giúp đỡ,
+								nâng cao đời sống của hàng triệu những hoàn cảnh khó khăn
 							</div>
 						</div>
 						<div className={styles.item}>
 							<Icon3 />
-							<div className={styles.value}>Transparency</div>
+							<div className={styles.value}>Minh bạch</div>
 							<div className={styles.key}>
-								We transfer your donation directly to the end beneficiary -
-								meaning 100% of your money goes to those who need it most. We
-								accept crypto as well as Visa/MasterCard.
+								Thông qua sức mạnh của công nghệ blockchain, chúng tôi đang
+								chuyển đổi cách thức hoạt động từ thiện, bằng cách cung cấp một
+								quy trình tự động và hoàn toàn minh bạch.
 							</div>
 						</div>
 					</div>
@@ -294,7 +293,7 @@ function Home(props) {
 			</div>
 			<div className={styles.partners}>
 				<Container>
-					<h5 className={styles.title}>Partners</h5>
+					<h5 className={styles.title}>Đối tác</h5>
 					<div className={styles.listItem}>
 						<div className={styles.item}>
 							<img src={Partner1}></img>
