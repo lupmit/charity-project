@@ -263,7 +263,7 @@ function Home(props) {
 					<h5 className={styles.title}>Giá trị mang lại</h5>
 					<div className={styles.info}>
 						<div className={styles.item}>
-							<Icon1 />
+							<Icon1 height={100} />
 							<div className={styles.value}>Tác động trực tiếp</div>
 							<div className={styles.key}>
 								Chúng tôi chuyển khoản đóng góp của bạn trực tiếp đến người thụ
@@ -272,7 +272,7 @@ function Home(props) {
 							</div>
 						</div>
 						<div className={styles.item}>
-							<Icon2 />
+							<Icon2 height={100} />
 							<div className={styles.value}>Thay đổi</div>
 							<div className={styles.key}>
 								Hướng tới một thế giới bình đẳng, phát triển bền vững. Giúp đỡ,
@@ -280,7 +280,7 @@ function Home(props) {
 							</div>
 						</div>
 						<div className={styles.item}>
-							<Icon3 />
+							<Icon3 height={100} />
 							<div className={styles.value}>Minh bạch</div>
 							<div className={styles.key}>
 								Thông qua sức mạnh của công nghệ blockchain, chúng tôi đang
