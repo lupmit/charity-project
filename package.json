@@ -49,10 +49,10 @@
   },
   "scripts": {
     "start-client": "react-scripts start",
-    "build": "(yarn install && react-scripts build) && (cd server && yarn install)",
+    "build": "(npm install && react-scripts build) && (cd server && npm install)",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start": "cd server && yarn start"
+    "start": "cd server && npm run start"
   },
   "eslintConfig": {
     "extends": [
