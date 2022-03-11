@@ -22,6 +22,7 @@ import Loading from "../../components/Loading";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { getProjectByAddress } from "../../api/ServerApi";
+import { roundNumber } from "../../utils/number";
 import styles from "./styles.module.scss";
 import Partner1 from "../../assets/images/partner1.png";
 import Partner2 from "../../assets/images/partner2.png";
@@ -136,7 +137,12 @@ function Home(props) {
 
 			const beneficyFromServer = await getAllBeneficy();
 
-			setBeneficy(beneficyFromServer);
+			let listBeneficy = [];
+			if (!beneficyFromServer.data.error) {
+				listBeneficy = [...beneficyFromServer.data.data];
+			}
+
+			setBeneficy(listBeneficy);
 		};
 		getData().then((res) => {
 			setLoading(false);
@@ -154,13 +160,7 @@ function Home(props) {
 				return item.state > 0;
 			});
 			cloneArray.sort((a, b) => {
-				return parseFloat(a.allocated) < parseFloat(b.allocated)
-					? 1
-					: parseFloat(a.allocated) === parseFloat(b.allocated)
-					? parseFloat(a.balance) < parseFloat(b.balance)
-						? 1
-						: -1
-					: -1;
+				return parseFloat(a.target) < parseFloat(b.target) ? 1 : -1;
 			});
 			return cloneArray;
 		}
@@ -169,7 +169,7 @@ function Home(props) {
 
 	let hightlight = getProjectHighlight();
 	return loading || _.isEmpty(hightlight) ? (
-		<Loading />
+		<Loading style={{ height: "100vh" }} />
 	) : (
 		<div className={styles.wrapper}>
 			<div className={styles.carousel}>
@@ -232,7 +232,7 @@ function Home(props) {
 					<div className={styles.info}>
 						<div className={styles.item}>
 							<div className={styles.value}>
-								{library.utils.fromWei(infoCharity[0])} ETH
+								{roundNumber(library.utils.fromWei(infoCharity[0]))} ETH
 							</div>
 							<div className={styles.key}>Số tiền huy động được</div>
 						</div>

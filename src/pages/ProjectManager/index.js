@@ -5,7 +5,6 @@ import {
 	getAllProject,
 	getProjectInfo,
 } from "../../api/CharityApi";
-import { donate, startCharity, addBeneficiary } from "../../api/ProjectApi";
 import { getContract, getCharityAdress } from "../../helpers/Contract";
 import { useWeb3React } from "@web3-react/core";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +14,7 @@ import Container from "../../components/Container";
 import { useLibrary } from "../../helpers/Hook";
 import Button from "../../components/Button";
 import Search from "../../components/Search";
-import { AiOutlineEdit, AiOutlineDelete, AiOutlineCopy } from "react-icons/ai";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import EthIcon from "../../assets/images/icon-eth.png";
 import { createOrUpdate } from "../../api/ServerApi";
 import Loading from "../../components/Loading";
@@ -24,7 +23,8 @@ import { deleteCharityProject } from "../../api/CharityApi";
 import { deleteProjectByAddress } from "../../api/ServerApi";
 import * as _ from "lodash";
 import Web3Token from "web3-token";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { roundNumber } from "../../utils/number";
+import AddressComponent from "../../components/Address";
 
 const ProjectManager = () => {
 	const { active, account } = useWeb3React();
@@ -32,6 +32,8 @@ const ProjectManager = () => {
 	const [rerender, setRerender] = useState(false);
 	const [token, setToken] = useState();
 	const [search, setSearch] = useState("");
+	const [error, setError] = useState();
+	const [buttonLoading, setButtonLoading] = useState(false);
 
 	const navigate = useNavigate();
 	const handleClickEdit = (address) => {
@@ -40,15 +42,17 @@ const ProjectManager = () => {
 
 	const handleClickDelete = async (address) => {
 		const contract = await getcontract();
-		deleteCharityProject(contract, account, address).then(() => {
-			setRerender(!rerender);
-			setShowDeleteProject(false);
-			deleteProjectByAddress(token, address);
-		});
-	};
-
-	const handleCopyClick = (address) => {
-		navigator.clipboard.writeText(address);
+		setButtonLoading(true);
+		deleteCharityProject(contract, account, address)
+			.then(() => {
+				setRerender(!rerender);
+				setShowDeleteProject(false);
+				deleteProjectByAddress(token, address);
+				setButtonLoading(false);
+			})
+			.catch((e) => {
+				setButtonLoading(false);
+			});
 	};
 
 	const library = useLibrary();
@@ -84,42 +88,18 @@ const ProjectManager = () => {
 		return await getContract(library, getCharityAdress());
 	};
 
-	const getShort = (address) => {
-		let head = address.substr(0, 6);
-		let tail = address.substr(-4, 4);
-		return head + "..." + tail;
-	};
-
-	const renderTooltip = (props) => (
-		<Tooltip id="button-tooltip" {...props}>
-			copy address
-		</Tooltip>
-	);
-
 	////
 	const columnsProject = [
 		{
 			name: "Địa chỉ dự án",
-			selector: (row) => (
-				<div className={styles.addressTable}>
-					{getShort(row.address)}
-					<OverlayTrigger
-						placement="top"
-						delay={{ show: 250, hide: 400 }}
-						overlay={renderTooltip}
-					>
-						<span>
-							<AiOutlineCopy onClick={() => handleCopyClick(row.address)} />
-						</span>
-					</OverlayTrigger>
-				</div>
-			),
-			maxWidth: "200px",
+			selector: (row) => <AddressComponent address={row.address} />,
+			maxWidth: "150px",
 		},
 		{
 			name: "Tên dự án",
 			selector: (row) => row.name,
 			sortable: true,
+			maxWidth: "350px",
 		},
 		{
 			name: "Loại tiền",
@@ -167,10 +147,10 @@ const ProjectManager = () => {
 			name: "",
 			selector: (row) => (
 				<div className={styles.actionTable}>
-					<AiOutlineEdit onClick={() => handleClickEdit(row.address)} />
+					<FiEdit2 onClick={() => handleClickEdit(row.address)} />
 					{row.status === "Chưa diễn ra" && (
 						<>
-							<AiOutlineDelete onClick={() => setShowDeleteProject(true)} />
+							<FiTrash2 onClick={() => setShowDeleteProject(true)} />
 
 							<Modal
 								show={showDeleteProject}
@@ -182,7 +162,10 @@ const ProjectManager = () => {
 											Bạn có chắc chắn muốn xóa?
 										</div>
 										<div className={styles.modalAction}>
-											<Button onClick={() => handleClickDelete(row.address)}>
+											<Button
+												onClick={() => handleClickDelete(row.address)}
+												loading={buttonLoading}
+											>
 												Xóa
 											</Button>
 											<Button typeButton="action" onClick={hideDeleteProject}>
@@ -208,8 +191,8 @@ const ProjectManager = () => {
 			return {
 				address: item[0],
 				name: item[1],
-				balance: library.utils.fromWei(item[3]),
-				target: library.utils.fromWei(item[2]),
+				balance: roundNumber(library.utils.fromWei(item[3])),
+				target: roundNumber(library.utils.fromWei(item[2])),
 				status:
 					item[8] === "0"
 						? "Chưa diễn ra"
@@ -249,8 +232,12 @@ const ProjectManager = () => {
 
 	const addProject = async (e) => {
 		e.preventDefault();
+		if (e.target[0].value.trim() === "") {
+			setError("Vui lòng nhập đủ các trường!");
+			return;
+		}
 		const contract = await getcontract();
-		setShowAddProject(false);
+		setButtonLoading(true);
 		addCharityProject(
 			contract,
 			account,
@@ -258,6 +245,7 @@ const ProjectManager = () => {
 			library.utils.toWei(e.target[1].value)
 		)
 			.then((res) => {
+				setShowAddProject(false);
 				setRerender(!rerender);
 				let tempProject = {
 					address: res.events.addCharityProjectEvent.returnValues[1],
@@ -267,8 +255,10 @@ const ProjectManager = () => {
 					infomation: "",
 				};
 				createOrUpdate(token, tempProject);
+				setButtonLoading(false);
 			})
 			.catch((err) => {
+				setButtonLoading(false);
 				console.log(err);
 			});
 	};
@@ -279,6 +269,7 @@ const ProjectManager = () => {
 	};
 
 	const hideAddProject = () => {
+		setError("");
 		setShowAddProject(false);
 	};
 	const showModalAddProject = () => {
@@ -302,7 +293,7 @@ const ProjectManager = () => {
 	}
 
 	return _.isEmpty(token) ? (
-		<Loading />
+		<Loading style={{ height: "100vh" }} />
 	) : (
 		<div className={styles.wrapper}>
 			<Container>
@@ -321,9 +312,8 @@ const ProjectManager = () => {
 					fixedHeader={true}
 					fixedHeaderScrollHeight={"100%"}
 					columns={columnsProject}
+					progressPending={loading}
 					data={getDataTable(dataDisplay)}
-					// progressPending={rerender}
-					// progressComponent={<Loading style={{ height: "100%" }} />}
 				></Table>
 				<Modal
 					show={showAddProject}
@@ -332,10 +322,7 @@ const ProjectManager = () => {
 					content={
 						<div>
 							<form className={styles.form} onSubmit={addProject}>
-								{/* <span>Name</span>
-								<input type="text" name="name" required />
-								<span>Target</span>
-								<input type="number" name="target" required /> */}
+								{!_.isEmpty(error) && <p style={{ color: "red" }}>{error}</p>}
 								<Input label="Tên dự án" name="name" required />
 								<div className={styles.amountGroup}>
 									<Input
@@ -350,7 +337,9 @@ const ProjectManager = () => {
 									</div>
 								</div>
 								<div className={styles.modalAction}>
-									<Button type="submit">Lưu</Button>
+									<Button type="submit" loading={buttonLoading}>
+										Lưu
+									</Button>
 									<Button
 										typeButton="action"
 										type="button"

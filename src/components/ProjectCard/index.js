@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, ProgressBar } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.scss";
+import { roundNumber } from "../../utils/number";
 import { useLibrary } from "../../helpers/Hook";
 
 const ProjectCard = (props) => {
@@ -31,12 +32,14 @@ const ProjectCard = (props) => {
 						<div className={styles.progressGroup}>
 							<div className={styles.content}>
 								<span className={styles.amount}>
-									{parseFloat(library.utils.fromWei(data.balance)) +
-										parseFloat(library.utils.fromWei(data.allocated))}{" "}
+									{roundNumber(
+										parseFloat(library.utils.fromWei(data.balance)) +
+											parseFloat(library.utils.fromWei(data.allocated))
+									)}{" "}
 									ETH
 								</span>
 								<span className={styles.target}>
-									/ {library.utils.fromWei(data.target)} ETH
+									/ {roundNumber(library.utils.fromWei(data.target))} ETH
 								</span>
 							</div>
 							<div className={styles.progress}>

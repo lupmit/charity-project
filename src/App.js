@@ -33,7 +33,6 @@ import Container from "./components/Container";
 import ProjectEdit from "./pages/ProjectEdit";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { add } from "lodash";
 import SwapToken from "./pages/SwapToken";
 import BeneficyManager from "./pages/BeneficyManager";
 

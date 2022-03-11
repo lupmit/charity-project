@@ -4,7 +4,6 @@ import { getProjectByAddress } from "../../api/ServerApi";
 import Search from "../../components/Search";
 import ProjectCard from "../../components/ProjectCard";
 import { getAllProject, getProjectInfo } from "../../api/CharityApi";
-import { connect, useSelector, useDispatch } from "react-redux";
 import { GrFilter } from "react-icons/gr";
 import { AiFillCaretDown } from "react-icons/ai";
 import { AiOutlineClose } from "react-icons/ai";
@@ -18,6 +17,7 @@ import Loading from "../../components/Loading";
 import { useLibrary } from "../../helpers/Hook";
 import Modal from "../../components/Modal";
 import Button from "../../components/Button";
+import { roundNumber } from "../../utils/number";
 import { useNavigate } from "react-router-dom";
 
 const Project = () => {
@@ -179,13 +179,7 @@ const Project = () => {
 		if (projectShow) {
 			const cloneArray = JSON.parse(JSON.stringify(projectShow));
 			cloneArray.sort((a, b) => {
-				return parseFloat(a.allocated) < parseFloat(b.allocated)
-					? 1
-					: parseFloat(a.allocated) === parseFloat(b.allocated)
-					? parseFloat(a.balance) < parseFloat(b.balance)
-						? 1
-						: -1
-					: -1;
+				return parseFloat(a.target) < parseFloat(b.target) ? 1 : -1;
 			});
 			return cloneArray;
 		}
@@ -210,7 +204,7 @@ const Project = () => {
 	});
 
 	return loading || _.isEmpty(hightlight) ? (
-		<Loading />
+		<Loading style={{ height: "100vh" }} />
 	) : (
 		<div className={styles.wrapper}>
 			<div className={styles.headerDetail}>
@@ -231,10 +225,12 @@ const Project = () => {
 							<div className={styles.infoWrapper}>
 								<div className={styles.valueWrapper}>
 									<span className={styles.value}>
-										{parseFloat(library.utils.fromWei(hightlight[0].balance)) +
-											parseFloat(
-												library.utils.fromWei(hightlight[0].allocated)
-											)}{" "}
+										{roundNumber(
+											parseFloat(library.utils.fromWei(hightlight[0].balance)) +
+												parseFloat(
+													library.utils.fromWei(hightlight[0].allocated)
+												)
+										)}{" "}
 										ETH
 									</span>
 									{/* <span className={styles.valueExtend}>≈ 78,810,466.7 USD</span> */}
@@ -291,4 +287,4 @@ const Project = () => {
 	);
 };
 
-export default connect()(Project);
+export default Project;

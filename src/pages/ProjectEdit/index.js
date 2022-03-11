@@ -23,7 +23,7 @@ import styles from "./styles.module.scss";
 import TextArea from "../../components/TextArea";
 import EthIcon from "../../assets/images/icon-eth.png";
 import Autocomplete from "react-autocomplete";
-import Autosuggest from "react-autosuggest";
+import { FiTrash2 } from "react-icons/fi";
 
 const ProjectEdit = () => {
 	const [info, setInfo] = useState();
@@ -31,6 +31,9 @@ const ProjectEdit = () => {
 	const [token, setToken] = useState();
 	const [listBeneficy, setListBeneficy] = useState([]);
 	const [sugget, setSugget] = useState([]);
+	const [errorMessage, setErrorMessage] = useState();
+	const [buttonLoading, setButtonLoading] = useState(false);
+	const [loadingImage, setLoadingImage] = useState(false);
 	const params = useParams();
 	const address = params.address;
 
@@ -59,11 +62,14 @@ const ProjectEdit = () => {
 	};
 
 	const handleUploadImage = (e) => {
+		setLoadingImage(true);
 		uploadImage(token, e.target.files[0])
 			.then((res) => {
 				setImage(res.data.data);
+				setLoadingImage(false);
 			})
 			.catch((err) => {
+				setLoadingImage(false);
 				console.log(err);
 			});
 	};
@@ -114,7 +120,10 @@ const ProjectEdit = () => {
 			selector: (row) =>
 				parseInt(info.state) == 0 ? (
 					<div className={styles.actionTable}>
-						<AiOutlineDelete onClick={() => setShowDelete(true)} />
+						<FiTrash2
+							style={{ cursor: "pointer" }}
+							onClick={() => setShowDelete(true)}
+						/>
 						<Modal
 							show={showDelete}
 							onHide={() => setShowDelete(false)}
@@ -182,7 +191,22 @@ const ProjectEdit = () => {
 	}, []);
 
 	const handleStartProject = async () => {
+		setErrorMessage();
 		const contract = await getcontract();
+		if (
+			_.isEmpty(target) ||
+			_.isEmpty(info) ||
+			_.isEmpty(desc) ||
+			_.isEmpty(image) ||
+			_.isEmpty(infomation) ||
+			_.isEmpty(problem)
+		) {
+			setErrorMessage("Vui lòng nhập đủ các trường!");
+			window.scrollTo(0, 0);
+			return;
+		}
+
+		setButtonLoading(true);
 		updateAndStartCharity(
 			contract,
 			account,
@@ -199,15 +223,28 @@ const ProjectEdit = () => {
 					problem: problem,
 				};
 				createOrUpdate(token, newInfo).then((res) => {
-					navigate("/auth/manager");
+					navigate("/auth/project-manager");
+					setButtonLoading(false);
 				});
 			})
 			.catch((e) => {
+				setButtonLoading(false);
 				console.log(e);
 			});
 	};
 
 	const handleSaveProject = () => {
+		if (
+			_.isEmpty(info) ||
+			_.isEmpty(desc) ||
+			_.isEmpty(image) ||
+			_.isEmpty(infomation) ||
+			_.isEmpty(problem)
+		) {
+			setErrorMessage("Vui lòng nhập đủ các trường!");
+			window.scrollTo(0, 0);
+			return;
+		}
 		let newInfo = {
 			address: info.projectAddress,
 			description: desc,
@@ -215,9 +252,10 @@ const ProjectEdit = () => {
 			infomation: infomation,
 			problem: problem,
 		};
-		console.log(newInfo);
+		setButtonLoading(true);
 		createOrUpdate(token, newInfo).then((res) => {
-			navigate("/auth/manager");
+			setButtonLoading(false);
+			navigate("/auth/project-manager");
 		});
 	};
 
@@ -278,7 +316,7 @@ const ProjectEdit = () => {
 	console.log(showDelete);
 
 	return loading || _.isEmpty(token) ? (
-		<Loading />
+		<Loading style={{ height: "100vh" }} />
 	) : (
 		<div className={styles.wrapper}>
 			<Container>
@@ -290,6 +328,9 @@ const ProjectEdit = () => {
 						</p>
 					</div>
 				</div>
+				{!_.isEmpty(errorMessage) && (
+					<p style={{ color: "red" }}>{errorMessage}</p>
+				)}
 
 				<Input
 					label="Tên dự án"
@@ -305,6 +346,7 @@ const ProjectEdit = () => {
 						label="Mục tiêu"
 						name="target"
 						type="number"
+						step=".01"
 						defaultValue={target}
 						disabled={parseInt(info.state) !== 0}
 						onChange={(e) => {
@@ -327,6 +369,7 @@ const ProjectEdit = () => {
 								/>
 							</div>
 						)}
+						{loadingImage && <Loading />}
 						<label htmlFor="uploadImageCustom">
 							<AiFillCamera style={{ cursor: "pointer" }} />
 						</label>
@@ -343,7 +386,6 @@ const ProjectEdit = () => {
 				<TextArea
 					label="Thông tin"
 					defaultValue={desc}
-					onChange
 					name="description"
 					onChange={(e) => setDesc(e.target.value)}
 				/>
@@ -403,12 +445,13 @@ const ProjectEdit = () => {
 				</div>
 				<div className={styles.editProjectAction}>
 					{parseInt(info.state) == 0 ? (
-						<>
-							<Button onClick={handleStartProject}>Bắt đầu dự án</Button>
-							<Button className={styles.deleteButton}>Xóa</Button>
-						</>
+						<Button onClick={handleStartProject} loading={buttonLoading}>
+							Bắt đầu dự án
+						</Button>
 					) : (
-						<Button onClick={handleSaveProject}>Lưu</Button>
+						<Button onClick={handleSaveProject} loading={buttonLoading}>
+							Lưu
+						</Button>
 					)}
 				</div>
 			</Container>

@@ -19,7 +19,9 @@ import { useLibrary } from "../../helpers/Hook";
 // import ReactToPdf from "react-to-pdf";
 import ReactToPrint from "react-to-print";
 import * as moment from "moment";
+import AddressComponent from "../../components/Address";
 import Table from "../../components/Table";
+import { roundNumber } from "../../utils/number";
 import EthIcon from "../../assets/images/icon-eth.png";
 
 const ProjectDetail = (props) => {
@@ -151,7 +153,7 @@ const ProjectDetail = (props) => {
 				name: item.name,
 				method: "Tiền số",
 				currency: "ETH",
-				amount: library.utils.fromWei(item.amount),
+				amount: roundNumber(library.utils.fromWei(item.amount)),
 				message: item.message,
 				time: moment.unix(item.timestamp).format("YYYY-MM-DD hh:mm"),
 			};
@@ -163,7 +165,7 @@ const ProjectDetail = (props) => {
 			return {
 				address: item.beneficiary.name,
 				currency: "ETH",
-				amount: library.utils.fromWei(item.amount),
+				amount: roundNumber(library.utils.fromWei(item.amount)),
 				time: moment.unix(item.timestamp).format("YYYY-MM-DD hh:mm"),
 			};
 		});
@@ -186,10 +188,6 @@ const ProjectDetail = (props) => {
 			width: "200px",
 		},
 		{
-			name: "Phương thức",
-			selector: (row) => row.method,
-		},
-		{
 			name: "Loại tiền",
 			selector: (row) => (
 				<div className={styles.currencyTable}>
@@ -205,7 +203,7 @@ const ProjectDetail = (props) => {
 		{
 			name: "Lời nhắn",
 			selector: (row) => row.message,
-			width: "250px",
+			width: "350px",
 		},
 		{
 			name: "Thời gian",
@@ -240,18 +238,18 @@ const ProjectDetail = (props) => {
 	const columnsAllBeneficy = [
 		{
 			name: "Địa chỉ ví",
-			selector: (row) => row.address,
-			width: "400px",
+			selector: (row) => <AddressComponent address={row.address} />,
+			width: "200px",
 		},
 		{
 			name: "Họ và tên",
 			selector: (row) => row.name,
-			width: "300px",
+			width: "250px",
 		},
 		{
 			name: "Thông tin",
 			selector: (row) => row.description,
-			width: "300px",
+			width: "550px",
 		},
 	];
 
@@ -259,15 +257,17 @@ const ProjectDetail = (props) => {
 		floatAllocated = 0,
 		floatTarget = 0;
 	if (!loading) {
-		floatBalance = parseFloat(library.utils.fromWei(info.balance));
-		floatAllocated = parseFloat(library.utils.fromWei(info.allocated));
-		floatTarget = parseFloat(library.utils.fromWei(info.target));
+		floatBalance = roundNumber(parseFloat(library.utils.fromWei(info.balance)));
+		floatAllocated = roundNumber(
+			parseFloat(library.utils.fromWei(info.allocated))
+		);
+		floatTarget = roundNumber(parseFloat(library.utils.fromWei(info.target)));
 	}
 
 	const pageStyle = "@page { size: A3}";
 
 	return loading ? (
-		<Loading />
+		<Loading style={{ height: "100vh" }} />
 	) : (
 		<div className={styles.wrapper} ref={ref}>
 			<div className={styles.headerWrapper}>
@@ -276,6 +276,7 @@ const ProjectDetail = (props) => {
 					<div className={styles.content}>
 						<h5>{getStatus(info.state)}</h5>
 						<h2>{info.name}</h2>
+						<AddressComponent address={address} style={{ color: "#f0b90b" }} />
 						<p>{infoFromBE.description} </p>
 						<div className={styles.progressContent}>
 							<ProgressBar

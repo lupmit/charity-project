@@ -11,7 +11,7 @@ const transactionReceiptAsync = async function (txnHash, resolve, reject) {
 		if (receipt === null) {
 			setTimeout(function () {
 				transactionReceiptAsync(txnHash, resolve, reject);
-			}, 1000);
+			}, 500);
 		} else resolve(receipt);
 	} catch (e) {
 		reject(e);
@@ -28,9 +28,9 @@ const updateAndStartCharity = (contract, account, name, target, beneficies) => {
 						transactionReceiptAsync(transactionHash, resolve, reject);
 					}),
 					{
-						pending: "Promise is pending",
-						success: "Promise resolved 👌",
-						error: "Promise rejected 🤯",
+						pending: "Transaction pending",
+						success: "Transaction confirm",
+						error: "Transaction rejected",
 					}
 				);
 		});
@@ -48,9 +48,9 @@ const donate = (contract, account, name, message, value) => {
 							transactionReceiptAsync(transactionHash, resolve, reject);
 						}),
 						{
-							pending: "Promise is pending",
-							success: "Promise resolved 👌",
-							error: "Promise rejected 🤯",
+							pending: "Transaction pending",
+							success: "Transaction confirm",
+							error: "Transaction rejected",
 						}
 					);
 			}

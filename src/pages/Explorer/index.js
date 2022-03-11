@@ -21,7 +21,7 @@ const Explorer = () => {
 				/>
 				<div className={styles.contentWrapper}>
 					<div className={styles.content}>
-						<h1 className={styles.title}>Charity Project Explorer</h1>
+						<h1 className={styles.title}>Trình khám phá chuỗi khối</h1>
 						<div className={styles.searhWrapper}>
 							<Search
 								placeholder="Tìm kiếm theo địa chỉ ví/ địa chỉ dự án"

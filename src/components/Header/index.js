@@ -14,6 +14,9 @@ import { useLibrary } from "../../helpers/Hook";
 import { getAllProject } from "../../api/CharityApi";
 import { Dropdown } from "react-bootstrap";
 import Modal from "../Modal";
+import { roundNumber } from "../../utils/number";
+import { shortAddress } from "../../utils/address";
+import AddressComponent from "../Address";
 
 const Header = ({ auth }) => {
 	const [show, setShow] = useState(false);
@@ -23,6 +26,7 @@ const Header = ({ auth }) => {
 	const [history, setHistory] = useState();
 	const [loading, setLoading] = useState(true);
 	const [showManager, setShowManager] = useState(false);
+	const [balance, setBalance] = useState(0);
 
 	const library = useLibrary();
 	const navigate = useNavigate();
@@ -30,6 +34,17 @@ const Header = ({ auth }) => {
 	const onHide = () => {
 		setShow(false);
 	};
+
+	useEffect(() => {
+		const getData = async () => {
+			const balance = await library.eth.getBalance(account);
+			setBalance(balance);
+		};
+
+		if (active) {
+			getData();
+		}
+	}, [active, account, showHistory]);
 
 	useEffect(() => {
 		if (!active) return;
@@ -60,15 +75,7 @@ const Header = ({ auth }) => {
 		getData().then((res) => {
 			setLoading(false);
 		});
-	}, [active]);
-
-	console.log(history);
-
-	const getShort = (address) => {
-		let head = address.substr(0, 6);
-		let tail = address.substr(-4, 4);
-		return head + "..." + tail;
-	};
+	}, [active, account, showHistory]);
 
 	const hanldeClickLogout = () => {
 		try {
@@ -147,7 +154,17 @@ const Header = ({ auth }) => {
 									</svg>
 								</div>
 							</div>
-							<p> {active ? getShort(account) : null}</p>
+							{/* <p> {active ? shortAddress(account) : null}</p> */}
+							<div className={styles.addressWrapper}>
+								{active ? (
+									<div className={styles.address}>
+										<AddressComponent address={account} />
+										<div className={styles.balance}>
+											{roundNumber(library.utils.fromWei(`${balance}`))} ETH
+										</div>
+									</div>
+								) : null}
+							</div>
 						</div>
 					</div>
 
@@ -239,7 +256,7 @@ const Header = ({ auth }) => {
 							<li className={styles.link}>Dự án</li>
 						</Link>
 						<Link to="/explorer">
-							<li className={styles.link}>Explorer</li>
+							<li className={styles.link}>Khám phá</li>
 						</Link>
 						<Link to="/swap">
 							<li className={styles.link}>Hoán đổi</li>
@@ -285,7 +302,7 @@ const Header = ({ auth }) => {
 								onClick={() => setShowHistory(true)}
 								className={styles.button}
 							>
-								{getShort(account)}
+								{shortAddress(account)}
 							</Button>
 						) : (
 							<Login show={show} onHide={onHide}>
@@ -342,7 +359,7 @@ const Header = ({ auth }) => {
 									<li className={styles.link}>Dự án</li>
 								</Link>
 								<Link to="/explorer" onClick={() => setShow1(false)}>
-									<li className={styles.link}>Explorer</li>
+									<li className={styles.link}>Khám phá</li>
 								</Link>
 								<Link to="/swap" onClick={() => setShow1(false)}>
 									<li className={styles.link}>Hoán đổi</li>
@@ -395,7 +412,7 @@ const Header = ({ auth }) => {
 										typeButton="outline"
 										className={styles.button}
 									>
-										{getShort(account)}
+										{shortAddress(account)}
 									</Button>
 								) : (
 									<Login show={show} onHide={onHide}>

@@ -13,7 +13,7 @@ import Loading from "../../components/Loading";
 import Login from "../../components/Login";
 import { useLibrary } from "../../helpers/Hook";
 import { getProjectByAddress } from "../../api/ServerApi";
-import Modal from "../../components/Modal";
+import * as _ from "lodash";
 import EthIcon from "../../assets/images/icon-eth.png";
 import Input from "../../components/Input";
 
@@ -28,8 +28,9 @@ const Donate = () => {
 	const [info, setInfo] = useState();
 	const [info1, setInfo1] = useState();
 	const [loading, setLoading] = useState(true);
+	const [buttonLoading, setButtonLoading] = useState(false);
 
-	const [swap, setSwap] = useState(false);
+	const [errorMessage, setErrorMessage] = useState();
 
 	const [show, setShow] = useState(false);
 
@@ -46,10 +47,12 @@ const Donate = () => {
 			const contract = await getcontract();
 			await Promise.all([
 				getProjectInfo(contract).then((res) => {
+					if (parseInt(res?.state) !== 1) {
+						navigate("/project/" + address);
+					}
 					setInfo(res);
 				}),
 				getProjectByAddress(address).then((res) => {
-					console.log(res);
 					setInfo1(res.data.data);
 				}),
 			]);
@@ -61,8 +64,13 @@ const Donate = () => {
 
 	const handleSumit = async (e) => {
 		e.preventDefault();
+		setErrorMessage();
 		const contract = await getcontract();
-		console.log(account);
+		if (e.target[0].value.trim() === "" || e.target[1].value.trim() === "") {
+			setErrorMessage("Vui lòng nhập đủ các trường!");
+			return;
+		}
+		setButtonLoading(true);
 		donate(
 			contract,
 			account,
@@ -71,19 +79,17 @@ const Donate = () => {
 			library.utils.toWei(e.target[2].value)
 		)
 			.then((res) => {
+				setButtonLoading(false);
 				navigate("/project/" + address);
 			})
 			.catch((e) => {
+				setButtonLoading(false);
 				console.log(e);
 			});
 	};
 
-	if (parseInt(info?.state) !== 1) {
-		navigate("/project/" + address);
-	}
-
 	return loading ? (
-		<Loading />
+		<Loading style={{ height: "100vh" }} />
 	) : (
 		<div className={styles.donateWrapper}>
 			<Container>
@@ -107,18 +113,29 @@ const Donate = () => {
 								<h3>Quyên góp để giúp đỡ</h3>
 							</div>
 							<div className={styles.form}>
+								{!_.isEmpty(errorMessage) && (
+									<p style={{ color: "red" }}>{errorMessage}</p>
+								)}
 								<form onSubmit={handleSumit}>
 									<Input label="Họ và tên" name="name" required></Input>
 									<Input label="Lời nhắn" name="desc" required></Input>
 									<div className={styles.amountGroup}>
-										<Input label="Số lượng" name="amount" required></Input>
+										<Input
+											label="Số lượng"
+											name="amount"
+											type="number"
+											step=".01"
+											required
+										></Input>
 										<div className={styles.logoGroup}>
 											<img src={EthIcon} /> <span> ETH</span>
 										</div>
 									</div>
 									{active ? (
 										<div className={styles.buttonDonate}>
-											<Button type="submit">Quyên góp</Button>
+											<Button type="submit" loading={buttonLoading}>
+												Quyên góp
+											</Button>
 										</div>
 									) : (
 										<Login show={show} onHide={onHide}>

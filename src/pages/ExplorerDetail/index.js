@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../../components/Button";
 import Search from "../../components/Search";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -14,7 +14,7 @@ import { useLibrary } from "../../helpers/Hook";
 import moment from "moment";
 import styles from "./styles.module.scss";
 import Loading from "../../components/Loading";
-import NotFound from "../../assets/images/not-found.png";
+import { roundNumber } from "../../utils/number";
 
 const ExplorerDetail = () => {
 	const [newAddress, setNewAddress] = useState();
@@ -95,7 +95,9 @@ const ExplorerDetail = () => {
 		},
 		{
 			name: "Value",
-			selector: (row) => <span>{row.value / 1000000000000000000} ETH</span>,
+			selector: (row) => (
+				<span>{roundNumber(row.value / 1000000000000000000)} ETH</span>
+			),
 			width: "100px",
 		},
 	];
@@ -165,7 +167,9 @@ const ExplorerDetail = () => {
 		},
 		{
 			name: "Value",
-			selector: (row) => <span>{row.value / 1000000000000000000} ETH</span>,
+			selector: (row) => (
+				<span>{roundNumber(row.value / 1000000000000000000)} ETH</span>
+			),
 			width: "100px",
 		},
 	];
@@ -202,7 +206,7 @@ const ExplorerDetail = () => {
 				/>
 				<div className={styles.contentWrapper}>
 					<div className={styles.content}>
-						<h1 className={styles.title}>Charity Project Explorer</h1>
+						<h1 className={styles.title}>Trình khám phá chuỗi khối</h1>
 						<div className={styles.searhWrapper}>
 							<Search
 								placeholder="Tìm kiếm theo địa chỉ ví/ địa chỉ dự án"
@@ -260,7 +264,7 @@ const ExplorerDetail = () => {
 						<div className={styles.titleBalance}>
 							Số dư:
 							<span className={styles.value}>
-								{balance && library.utils.fromWei(balance)} ETH
+								{balance && roundNumber(library.utils.fromWei(balance))} ETH
 							</span>
 						</div>
 					</div>
@@ -278,8 +282,10 @@ const ExplorerDetail = () => {
 			) : (
 				<Container>
 					<div className={styles.backgroundNotFound}>
-						<div className={styles.searchNotFound}>Không tìm thấy!</div>
-						<img src={NotFound} />
+						<div className={styles.searchNotFound}>
+							<h1>404</h1>
+							<p>KHÔNG TÌM THẤY!</p>
+						</div>
 					</div>
 				</Container>
 			)}

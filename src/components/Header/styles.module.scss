@@ -262,12 +262,23 @@
 				display: flex;
 				flex-flow: row nowrap;
 				align-items: center;
-				p {
-					min-width: 0px;
-					margin: 0px;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					white-space: nowrap;
+				.addressWrapper {
+					.address {
+						min-width: 0px;
+						margin: 0px;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						display: flex;
+						flex-direction: row;
+						.balance {
+							background-color: #edeef2;
+							border-radius: 50px;
+							padding: 5px 10px;
+							font-size: 15px;
+							margin-left: 20px;
+						}
+					}
 				}
 				.iconWrapper {
 					height: 1rem;

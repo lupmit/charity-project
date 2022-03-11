@@ -8,7 +8,7 @@ import Container from "../../components/Container";
 import { useLibrary } from "../../helpers/Hook";
 import Button from "../../components/Button";
 import Search from "../../components/Search";
-import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import {
 	getAllBeneficy,
 	deleteBeneficyByAddress,
@@ -18,6 +18,8 @@ import Loading from "../../components/Loading";
 import Input from "../../components/Input";
 import * as _ from "lodash";
 import Web3Token from "web3-token";
+import AddressComponent from "../../components/Address";
+import TextArea from "../../components/TextArea";
 
 const BeneficyManager = () => {
 	const { active, account } = useWeb3React();
@@ -25,10 +27,13 @@ const BeneficyManager = () => {
 	const [token, setToken] = useState();
 	const [search, setSearch] = useState("");
 	const [error, setError] = useState("");
+	const [buttonLoading, setButtonLoading] = useState(false);
 
 	const handleClickDelete = async (address) => {
+		setButtonLoading(true);
 		deleteBeneficyByAddress(token, address).then(() => {
 			setReRender(!reRender);
+			setButtonLoading(false);
 			setShowDeletebeneficy(false);
 		});
 	};
@@ -42,29 +47,31 @@ const BeneficyManager = () => {
 	const columnsBeneficy = [
 		{
 			name: "Địa chỉ ví",
-			selector: (row) => row.address,
-			width: "350px",
+			selector: (row) => <AddressComponent address={row.address} />,
+			width: "150px",
 		},
 		{
 			name: "Họ và tên",
 			selector: (row) => row.name,
+			width: "250px",
 		},
 		{
 			name: "Thông tin thêm",
 			selector: (row) => row.description,
+			width: "500px",
 		},
 		{
 			name: "",
 			selector: (row) => (
 				<div className={styles.actionTable}>
-					<AiOutlineEdit
+					<FiEdit2
 						onClick={() => {
 							setRow(row);
 							setShowEditBeneficy(true);
 						}}
 					/>
 
-					<AiOutlineDelete
+					<FiTrash2
 						onClick={() => {
 							setRow(row);
 							setShowDeletebeneficy(true);
@@ -122,6 +129,15 @@ const BeneficyManager = () => {
 
 	const addBeneficy = async (e) => {
 		e.preventDefault();
+
+		if (
+			e.target[0].value.trim() === "" ||
+			e.target[1].value.trim() === "" ||
+			e.target[2].value.trim() === ""
+		) {
+			setError("Vui lòng nhập đủ các trường!");
+			return;
+		}
 		if (!library.utils.isAddress(e.target[0].value)) {
 			setError("Địa chỉ ví không hợp lệ!");
 			return;
@@ -134,6 +150,7 @@ const BeneficyManager = () => {
 			setError("Địa chỉ ví đã tồn tại!");
 			return;
 		}
+		setButtonLoading(true);
 
 		const temp = {
 			address: e.target[0].value,
@@ -144,28 +161,28 @@ const BeneficyManager = () => {
 			setReRender(!reRender);
 			setShowAddBeneficy(false);
 			setError("");
+			setButtonLoading(false);
 		});
 	};
 
 	const updateBeneficy = async (e) => {
 		e.preventDefault();
-		if (!library.utils.isAddress(e.target[0].value)) {
-			setError("Địa chỉ ví không hợp lệ!");
+		if (e.target[0].value.trim() === "" || e.target[1].value.trim() === "") {
+			setError("Vui lòng nhập đủ các trường!");
 			return;
 		}
-		const temp = {
-			address: e.target[0].value,
-			name: e.target[1].value,
-			description: e.target[2].value,
-		};
 
-		if (row.address !== temp.address) {
-			deleteBeneficyByAddress(token, row.address);
-		}
+		setButtonLoading(true);
+		const temp = {
+			address: row.address,
+			name: e.target[0].value,
+			description: e.target[1].value,
+		};
 		createOrUpdateBeneficy(token, temp).then((res) => {
 			setReRender(!reRender);
 			setShowEditBeneficy(false);
 			setError("");
+			setButtonLoading(false);
 		});
 	};
 
@@ -175,6 +192,7 @@ const BeneficyManager = () => {
 	};
 
 	const hideAddBeneficy = () => {
+		setError("");
 		setShowAddBeneficy(false);
 	};
 
@@ -200,7 +218,7 @@ const BeneficyManager = () => {
 	}, [showAddBeneficy, showEditBeneficy]);
 
 	return _.isEmpty(token) ? (
-		<Loading />
+		<Loading style={{ height: "100vh" }} />
 	) : (
 		<div className={styles.wrapper}>
 			<Container>
@@ -222,6 +240,7 @@ const BeneficyManager = () => {
 					fixedHeader={true}
 					fixedHeaderScrollHeight={"100%"}
 					columns={columnsBeneficy}
+					progressPending={loading}
 					data={dataDisplay}
 				></Table>
 				<Modal
@@ -236,10 +255,12 @@ const BeneficyManager = () => {
 								)}
 								<Input label="Địa chỉ ví" name="address" required />
 								<Input label="Họ và tên" name="name" required />
-								<Input label="Thông tin thêm" name="desc" required />
+								<TextArea label="Thông tin thêm" name="desc" required />
 
 								<div className={styles.modalAction}>
-									<Button type="submit">Lưu</Button>
+									<Button type="submit" loading={buttonLoading}>
+										Lưu
+									</Button>
 									<Button
 										typeButton="action"
 										type="button"
@@ -264,19 +285,15 @@ const BeneficyManager = () => {
 										{!_.isEmpty(error) && (
 											<div style={{ color: "#ff3333" }}>{error}</div>
 										)}
-										<Input
-											label="Địa chỉ ví"
-											name="address"
-											defaultValue={row.address}
-											required
-										/>
+										<p style={{ fontWeight: 600 }}>Address</p>
+										<p>{row.address}</p>
 										<Input
 											label="Họ và tên"
 											name="name"
 											defaultValue={row.name}
 											required
 										/>
-										<Input
+										<TextArea
 											label="Thông tin thêm"
 											name="desc"
 											defaultValue={row.description}
@@ -284,7 +301,9 @@ const BeneficyManager = () => {
 										/>
 
 										<div className={styles.modalAction}>
-											<Button type="submit">Lưu</Button>
+											<Button type="submit" loading={buttonLoading}>
+												Lưu
+											</Button>
 											<Button
 												typeButton="action"
 												type="button"
@@ -307,7 +326,10 @@ const BeneficyManager = () => {
 										Bạn có chắc chắn muốn xóa?
 									</div>
 									<div className={styles.modalAction}>
-										<Button onClick={() => handleClickDelete(row.address)}>
+										<Button
+											onClick={() => handleClickDelete(row.address)}
+											loading={buttonLoading}
+										>
 											Xóa
 										</Button>
 										<Button typeButton="action" onClick={hideDeleteBenficy}>
