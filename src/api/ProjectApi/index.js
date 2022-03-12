@@ -7,12 +7,13 @@ var web3 = new Web3(BASE_PROVIDER_URL);
 const transactionReceiptAsync = async function (txnHash, resolve, reject) {
 	try {
 		var receipt = await web3.eth.getTransactionReceipt(txnHash);
-		console.log(receipt);
-		if (receipt === null) {
+		if (receipt !== null && receipt.status === true) {
+			resolve(receipt);
+		} else {
 			setTimeout(function () {
 				transactionReceiptAsync(txnHash, resolve, reject);
 			}, 500);
-		} else resolve(receipt);
+		}
 	} catch (e) {
 		reject(e);
 	}

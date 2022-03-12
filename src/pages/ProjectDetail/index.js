@@ -286,9 +286,11 @@ const ProjectDetail = (props) => {
 						</div>
 						<div className={styles.infoDonate}>
 							<span className={styles.balance}>
-								{floatBalance + floatAllocated} ETH
+								{roundNumber(floatBalance + floatAllocated)} ETH
 							</span>
-							<span className={styles.target}>mục tiêu {floatTarget} ETH</span>
+							<span className={styles.target}>
+								mục tiêu {roundNumber(floatTarget)} ETH
+							</span>
 						</div>
 						<div className={styles.action}>
 							{parseInt(info.state) === 2 ? (
@@ -335,15 +337,19 @@ const ProjectDetail = (props) => {
 							</div>
 							<div className={styles.chartTitle}>
 								Số tiền đã đóng góp
-								<span> {floatBalance + floatAllocated} ETH</span>
+								<span> {roundNumber(floatBalance + floatAllocated)} ETH</span>
 							</div>
 							<div className={styles.allocated}>
 								Số tiền đã được gửi đi
-								<span style={{ marginLeft: "5px" }}>{floatAllocated} ETH</span>
+								<span style={{ marginLeft: "5px" }}>
+									{roundNumber(floatAllocated)} ETH
+								</span>
 							</div>
 							<div className={styles.pending}>
 								Số tiền đang gửi
-								<span style={{ marginLeft: "5px" }}>{floatBalance} ETH</span>
+								<span style={{ marginLeft: "5px" }}>
+									{roundNumber(floatBalance)} ETH
+								</span>
 							</div>
 						</div>
 					</div>

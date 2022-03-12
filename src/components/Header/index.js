@@ -212,7 +212,7 @@ const Header = ({ auth }) => {
 												>
 													<div className={styles.titleWrapper}>
 														<div className={styles.titleDonate}>
-															{item.projectAddress} -{" "}
+															{shortAddress(item.projectAddress)} -{" "}
 															{library.utils.fromWei(item[3])} ETH ↗
 														</div>
 													</div>
