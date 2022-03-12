@@ -208,6 +208,7 @@
 			color: rgb(112, 122, 138);
 		}
 		.statuses {
+			display: flex;
 			& > button {
 				width: 125px;
 				height: 40px;
