@@ -257,11 +257,9 @@ const ProjectDetail = (props) => {
 		floatAllocated = 0,
 		floatTarget = 0;
 	if (!loading) {
-		floatBalance = roundNumber(parseFloat(library.utils.fromWei(info.balance)));
-		floatAllocated = roundNumber(
-			parseFloat(library.utils.fromWei(info.allocated))
-		);
-		floatTarget = roundNumber(parseFloat(library.utils.fromWei(info.target)));
+		floatBalance = parseFloat(library.utils.fromWei(info.balance));
+		floatAllocated = parseFloat(library.utils.fromWei(info.allocated));
+		floatTarget = parseFloat(library.utils.fromWei(info.target));
 	}
 
 	const pageStyle = "@page { size: A3}";
